@@ -6,12 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D1286F432D815BED006B5E52 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D1286F422D815BED006B5E52 /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		6DDB45C12D7ED702006C4A4B /* Pinit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pinit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		6DDB45D62D7ED704006C4A4B /* Exceptions for "Pinit" folder in "Pinit" target */ = {
+		D1286F402D815BB8006B5E52 /* Exceptions for "Pinit" folder in "Pinit" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -21,10 +25,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		6DDB45C32D7ED702006C4A4B /* Pinit */ = {
+		D1286F2B2D815BB8006B5E52 /* Pinit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				6DDB45D62D7ED704006C4A4B /* Exceptions for "Pinit" folder in "Pinit" target */,
+				D1286F402D815BB8006B5E52 /* Exceptions for "Pinit" folder in "Pinit" target */,
 			);
 			path = Pinit;
 			sourceTree = "<group>";
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1286F432D815BED006B5E52 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +50,7 @@
 		6DDB45B82D7ED702006C4A4B = {
 			isa = PBXGroup;
 			children = (
-				6DDB45C32D7ED702006C4A4B /* Pinit */,
+				D1286F2B2D815BB8006B5E52 /* Pinit */,
 				6DDB45C22D7ED702006C4A4B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,10 +79,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6DDB45C32D7ED702006C4A4B /* Pinit */,
+				D1286F2B2D815BB8006B5E52 /* Pinit */,
 			);
 			name = Pinit;
 			packageProductDependencies = (
+				D1286F422D815BED006B5E52 /* SnapKit */,
 			);
 			productName = Pinit;
 			productReference = 6DDB45C12D7ED702006C4A4B /* Pinit.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 6DDB45B82D7ED702006C4A4B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D1286F412D815BED006B5E52 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DDB45C22D7ED702006C4A4B /* Products */;
 			projectDirPath = "";
@@ -333,6 +342,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D1286F412D815BED006B5E52 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D1286F422D815BED006B5E52 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1286F412D815BED006B5E52 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DDB45B92D7ED702006C4A4B /* Project object */;
 }
