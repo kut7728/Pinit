@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  Pinit
 //
 //  Created by nelime on 3/10/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     
     private let Label : UILabel = {
         let label = UILabel()
@@ -36,5 +36,5 @@ class ViewController: UIViewController {
 
 
 #Preview{
-    ViewController()
+    HomeViewController()
 }
