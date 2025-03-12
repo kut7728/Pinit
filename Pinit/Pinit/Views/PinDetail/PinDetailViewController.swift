@@ -15,5 +15,5 @@ final class PinDetailViewController: UIViewController {
 }
 
 #Preview {
-    PastPinViewController()
+    PinDetailViewController()
 }
