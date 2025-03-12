@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     
     private let Label : UILabel = {
         let label = UILabel()
-        label.text = "한글 123 #%^$"
+        label.text = "한글 123 #%^#$"
         label.font = DesignSystemFont.Pretendard_Bold70.value
         return label
     }()
