@@ -1,0 +1,12 @@
+branchName: '#${issue.number}'
+branches:
+  - label: REFACTOR
+    prefix: refactor/
+  - label: CHORE
+    prefix: chore/
+  - label: FIX
+    prefix: fix/
+  - label: FEAT
+    prefix: feature/
+autoCloseIssue: true
+commentMessage: 'Branch ${branchName} created for issue: ${issue.number}-${issue.title}'
