@@ -20,12 +20,9 @@ class HomeViewController: UIViewController {
         label.font = DesignSystemFont.Pretendard_Bold70.value
         return label
     }()
-<<<<<<< HEAD
-=======
+    
     // BottomSheet 동적 높이를 저장하기위한 변수
     private var bottomSheetHeightConstraint: CGFloat = 0
-
->>>>>>> feature/#5
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,8 +47,6 @@ class HomeViewController: UIViewController {
             $0.center.equalToSuperview()
         }
     }
-<<<<<<< HEAD
-=======
     
     private func setupBottomSheet() {
         bottomSheet.snp.makeConstraints {
@@ -98,7 +93,7 @@ extension HomeViewController {
             $0.height.equalTo(self.bottomSheetHeightConstraint)
         }
         // Constraint 업데이트 + Animation
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.07) {
             self.view.layoutIfNeeded()
         }
     }
@@ -114,7 +109,7 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
         print("Deleted: \(deleted)")
         // 여기서 CoreData 업데이트
     }
->>>>>>> feature/#5
+    
 }
 
 

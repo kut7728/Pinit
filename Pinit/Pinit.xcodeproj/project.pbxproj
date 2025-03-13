@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		D1286F432D815BED006B5E52 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D1286F422D815BED006B5E52 /* SnapKit */; };
 		D14369DC2D82D1970095F7E3 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = D14369DB2D82D1970095F7E3 /* FSCalendar */; };
+		D1436C432D8332020095F7E3 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = D1436C422D8332020095F7E3 /* CombineMoya */; };
+		D1436C452D8332020095F7E3 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = D1436C442D8332020095F7E3 /* Moya */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +45,8 @@
 			files = (
 				D1286F432D815BED006B5E52 /* SnapKit in Frameworks */,
 				D14369DC2D82D1970095F7E3 /* FSCalendar in Frameworks */,
+				D1436C452D8332020095F7E3 /* Moya in Frameworks */,
+				D1436C432D8332020095F7E3 /* CombineMoya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,8 @@
 			packageProductDependencies = (
 				D1286F422D815BED006B5E52 /* SnapKit */,
 				D14369DB2D82D1970095F7E3 /* FSCalendar */,
+				D1436C422D8332020095F7E3 /* CombineMoya */,
+				D1436C442D8332020095F7E3 /* Moya */,
 			);
 			productName = Pinit;
 			productReference = 6DDB45C12D7ED702006C4A4B /* Pinit.app */;
@@ -119,6 +125,7 @@
 			packageReferences = (
 				D1286F412D815BED006B5E52 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				D14369DA2D82D1970095F7E3 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				D1436C412D8332020095F7E3 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DDB45C22D7ED702006C4A4B /* Products */;
@@ -158,13 +165,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UUYBHY988H;
+				DEVELOPMENT_TEAM = 5664C7G97A;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pinit/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -185,13 +193,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UUYBHY988H;
+				DEVELOPMENT_TEAM = 5664C7G97A;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pinit/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -364,6 +373,14 @@
 				minimumVersion = 2.8.4;
 			};
 		};
+		D1436C412D8332020095F7E3 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -376,6 +393,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D14369DA2D82D1970095F7E3 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		D1436C422D8332020095F7E3 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1436C412D8332020095F7E3 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		D1436C442D8332020095F7E3 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1436C412D8332020095F7E3 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
