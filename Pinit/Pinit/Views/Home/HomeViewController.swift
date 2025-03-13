@@ -59,6 +59,7 @@ extension HomeViewController {
     @objc private func panGestureHandler(_ gesture: UIPanGestureRecognizer) {
         // Pretend 크기 설정
         let small = view.frame.height / 14
+        let medium = view.frame.height * 0.4
         let large = view.frame.height * 0.8
         // 제스처 시작
         let translation = gesture.translation(in: view)
@@ -71,8 +72,11 @@ extension HomeViewController {
         // 제스터 (드래그 끝났을때) 위치에 따라 최종 높이 업데이트
         if gesture.state == .ended {
             // 높이 조정 pretend?
-            if newHeight > (view.frame.height / 2) {
+            if newHeight > (view.frame.height * 0.6) {
                 bottomSheetHeightConstraint = large
+            }
+            else if newHeight > (view.frame.height * 0.3) {
+                bottomSheetHeightConstraint = medium
             }
             else {
                 bottomSheetHeightConstraint = small
