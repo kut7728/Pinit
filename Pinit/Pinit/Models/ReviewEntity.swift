@@ -9,8 +9,6 @@ import Foundation
 struct ReviewEntity: Codable {
     let id: UUID
     let pinID: UUID
-    let data: Date
-    let weather: String
-    let mediaPath: String?
-    let description: String?
+    let date: Date
+    let description: String
 }
