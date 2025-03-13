@@ -19,6 +19,7 @@ final class CustomBottomSheet: UIView {
     }()
     init() {
         super.init(frame: .zero)
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -26,6 +27,10 @@ final class CustomBottomSheet: UIView {
     }
     
     func setupLayout() {
+        self.backgroundColor = .white
+        self.layer.cornerRadius = 15
+        self.layer.maskedCorners = .init(arrayLiteral: [.layerMaxXMinYCorner, .layerMinXMinYCorner])
+        
         addSubviews(collectionView, grabber)
         
         grabber.snp.makeConstraints {
