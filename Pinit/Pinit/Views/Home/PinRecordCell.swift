@@ -9,4 +9,7 @@ import UIKit
 
 final class PinRecordCell: UICollectionViewCell {
     
+    func configure() {
+        
+    }
 }
