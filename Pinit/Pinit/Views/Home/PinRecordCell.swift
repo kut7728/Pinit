@@ -19,11 +19,13 @@ final class PinRecordCell: UICollectionViewCell {
     private lazy var pinTitleLabel: UILabel = {
         let label = UILabel()
         label.font = DesignSystemFont.Pretendard_Bold20.value
+        label.sizeToFit()
         return label
     }()
     private lazy var pinDateLabel: UILabel = {
         let label = UILabel()
         label.font = DesignSystemFont.Pretendard_Medium12.value
+        label.sizeToFit()
         return label
     }()
     
@@ -32,6 +34,8 @@ final class PinRecordCell: UICollectionViewCell {
         pinTitleLabel.text = model.description ?? "제목임미다"
         thumbnailImageView.image = UIImage(systemName: "house")
 //        thumbnailImageView.image = model.mediaPath ?? UIImage(systemName: "house")
+        
+        setupLayout()
     }
     
     private func setupLayout() {
@@ -42,11 +46,11 @@ final class PinRecordCell: UICollectionViewCell {
             $0.height.equalTo(contentView.snp.width)
         }
         pinTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(thumbnailImageView.snp.bottom).inset(8)
+            $0.top.equalTo(thumbnailImageView.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview()
         }
         pinDateLabel.snp.makeConstraints {
-            $0.top.equalTo(pinTitleLabel.snp.bottom).inset(8)
+            $0.top.equalTo(pinTitleLabel.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview()
         }
         
