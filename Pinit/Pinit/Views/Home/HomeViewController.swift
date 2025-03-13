@@ -37,12 +37,13 @@ class HomeViewController: UIViewController {
         Label.snp.makeConstraints{
             $0.center.equalToSuperview()
         }
+        setupBottomSheet()
     }
     
     func setupBottomSheet() {
         // 높이 조절을 위한 제약 설정
         bottomSheet.snp.makeConstraints {
-            let initialHeight = view.frame.width / 6
+            let initialHeight = view.frame.height / 6
             bottomSheetHeightConstraint = $0.height.equalTo(initialHeight).constraint
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -51,15 +52,36 @@ class HomeViewController: UIViewController {
         bottomSheetHeightConstraint.update(offset: 500)
         
         // 패닝 제스처
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
 //        bottomSheet.grabber.addGestureRecognizer(panGesture)
         bottomSheet.addGestureRecognizer(panGesture)
     }
 }
 
 extension HomeViewController {
-    @objc private func panGestureHandler() {
+    @objc private func panGestureHandler(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        // 기본값 설정
+        var newHeight = view.frame.height / 6
+        if let height = bottomSheetHeightConstraint.layoutConstraints.first(
+            where: { $0.firstAttribute == .height && $0.secondAttribute == .height })?.constant
+        {
+            newHeight = height - translation.y
+            gesture.setTranslation(.zero, in: view)
+        }
         
+        if gesture.state == .ended {
+            // 높이 조정 pretend?
+            if newHeight > (view.frame.height / 2) {
+                newHeight = view.frame.height * 0.8
+            }
+            else {
+                newHeight = view.frame.height / 6
+            }
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.bottomSheetHeightConstraint.update(offset: newHeight)
+        }
     }
 }
 
