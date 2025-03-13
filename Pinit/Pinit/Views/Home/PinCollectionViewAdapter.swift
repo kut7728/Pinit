@@ -25,13 +25,14 @@ final class PinCollectionViewAdapter: NSObject {
     ) {
         super.init()
         // CollectionView 설정
-        let layout = UICollectionViewFlowLayout()
-        let width = (width / 2) - 16
-//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.itemSize = .init(width: width, height: width)
-        layout.minimumInteritemSpacing = 8
-        layout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
-        collectionView.setCollectionViewLayout(layout, animated: false)
+        //        let layout = UICollectionViewFlowLayout()
+        //        let spacing = 16.0
+        //        let width = (width / 2) - (spacing * 2)
+        //        layout.estimatedItemSize = .init(width: width, height: width)//UICollectionViewFlowLayout.automaticSize
+        ////        layout.itemSize = .init(width: width, height: width)
+        //        layout.minimumInteritemSpacing = spacing
+        //        layout.sectionInset = .init(top: spacing, left: spacing, bottom: spacing, right: spacing)
+        collectionView.setCollectionViewLayout(configureLayout(), animated: false)
         collectionView.register(PinRecordCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .yellow
         collectionView.dataSource = self
@@ -48,8 +49,9 @@ extension PinCollectionViewAdapter: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PinRecordCell
         else { return UICollectionViewCell() }
-        print("HIHI")
+        
         cell.configure(model: data[indexPath.row])
+        cell.layoutIfNeeded()
         
         return cell
     }
@@ -72,5 +74,26 @@ extension PinCollectionViewAdapter: UICollectionViewDelegate {
             }
             return UIMenu(title: "", children: [deleteAction])
         }
+    }
+}
+
+extension PinCollectionViewAdapter {
+    private func configureLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout(section: commonSectionLayout())
+    }
+    private func commonSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.65))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
+        group.interItemSpacing = .fixed(16)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 16
+        section.contentInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16)
+        
+        return section
     }
 }
