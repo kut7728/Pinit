@@ -45,7 +45,7 @@ final class CustomBottomSheet: UIView {
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(cornerRadius*2)
+            $0.top.equalToSuperview().offset(cornerRadius*1.5)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }

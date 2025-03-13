@@ -7,28 +7,15 @@
 
 import UIKit
 
-struct OldPinEntity {
-    let pin_id: UUID
-    let latitude: Double
-    let longitude: Double
-    let address: String
-    let date: String
-    let weather: String
-    let mediaPath: String?
-    let description: String?
-    
-    
-}
-
 struct PinEntity {
     let pin_id: UUID
     let title: String
     let latitude: Double
     let longitude: Double
     let address: String
-    let date: String
+    let date: Date
     let weather: String
-    let description: String
+    let description: String?
     let mediaPath: UIImage?
     
     static let sampleData: [PinEntity] = [
@@ -37,7 +24,7 @@ struct PinEntity {
                       latitude: 37.56100504013702,
                       longitude: 126.97628375547349,
                       address: "서울특별시 도로명주소 24번지",
-                      date: "2024-12-11T16:21:14.472293",
+                      date: Date(),
                       weather: "비",
                       description: "샘플 설명 83",
                       mediaPath: nil),  // 이미지 없음
@@ -47,7 +34,7 @@ struct PinEntity {
                       latitude: 37.56765588123195,
                       longitude: 126.98134546666795,
                       address: "서울특별시 도로명주소 51번지",
-                      date: "2024-06-28T16:21:14.472520",
+                      date: Date(),
                       weather: "눈",
                       description: "샘플 설명 67",
                       mediaPath: nil),  // 이미지 변환
@@ -57,7 +44,7 @@ struct PinEntity {
                       latitude: 37.568960833887765,
                       longitude: 126.97047797779446,
                       address: "서울특별시 도로명주소 1번지",
-                      date: "2025-03-01T16:21:14.472791",
+                      date: Date(),
                       weather: "비",
                       description: "샘플 설명 36",
                       mediaPath: nil)  // 이미지 없음

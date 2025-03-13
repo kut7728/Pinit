@@ -27,8 +27,8 @@ final class PinCollectionViewAdapter: NSObject {
         // CollectionView 설정
         let layout = UICollectionViewFlowLayout()
         let spacing = 16.0
-        let width = (width / 2) - (spacing * 2)
-        layout.itemSize = .init(width: width, height: width * 1.2)
+        let width = (width / 2) - (spacing * 1.5)
+        layout.itemSize = .init(width: width, height: width * 1.23)
         layout.minimumInteritemSpacing = spacing
         layout.sectionInset = .init(top: spacing, left: spacing, bottom: spacing, right: spacing)
         collectionView.setCollectionViewLayout(layout, animated: false)
