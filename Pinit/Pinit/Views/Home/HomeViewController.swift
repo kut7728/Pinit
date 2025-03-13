@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  Pinit
 //
 //  Created by nelime on 3/10/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     
     private let Label : UILabel = {
         let label = UILabel()
@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .white
         view.addSubview(Label)
         
         Label.snp.makeConstraints{
@@ -30,5 +30,5 @@ class ViewController: UIViewController {
 
 
 #Preview{
-    ViewController()
+    HomeViewController()
 }
