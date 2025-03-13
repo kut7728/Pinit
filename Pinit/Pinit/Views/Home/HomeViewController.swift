@@ -25,8 +25,8 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addSubview(Label)
+        view.backgroundColor = .gray
+        view.addSubviews(Label, bottomSheet)
         
         adapter = PinCollectionViewAdapter(
             collectionView: bottomSheet.collectionView,
@@ -44,9 +44,9 @@ class HomeViewController: UIViewController {
         // 높이 조절을 위한 제약 설정
         bottomSheet.snp.makeConstraints {
             let initialHeight = view.frame.height / 6
-            bottomSheetHeightConstraint = $0.height.equalTo(initialHeight).constraint
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            bottomSheetHeightConstraint = $0.height.equalTo(initialHeight).constraint
         }
         // 높이 변경
         bottomSheetHeightConstraint.update(offset: 500)
@@ -81,6 +81,7 @@ extension HomeViewController {
         }
         UIView.animate(withDuration: 0.3) {
             self.bottomSheetHeightConstraint.update(offset: newHeight)
+            self.bottomSheet.layoutIfNeeded()
         }
     }
 }
