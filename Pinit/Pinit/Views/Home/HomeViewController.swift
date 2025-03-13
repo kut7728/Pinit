@@ -20,7 +20,7 @@ class HomeViewController: UIViewController {
         label.font = DesignSystemFont.Pretendard_Bold70.value
         return label
     }()
-    private var bottomSheetHeightConstraint: Constraint!
+    private var bottomSheetHeightConstraint: CGFloat = 0
 
     
     override func viewDidLoad() {
@@ -43,45 +43,47 @@ class HomeViewController: UIViewController {
     func setupBottomSheet() {
         // 높이 조절을 위한 제약 설정
         bottomSheet.snp.makeConstraints {
-            let initialHeight = view.frame.height / 6
+            bottomSheetHeightConstraint = view.frame.height / 14
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            bottomSheetHeightConstraint = $0.height.equalTo(initialHeight).constraint
+            $0.height.equalTo(bottomSheetHeightConstraint)
         }
-        // 높이 변경
-        bottomSheetHeightConstraint.update(offset: 500)
         
         // 패닝 제스처
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
-//        bottomSheet.grabber.addGestureRecognizer(panGesture)
-        bottomSheet.addGestureRecognizer(panGesture)
+        //        bottomSheet.addGestureRecognizer(panGesture)
+        bottomSheet.grabber.addGestureRecognizer(panGesture)
     }
 }
 
 extension HomeViewController {
     @objc private func panGestureHandler(_ gesture: UIPanGestureRecognizer) {
+        let small = view.frame.height / 14
+        let large = view.frame.height * 0.8
+        
         let translation = gesture.translation(in: view)
-        // 기본값 설정
-        var newHeight = view.frame.height / 6
-        if let height = bottomSheetHeightConstraint.layoutConstraints.first(
-            where: { $0.firstAttribute == .height && $0.secondAttribute == .height })?.constant
-        {
-            newHeight = height - translation.y
+        let newHeight = bottomSheetHeightConstraint - translation.y
+        
+        if newHeight >= small && newHeight <= large {
+            bottomSheetHeightConstraint = newHeight
             gesture.setTranslation(.zero, in: view)
         }
         
         if gesture.state == .ended {
             // 높이 조정 pretend?
             if newHeight > (view.frame.height / 2) {
-                newHeight = view.frame.height * 0.8
+                bottomSheetHeightConstraint = large
             }
             else {
-                newHeight = view.frame.height / 6
+                bottomSheetHeightConstraint = small
             }
         }
-        UIView.animate(withDuration: 0.3) {
-            self.bottomSheetHeightConstraint.update(offset: newHeight)
-            self.bottomSheet.layoutIfNeeded()
+        // 업데이트 부분
+        UIView.animate(withDuration: 0.2) {
+            self.bottomSheet.snp.updateConstraints {
+                $0.height.equalTo(self.bottomSheetHeightConstraint)
+            }
+            self.view.layoutIfNeeded()
         }
     }
 }
