@@ -30,7 +30,7 @@ final class PinCollectionViewAdapter: NSObject {
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         collectionView.setCollectionViewLayout(layout, animated: true)
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .yellow
         collectionView.dataSource = self
         collectionView.delegate = self
     }
