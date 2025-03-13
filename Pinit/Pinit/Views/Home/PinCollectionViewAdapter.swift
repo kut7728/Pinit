@@ -24,7 +24,6 @@ final class PinCollectionViewAdapter: NSObject {
         width: CGFloat
     ) {
         super.init()
-        //200 * 0.625 = 125
         // CollectionView 설정
         let layout = UICollectionViewFlowLayout()
         let spacing = 16.0

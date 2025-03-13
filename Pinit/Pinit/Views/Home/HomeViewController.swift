@@ -26,9 +26,17 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupProperties()
+        setupAdapter()
+        setupBottomSheet()
+    }
+    
+    private func setupProperties() {
         view.backgroundColor = .gray
         view.addSubviews(Label, bottomSheet)
-        
+    }
+    
+    private func setupAdapter() {
         adapter = PinCollectionViewAdapter(
             collectionView: bottomSheet.collectionView,
             width: view.frame.width
@@ -38,10 +46,9 @@ class HomeViewController: UIViewController {
         Label.snp.makeConstraints{
             $0.center.equalToSuperview()
         }
-        setupBottomSheet()
     }
     
-    func setupBottomSheet() {
+    private func setupBottomSheet() {
         bottomSheet.snp.makeConstraints {
             bottomSheetHeightConstraint = view.frame.height / 14
             $0.leading.trailing.equalToSuperview()
@@ -54,7 +61,7 @@ class HomeViewController: UIViewController {
         bottomSheet.addGestureRecognizer(panGesture)
     }
 }
-
+// MARK: @objc func
 extension HomeViewController {
     @objc private func panGestureHandler(_ gesture: UIPanGestureRecognizer) {
         // Pretend 크기 설정
@@ -87,12 +94,11 @@ extension HomeViewController {
         }
         // Constraint 업데이트 + Animation
         UIView.animate(withDuration: 0.2) {
-            
             self.view.layoutIfNeeded()
         }
     }
 }
-
+// MARK: PinCollectionViewAdapterDelegate
 extension HomeViewController: PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity) {
         print("Selected: \(selected)")

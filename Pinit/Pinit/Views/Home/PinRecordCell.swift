@@ -42,9 +42,9 @@ final class PinRecordCell: UICollectionViewCell {
     
     func configure(model: PinEntity) {
         pinDateLabel.text = model.date
-        pinTitleLabel.text = model.description ?? "제목임미다"
+        pinTitleLabel.text = model.description
         thumbnailImageView.image = UIImage(systemName: "house")
-        //        thumbnailImageView.image = model.mediaPath ?? UIImage(systemName: "house")
+        //thumbnailImageView.image = model.mediaPath ?? UIImage(systemName: "house")
         
         setupLayout()
     }
