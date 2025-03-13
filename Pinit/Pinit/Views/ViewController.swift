@@ -17,8 +17,6 @@ class ViewController: UIViewController {
         return label
     }()
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .yellow
@@ -28,10 +26,6 @@ class ViewController: UIViewController {
             $0.center.equalToSuperview()
         }
     }
-    
-    
-    
-    
 }
 
 
