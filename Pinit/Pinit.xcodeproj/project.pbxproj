@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1286F432D815BED006B5E52 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D1286F422D815BED006B5E52 /* SnapKit */; };
+		D14369DC2D82D1970095F7E3 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = D14369DB2D82D1970095F7E3 /* FSCalendar */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1286F432D815BED006B5E52 /* SnapKit in Frameworks */,
+				D14369DC2D82D1970095F7E3 /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = Pinit;
 			packageProductDependencies = (
 				D1286F422D815BED006B5E52 /* SnapKit */,
+				D14369DB2D82D1970095F7E3 /* FSCalendar */,
 			);
 			productName = Pinit;
 			productReference = 6DDB45C12D7ED702006C4A4B /* Pinit.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D1286F412D815BED006B5E52 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D14369DA2D82D1970095F7E3 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DDB45C22D7ED702006C4A4B /* Products */;
@@ -352,6 +356,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		D14369DA2D82D1970095F7E3 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -359,6 +371,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D1286F412D815BED006B5E52 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		D14369DB2D82D1970095F7E3 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D14369DA2D82D1970095F7E3 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
