@@ -16,6 +16,7 @@ final class CustomBottomSheet: UIView {
         grabber.layer.borderColor = UIColor.white.cgColor
         grabber.layer.borderWidth = 1
         grabber.clipsToBounds = true
+        grabber.isUserInteractionEnabled = false //Grabber는 Guide용으로만 사용
         return grabber
     }()
     init() {
@@ -28,8 +29,10 @@ final class CustomBottomSheet: UIView {
     }
     
     func setupLayout() {
+        let cornerRadius = 20.0
         self.backgroundColor = .white
-        self.layer.cornerRadius = 15
+        self.layer.cornerRadius = cornerRadius
+        // cornerRadius 상단 좌,우측만 적용하기
         self.layer.maskedCorners = .init(arrayLiteral: [.layerMaxXMinYCorner, .layerMinXMinYCorner])
         
         addSubviews(collectionView, grabber)
@@ -42,7 +45,7 @@ final class CustomBottomSheet: UIView {
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(32)
+            $0.top.equalToSuperview().offset(cornerRadius*2)
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.bottom.equalToSuperview().inset(8)
             
