@@ -8,13 +8,14 @@
 import UIKit
 
 final class CustomBottomSheet: UIView {
-    var collectionView = UICollectionView()
+    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     let grabber: UIView = {
         let grabber = UIView()
-        grabber.layer.cornerRadius = 3
+        grabber.layer.cornerRadius = 4
         grabber.backgroundColor = .black
         grabber.layer.borderColor = UIColor.white.cgColor
         grabber.layer.borderWidth = 1
+        grabber.clipsToBounds = true
         return grabber
     }()
     init() {
@@ -32,16 +33,19 @@ final class CustomBottomSheet: UIView {
         self.layer.maskedCorners = .init(arrayLiteral: [.layerMaxXMinYCorner, .layerMinXMinYCorner])
         
         addSubviews(collectionView, grabber)
-        
+
         grabber.snp.makeConstraints {
-            $0.top.leading.equalToSuperview().offset(8)
-            $0.trailing.equalToSuperview().inset(8)
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(8)
+            $0.width.equalTo(100)
             $0.height.equalTo(grabber.layer.cornerRadius * 2)
         }
         
         collectionView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview().offset(8)
-            $0.top.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(32)
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.bottom.equalToSuperview().inset(8)
+            
         }
     }
 }
