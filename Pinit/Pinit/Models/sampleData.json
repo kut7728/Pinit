@@ -1,0 +1,162 @@
+[
+    {
+        "pin_id": "b44a6eaf-a5f8-426c-8200-0cf93a18c2ca",
+        "latitude": 37.56100504013702,
+        "longitude": 126.97628375547349,
+        "address": "서울특별시 도로명주소 24번지",
+        "record_date": "2024-12-11T16:21:14.472293",
+        "weather": "비",
+        "media_path": null,
+        "description": "샘플 설명 83"
+    },
+    {
+        "pin_id": "68dd4f80-95ea-46a5-a632-9a4a069e1b7a",
+        "latitude": 37.56877952814179,
+        "longitude": 126.98456754049919,
+        "address": "서울특별시 도로명주소 30번지",
+        "record_date": "2024-12-15T16:21:14.472468",
+        "weather": "비",
+        "media_path": null,
+        "description": "샘플 설명 93"
+    },
+    {
+        "pin_id": "d2c3ae95-5261-47e1-ab6f-ad71c00aadf7",
+        "latitude": 37.56765588123195,
+        "longitude": 126.98134546666795,
+        "address": "서울특별시 도로명주소 51번지",
+        "record_date": "2024-06-28T16:21:14.472520",
+        "weather": "눈",
+        "media_path": "/media/e8d7fc54-d9ec-4d74-8926-7f634356c6f0.jpg",
+        "description": "샘플 설명 67"
+    },
+    {
+        "pin_id": "433c8bd9-94bd-4871-a33c-33764591ee8d",
+        "latitude": 37.561084133506085,
+        "longitude": 126.97772615998592,
+        "address": "서울특별시 도로명주소 12번지",
+        "record_date": "2024-06-09T16:21:14.472578",
+        "weather": "비",
+        "media_path": "/media/a4d505b5-b868-4eb8-b5a4-8ddb8eb7cde1.jpg",
+        "description": "샘플 설명 72"
+    },
+    {
+        "pin_id": "5170db8b-7e0d-4f1f-b01c-9c3e2403c4a6",
+        "latitude": 37.56141240706244,
+        "longitude": 126.97405621468289,
+        "address": "서울특별시 도로명주소 7번지",
+        "record_date": "2024-05-01T16:21:14.472636",
+        "weather": "눈",
+        "media_path": "/media/0ab04e6d-7ad2-4653-9b1e-8ac696a7497b.jpg",
+        "description": "샘플 설명 87"
+    },
+    {
+        "pin_id": "44eaec4e-a87a-4947-9670-fa350124bd12",
+        "latitude": 37.568960833887765,
+        "longitude": 126.97047797779446,
+        "address": "서울특별시 도로명주소 1번지",
+        "record_date": "2025-03-01T16:21:14.472791",
+        "weather": "비",
+        "media_path": null,
+        "description": "샘플 설명 36"
+    },
+    {
+        "pin_id": "bd704a06-cec9-44aa-b9b7-1bc701a66d12",
+        "latitude": 37.560203477731456,
+        "longitude": 126.97764758540116,
+        "address": "서울특별시 도로명주소 58번지",
+        "record_date": "2025-03-12T16:21:14.473523",
+        "weather": "맑음",
+        "media_path": "/media/21c5ecb1-0879-4d90-b5de-c946d0b98c61.jpg",
+        "description": "샘플 설명 31"
+    },
+    {
+        "pin_id": "62241721-fdb2-475c-97c1-d1f6df2bdd45",
+        "latitude": 37.354225829412755,
+        "longitude": 127.94270072929358,
+        "address": "서울특별시 도로명주소 84번지",
+        "record_date": "2025-01-29T16:21:14.473468",
+        "weather": "비",
+        "media_path": null,
+        "description": "샘플 설명 48"
+    },
+    {
+        "pin_id": "9a9d612c-6e2f-4e79-ab1c-b0d1b80f620b",
+        "latitude": 37.34796148005763,
+        "longitude": 127.9542844343735,
+        "address": "서울특별시 도로명주소 47번지",
+        "record_date": "2025-02-04T16:21:14.473479",
+        "weather": "맑음",
+        "media_path": "/media/783f37b1-43c5-4514-a9f8-b671c5c58c7e.jpg",
+        "description": "샘플 설명 10"
+    },
+    {
+        "pin_id": "3abe3395-2373-4b4c-8379-797059a93173",
+        "latitude": 37.35479273389127,
+        "longitude": 127.95064292442896,
+        "address": "서울특별시 도로명주소 92번지",
+        "record_date": "2025-03-08T16:21:14.473494",
+        "weather": "바람",
+        "media_path": "/media/42cc2915-1d4a-4768-8e8e-13a71d08ac13.jpg",
+        "description": "샘플 설명 12"
+    },
+    {
+        "pin_id": "3c86e93b-5b88-4b8a-b690-250789ec5db1",
+        "latitude": 37.34826781136184,
+        "longitude": 127.9464906798696,
+        "address": "원주시 도로명주소 78번지",
+        "record_date": "2025-03-12T16:21:14.473523",
+        "weather": "맑음",
+        "media_path": "/media/e7fa26db-a359-417d-8db2-2cc8283d35df.jpg",
+        "description": "샘플 설명 90"
+    },
+    {
+        "pin_id": "1588ac71-21bb-4087-b5c1-d13cc470834d",
+        "latitude": 37.343127539418106,
+        "longitude": 127.94316609952585,
+        "address": "원주시 도로명주소 76번지",
+        "record_date": "2024-10-05T16:21:14.473552",
+        "weather": "바람",
+        "media_path": "/media/ba0f3666-6d53-471d-802c-2b81716ad390.jpg",
+        "description": "샘플 설명 82"
+    },
+    {
+        "pin_id": "5a0c5cd9-810e-436f-8e2e-1872f134f269",
+        "latitude": 37.337325895469405,
+        "longitude": 127.95171195207037,
+        "address": "원주시 도로명주소 71번지",
+        "record_date": "2025-02-23T16:21:14.473586",
+        "weather": "흐림",
+        "media_path": "/media/708c0498-8080-4d90-aae2-69923d86fd72.jpg",
+        "description": "샘플 설명 51"
+    },
+    {
+        "pin_id": "b44a6eaf-a5f8-426c-8200-0cf93a18c2ca",
+        "latitude": 37.354225829412755,
+        "longitude": 127.94270072929358,
+        "address": "원주시 도로명주소 84번지",
+        "record_date": "2025-01-29T16:21:14.473468",
+        "weather": "비",
+        "media_path": null,
+        "description": "샘플 설명 48"
+    },
+    {
+        "pin_id": "68dd4f80-95ea-46a5-a632-9a4a069e1b7a",
+        "latitude": 37.34796148005763,
+        "longitude": 127.9542844343735,
+        "address": "원주시 도로명주소 47번지",
+        "record_date": "2025-02-04T16:21:14.473479",
+        "weather": "맑음",
+        "media_path": "/media/783f37b1-43c5-4514-a9f8-b671c5c58c7e.jpg",
+        "description": "샘플 설명 10"
+    },
+    {
+        "pin_id": "3abe3395-2373-4b4c-8379-797059a93173",
+        "latitude": 37.35479273389127,
+        "longitude": 127.95064292442896,
+        "address": "원주시 도로명주소 92번지",
+        "record_date": "2025-03-08T16:21:14.473494",
+        "weather": "바람",
+        "media_path": "/media/42cc2915-1d4a-4768-8e8e-13a71d08ac13.jpg",
+        "description": "샘플 설명 12"
+    }
+]

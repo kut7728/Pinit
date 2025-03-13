@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치기반 기록 작성을 위한 위치 서비스 사용을 허용해 주시옵소서</string>
+	<key>NSCameraUsageDescription</key>
+	<string>기록 작성을 위한 카메라 사용을 허용해 주십옵소서</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Thin.otf</string>
