@@ -35,7 +35,7 @@ final class PinRecordCell: UICollectionViewCell {
     private lazy var pinDateLabel: UILabel = {
         let label = UILabel()
         label.font = DesignSystemFont.Pretendard_Medium12.value
-        label.textColor = .secondaryLabel
+        label.textColor = UIColor(hex: "808080")
         label.sizeToFit()
         return label
     }()
