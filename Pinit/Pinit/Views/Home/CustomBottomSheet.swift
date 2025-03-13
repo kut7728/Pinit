@@ -30,7 +30,7 @@ final class CustomBottomSheet: UIView {
     
     func setupLayout() {
         let cornerRadius = 20.0
-        self.backgroundColor = .white
+        self.backgroundColor = .secondarySystemBackground
         self.layer.cornerRadius = cornerRadius
         // cornerRadius 상단 좌,우측만 적용하기
         self.layer.maskedCorners = .init(arrayLiteral: [.layerMaxXMinYCorner, .layerMinXMinYCorner])
