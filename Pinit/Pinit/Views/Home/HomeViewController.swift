@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
         label.font = DesignSystemFont.Pretendard_Bold70.value
         return label
     }()
+    // BottomSheet 동적 높이를 저장하기위한 변수
     private var bottomSheetHeightConstraint: CGFloat = 0
 
     
@@ -41,7 +42,6 @@ class HomeViewController: UIViewController {
     }
     
     func setupBottomSheet() {
-        // 높이 조절을 위한 제약 설정
         bottomSheet.snp.makeConstraints {
             bottomSheetHeightConstraint = view.frame.height / 14
             $0.leading.trailing.equalToSuperview()
@@ -51,24 +51,24 @@ class HomeViewController: UIViewController {
         
         // 패닝 제스처
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
-        //        bottomSheet.addGestureRecognizer(panGesture)
-        bottomSheet.grabber.addGestureRecognizer(panGesture)
+        bottomSheet.addGestureRecognizer(panGesture)
     }
 }
 
 extension HomeViewController {
     @objc private func panGestureHandler(_ gesture: UIPanGestureRecognizer) {
+        // Pretend 크기 설정
         let small = view.frame.height / 14
         let large = view.frame.height * 0.8
-        
+        // 제스처 시작
         let translation = gesture.translation(in: view)
         let newHeight = bottomSheetHeightConstraint - translation.y
-        
+        // 제스처 (드래그) 위치에 따라 업데이트
         if newHeight >= small && newHeight <= large {
             bottomSheetHeightConstraint = newHeight
             gesture.setTranslation(.zero, in: view)
         }
-        
+        // 제스터 (드래그 끝났을때) 위치에 따라 최종 높이 업데이트
         if gesture.state == .ended {
             // 높이 조정 pretend?
             if newHeight > (view.frame.height / 2) {
@@ -78,7 +78,7 @@ extension HomeViewController {
                 bottomSheetHeightConstraint = small
             }
         }
-        // 업데이트 부분
+        // Constraint 업데이트 + Animation
         UIView.animate(withDuration: 0.2) {
             self.bottomSheet.snp.updateConstraints {
                 $0.height.equalTo(self.bottomSheetHeightConstraint)

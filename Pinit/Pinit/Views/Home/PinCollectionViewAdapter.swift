@@ -17,13 +17,14 @@ protocol PinCollectionViewAdapterDelegate: AnyObject {
 
 // MARK: CollectionView Adapter
 final class PinCollectionViewAdapter: NSObject {
-    var data: [PinEntity] = []
-    var delegate: PinCollectionViewAdapterDelegate?
+    var data: [PinEntity] = [] // 어댑터에서 datasource 관리
+    var delegate: PinCollectionViewAdapterDelegate? // CollectionView 선택, 삭제등의 결과를 받기위한 Delegate
     init(
         collectionView: UICollectionView,
         width: CGFloat
     ) {
         super.init()
+        // CollectionView 설정
         let layout = UICollectionViewFlowLayout()
         let width = (width / 2) - 16
         layout.itemSize = .init(width: width, height: width)
@@ -55,7 +56,7 @@ extension PinCollectionViewAdapter: UICollectionViewDataSource {
 // MARK: CollectionView Delegate
 extension PinCollectionViewAdapter: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.selectedItem(selected: data[indexPath.row])
+        delegate?.selectedItem(selected: data[indexPath.row]) // 선택된 아이템 delegate로 보냄
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
@@ -65,7 +66,7 @@ extension PinCollectionViewAdapter: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { elements in
             let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash")) {[weak self] action in
                 let deleted = self?.data.remove(at: indexPath.row)
-                self?.delegate?.deletedItem(deleted: deleted)
+                self?.delegate?.deletedItem(deleted: deleted) // 삭제된 아이템 delegate로 보냄
             }
             return UIMenu(title: "", children: [deleteAction])
         }
