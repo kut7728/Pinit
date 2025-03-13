@@ -27,10 +27,12 @@ final class PinCollectionViewAdapter: NSObject {
         // CollectionView 설정
         let layout = UICollectionViewFlowLayout()
         let width = (width / 2) - 16
+//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.itemSize = .init(width: width, height: width)
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
         collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.register(PinRecordCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .yellow
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -46,8 +48,8 @@ extension PinCollectionViewAdapter: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PinRecordCell
         else { return UICollectionViewCell() }
-        
-        cell.configure()
+        print("HIHI")
+        cell.configure(model: data[indexPath.row])
         
         return cell
     }

@@ -34,7 +34,7 @@ class HomeViewController: UIViewController {
             width: view.frame.width
         )
         adapter?.delegate = self
-        
+        adapter?.data = PinEntity.sampleData
         Label.snp.makeConstraints{
             $0.center.equalToSuperview()
         }
