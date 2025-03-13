@@ -78,11 +78,12 @@ extension HomeViewController {
                 bottomSheetHeightConstraint = small
             }
         }
+        bottomSheet.snp.updateConstraints {
+            $0.height.equalTo(self.bottomSheetHeightConstraint)
+        }
         // Constraint 업데이트 + Animation
         UIView.animate(withDuration: 0.2) {
-            self.bottomSheet.snp.updateConstraints {
-                $0.height.equalTo(self.bottomSheetHeightConstraint)
-            }
+            
             self.view.layoutIfNeeded()
         }
     }
