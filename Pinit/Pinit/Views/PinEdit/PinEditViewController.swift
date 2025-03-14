@@ -24,6 +24,8 @@ final class PinEditViewController: UIViewController {
         
         self.view.addSubview(mapView)       //mapview 뷰에 보이게 합니다다아암;ㄹㅇ너리ㅏ머
         
+        setUpKeyboard()
+        
         let center = CLLocationCoordinate2D(latitude: 37.506446, longitude: 126.885397)     //중심좌표
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
         mapView.setRegion(region, animated: true)
@@ -78,19 +80,19 @@ final class PinEditViewController: UIViewController {
         }
         
         // 제목 작성 버튼
-        let titlebutton = UITextField()
-        titlebutton.backgroundColor = .systemPink
-        titlebutton.textColor = .white
-        titlebutton.attributedPlaceholder = NSAttributedString(
+        let titlefield = UITextField()
+        titlefield.backgroundColor = .systemPink
+        titlefield.textColor = .white
+        titlefield.attributedPlaceholder = NSAttributedString(
             string: "제목 작성",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white] //제목작성 글자 흰색으로
         )
-        titlebutton.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))  // 이거 개쩜 제목 작성 맨 앞에 여백을 주는거임
-        titlebutton.leftViewMode = .always      //항상
+        titlefield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))  // 이거 개쩜 제목 작성 맨 앞에 여백을 주는거임
+        titlefield.leftViewMode = .always      //항상
         
-        self.view.addSubview(titlebutton)
+        self.view.addSubview(titlefield)
         
-        titlebutton.snp.makeConstraints{
+        titlefield.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(20)
             $0.top.equalToSuperview().offset(540)
             $0.width.equalTo(360)
@@ -99,12 +101,11 @@ final class PinEditViewController: UIViewController {
         
         let keyboardToolbar = UIToolbar()
         let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneBarButton = UIBarButtonItem(title: "완료 ", style: .plain, target: self, action: #selector(doneBtnClicked))
+        let doneBarButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneBtnClicked))
         keyboardToolbar.items = [flexBarButton, doneBarButton]
         keyboardToolbar.sizeToFit()
-        keyboardToolbar.tintColor = UIColor.white
         
-        titlebutton.inputAccessoryView = keyboardToolbar
+        titlefield.inputAccessoryView = keyboardToolbar
         
         
     }
@@ -112,8 +113,30 @@ final class PinEditViewController: UIViewController {
     @objc func doneBtnClicked() {
         view.endEditing(true)  // 키보드 닫기
     }
-}
+    func setUpKeyboard() {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(keyboardWillShow),
+                                                   name: UIResponder.keyboardWillShowNotification,
+                                                   object: nil)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(keyboardWillHide),
+                                                   name: UIResponder.keyboardWillHideNotification,
+                                                   object: nil)
+        }
+
+        @objc func keyboardWillShow(notification: NSNotification) {
+            view.frame.origin.y = -300
+            // 키보드가 나타날 때 동작 (예: 뷰 위치 조정)
+        }
+
+        @objc func keyboardWillHide(notification: NSNotification) {
+            view.frame.origin.y = 0
+            // 키보드가 사라질 때 동작
+        }
+    }
 
 #Preview{
     PinEditViewController()
 }
+
+
