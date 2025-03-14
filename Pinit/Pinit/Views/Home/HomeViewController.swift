@@ -11,29 +11,47 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     
-    private var adapter: PinCollectionViewAdapter?
-    
-    private let bottomSheet = CustomBottomSheet()
-    private let Label : UILabel = {
-        let label = UILabel()
-        label.text = "한글 123 #%^#$"
-        label.font = DesignSystemFont.Pretendard_Bold70.value
-        return label
-    }()
     // BottomSheet 동적 높이를 저장하기위한 변수
-    private var bottomSheetHeightConstraint: CGFloat = 0
-
+    private lazy var bottomSheetHeightConstraint: CGFloat = view.frame.height / 14
+    private let circleButtonSize: CGFloat = 44
+    
+    private var adapter: PinCollectionViewAdapter?
+    private let bottomSheet = CustomBottomSheet()
+    private lazy var addPinButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "pencil.line"), for: .normal)
+        button.backgroundColor = .secondarySystemBackground
+        button.layer.cornerRadius = circleButtonSize / 2
+        button.clipsToBounds = true
+        return button
+    }()
+    private lazy var currentLocationButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "dot.scope"), for: .normal)
+        button.backgroundColor = .secondarySystemBackground
+        button.layer.cornerRadius = circleButtonSize / 2
+        button.clipsToBounds = true
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProperties()
         setupAdapter()
-        setupBottomSheet()
+        setupLayout()
     }
     
     private func setupProperties() {
         view.backgroundColor = .gray
-        view.addSubviews(Label, bottomSheet)
+        
+        // 바텀시트 패닝 제스처 추가
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
+        bottomSheet.addGestureRecognizer(panGesture)
+        // 버튼 액션 추가
+        addPinButton.addTarget(self, action: #selector(moveToAddPin), for: .touchUpInside)
+        currentLocationButton.addTarget(self, action: #selector(moveToUserLocation), for: .touchUpInside)
+        
+        view.addSubviews(addPinButton, currentLocationButton, bottomSheet)
     }
     
     private func setupAdapter() {
@@ -43,26 +61,50 @@ class HomeViewController: UIViewController {
         )
         adapter?.delegate = self
         adapter?.data = PinEntity.sampleData
-        Label.snp.makeConstraints{
-            $0.center.equalToSuperview()
-        }
     }
     
-    private func setupBottomSheet() {
+    private func setupLayout() {
         bottomSheet.snp.makeConstraints {
-            bottomSheetHeightConstraint = view.frame.height / 14
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(bottomSheetHeightConstraint)
         }
-        
-        // 패닝 제스처
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler(_:)))
-        bottomSheet.addGestureRecognizer(panGesture)
+        addPinButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview().inset(bottomSheetHeightConstraint * 2.5)
+            $0.size.equalTo(circleButtonSize)
+        }
+        currentLocationButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalTo(addPinButton.snp.top).offset(-10)
+            $0.size.equalTo(circleButtonSize)
+        }
     }
 }
-// MARK: @objc func
+
+// MARK: PinCollectionViewAdapterDelegate
+extension HomeViewController: PinCollectionViewAdapterDelegate {
+    func selectedItem(selected: PinEntity) {
+        print("Selected: \(selected)")
+        // 여기서 화면 이동
+    }
+    
+    func deletedItem(deleted: PinEntity?) {
+        print("Deleted: \(deleted)")
+        // 여기서 CoreData 업데이트
+    }
+}
+
+// MARK: @objc event callback function
 extension HomeViewController {
+    @objc private func moveToAddPin() {
+        print("기록하기 화면으로 이동")
+    }
+    
+    @objc private func moveToUserLocation() {
+        print("CLLocation에서 유저 화면으로 이동")
+    }
+    
     @objc private func panGestureHandler(_ gesture: UIPanGestureRecognizer) {
         // Pretend 크기 설정
         let small = view.frame.height / 14
@@ -93,23 +135,12 @@ extension HomeViewController {
             $0.height.equalTo(self.bottomSheetHeightConstraint)
         }
         // Constraint 업데이트 + Animation
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.07) {
             self.view.layoutIfNeeded()
         }
     }
 }
-// MARK: PinCollectionViewAdapterDelegate
-extension HomeViewController: PinCollectionViewAdapterDelegate {
-    func selectedItem(selected: PinEntity) {
-        print("Selected: \(selected)")
-        // 여기서 화면 이동
-    }
-    
-    func deletedItem(deleted: PinEntity?) {
-        print("Deleted: \(deleted)")
-        // 여기서 CoreData 업데이트
-    }
-}
+
 
 
 #Preview{
