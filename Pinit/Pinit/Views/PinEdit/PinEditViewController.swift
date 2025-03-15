@@ -125,7 +125,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         keyboardToolbar.sizeToFit()
         
         titlefield.inputAccessoryView = keyboardToolbar
-        
+        contentTextView.inputAccessoryView = keyboardToolbar
         
     }
     
