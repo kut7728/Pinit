@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import SnapKit
 
-final class PinEditViewController: UIViewController {
+final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     private var mapView: MKMapView!     //mapview 불러옴
     
@@ -99,6 +99,25 @@ final class PinEditViewController: UIViewController {
             $0.height.equalTo(40)
         }
         
+        // 추가메모 텍스트뷰 추가
+        let contentTextView = UITextView()
+        contentTextView.backgroundColor = .systemPink
+        contentTextView.textColor = .white
+        contentTextView.font = UIFont.systemFont(ofSize: 16)
+        contentTextView.layer.borderColor = UIColor.lightGray.cgColor
+        contentTextView.layer.borderWidth = 1
+
+        self.view.addSubview(contentTextView)
+
+        contentTextView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(20)
+            $0.top.equalTo(titlefield.snp.bottom).offset(10)
+            $0.width.equalTo(360)
+            $0.height.equalTo(150)
+        }
+
+        contentTextView.delegate = self
+        
         let keyboardToolbar = UIToolbar()
         let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneBarButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneBtnClicked))
@@ -113,30 +132,27 @@ final class PinEditViewController: UIViewController {
     @objc func doneBtnClicked() {
         view.endEditing(true)  // 키보드 닫기
     }
+    
     func setUpKeyboard() {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(keyboardWillShow),
-                                                   name: UIResponder.keyboardWillShowNotification,
-                                                   object: nil)
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(keyboardWillHide),
-                                                   name: UIResponder.keyboardWillHideNotification,
-                                                   object: nil)
-        }
-
-        @objc func keyboardWillShow(notification: NSNotification) {
-            view.frame.origin.y = -300
-            // 키보드가 나타날 때 동작 (예: 뷰 위치 조정)
-        }
-
-        @objc func keyboardWillHide(notification: NSNotification) {
-            view.frame.origin.y = 0
-            // 키보드가 사라질 때 동작
-        }
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
     }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        view.frame.origin.y = -300   //키보드가 나타날 때 동작
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        view.frame.origin.y = 0     //키보드가 사라질 때 동작
+    }
+}
 
 #Preview{
     PinEditViewController()
 }
-
-
