@@ -30,6 +30,25 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
         mapView.setRegion(region, animated: true)
         
+        
+        // 지도 오른쪽 위에 닫기 버튼 추가, xmark.circle.fill
+        let closeButton = UIButton(type: .system)
+        if let closeImage = UIImage(systemName: "xmark.circle.fill") {
+            let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .default)
+            let largeImage = closeImage.withConfiguration(largeConfig)
+            closeButton.setImage(largeImage, for: .normal)
+        }
+        closeButton.tintColor = .black
+
+        self.view.addSubview(closeButton)
+
+        // Auto Layout 설정
+        closeButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(60)  // 상단에서 70px
+            $0.trailing.equalToSuperview().offset(0)  // 오른쪽에서 20px
+            $0.width.height.equalTo(40)  // 버튼 크기
+        }
+        
         //왼쪽 기록 날짜 버튼
         let leftbutton = UIButton()
         leftbutton.backgroundColor = .systemPink        //색 핑크임
@@ -61,7 +80,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         //그 아래 카메라 버튼
         let camerabutton = UIButton()
         camerabutton.backgroundColor = .systemPink
-        if let cameraImage = UIImage(systemName: "camera"){     //크기 조절 지피티
+        if let cameraImage = UIImage(systemName: "camera"){
             let largeConfig = UIImage.SymbolConfiguration(pointSize: 80, weight: .regular, scale: .default)
             let largeImage = cameraImage.withConfiguration(largeConfig)
             camerabutton.setImage(largeImage, for: .normal)
@@ -115,9 +134,25 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             $0.width.equalTo(360)
             $0.height.equalTo(150)
         }
-
+        
         contentTextView.delegate = self
         
+        //저장 버튼
+        let savebutton = UIButton()
+        savebutton.backgroundColor = .systemPink
+        savebutton.setTitle("저장", for: .normal)
+        self.view.addSubview(savebutton)
+        
+        //오토레이아웃 설정
+        savebutton.snp.makeConstraints{
+            $0.leading.equalToSuperview().offset(120)
+            $0.top.equalToSuperview().offset(770)
+            $0.width.equalTo(160)
+            $0.height.equalTo(70)
+        }
+        
+        
+        //키보드 완료 버튼
         let keyboardToolbar = UIToolbar()
         let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneBarButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneBtnClicked))
@@ -132,6 +167,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     @objc func doneBtnClicked() {
         view.endEditing(true)  // 키보드 닫기
     }
+    
     
     func setUpKeyboard() {
         NotificationCenter.default.addObserver(self,
