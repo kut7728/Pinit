@@ -127,11 +127,11 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         // 추가메모 텍스트뷰 추가
         let contentTextView = UITextView()
         contentTextView.backgroundColor = .systemPink
-        contentTextView.textColor = .white
+        contentTextView.text = "남기고자 하는 메모가 있다면 작성해주세요."
+        contentTextView.textColor = UIColor.white
         contentTextView.font = UIFont.systemFont(ofSize: 16)
-        contentTextView.layer.borderColor = UIColor.lightGray.cgColor
+        contentTextView.layer.borderColor = UIColor.white.cgColor
         contentTextView.layer.borderWidth = 1
-
         self.view.addSubview(contentTextView)
 
         contentTextView.snp.makeConstraints {
@@ -192,6 +192,20 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         view.frame.origin.y = 0     //키보드가 사라질 때 동작
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "남기고자 하는 메모가 있다면 작성해주세요." {
+            textView.text = ""
+            textView.textColor = .white
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = "남기고자 하는 메모가 있다면 작성해주세요."
+            textView.textColor = UIColor.lightGray
+        }
     }
 }
 
