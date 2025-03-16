@@ -147,6 +147,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         let savebutton = UIButton()
         savebutton.backgroundColor = .systemPink
         savebutton.setTitle("저장", for: .normal)
+        savebutton.layer.cornerRadius = 10
         self.view.addSubview(savebutton)
         
         //오토레이아웃 설정
