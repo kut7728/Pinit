@@ -13,7 +13,8 @@ import SnapKit
 final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     private var mapView: MKMapView!     //mapview 불러옴
-    
+    private let leftbutton = UIButton()   // leftbutton을 클래스 프로퍼티로 변경
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,10 +51,10 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         
         //왼쪽 기록 날짜 버튼
-        let leftbutton = UIButton()
         leftbutton.backgroundColor = .systemPink        //색 핑크임
         leftbutton.setTitle("기록 날짜", for: .normal)      //for: .normal은 아무런 상호작용 없을때 상태
         self.view.addSubview(leftbutton)        //뷰에 leftbutton 보여줌
+        leftbutton.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside) // 타겟 액션 추가
         
         //오토레이아웃 설정
         leftbutton.snp.makeConstraints{
@@ -85,7 +86,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         camerabutton.layer.masksToBounds = false  // 내부에 속한 요소들이 UIView 밖을 벗어날 때, 잘라낼 것인지. 그림자는 밖에 그려지는 것이므로 false 로 설정
         camerabutton.layer.shadowOffset = CGSize(width: 0, height: 4) // 위치조정
         camerabutton.layer.shadowRadius = 10 // 반경
-        camerabutton.layer.shadowOpacity = 0.3
+        camerabutton.layer.shadowOpacity = 0.5
         if let cameraImage = UIImage(systemName: "camera"){
             let largeConfig = UIImage.SymbolConfiguration(pointSize: 80, weight: .regular, scale: .default)
             let largeImage = cameraImage.withConfiguration(largeConfig)
@@ -169,6 +170,31 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         titlefield.inputAccessoryView = keyboardToolbar
         contentTextView.inputAccessoryView = keyboardToolbar
         
+    }
+    
+    @objc func showDatePicker() {
+        let alert = UIAlertController(title: "날짜 선택", message: "\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+        
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.frame = CGRect(x: 10, y: 30, width: alert.view.bounds.width - 20, height: 200)
+        
+        alert.view.addSubview(datePicker)
+        
+        let selectAction = UIAlertAction(title: "선택", style: .default) { _ in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let selectedDate = dateFormatter.string(from: datePicker.date)
+            self.leftbutton.setTitle(selectedDate, for: .normal) // leftbutton에 접근
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alert.addAction(selectAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     @objc func doneBtnClicked() {
