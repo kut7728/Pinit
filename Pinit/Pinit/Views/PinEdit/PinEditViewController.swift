@@ -80,6 +80,12 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         //그 아래 카메라 버튼
         let camerabutton = UIButton()
         camerabutton.backgroundColor = .systemPink
+        camerabutton.layer.cornerRadius = 10    //굴곡 10 넣음
+        camerabutton.layer.shadowColor = UIColor.black.cgColor // 색깔
+        camerabutton.layer.masksToBounds = false  // 내부에 속한 요소들이 UIView 밖을 벗어날 때, 잘라낼 것인지. 그림자는 밖에 그려지는 것이므로 false 로 설정
+        camerabutton.layer.shadowOffset = CGSize(width: 0, height: 4) // 위치조정
+        camerabutton.layer.shadowRadius = 10 // 반경
+        camerabutton.layer.shadowOpacity = 0.3
         if let cameraImage = UIImage(systemName: "camera"){
             let largeConfig = UIImage.SymbolConfiguration(pointSize: 80, weight: .regular, scale: .default)
             let largeImage = cameraImage.withConfiguration(largeConfig)
