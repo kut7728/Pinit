@@ -34,7 +34,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         // 지도 오른쪽 위에 닫기 버튼 추가, xmark.circle.fill
         let closeButton = UIButton(type: .system)
         if let closeImage = UIImage(systemName: "xmark.circle.fill") {
-            let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .default)
+            let largeConfig = UIImage.SymbolConfiguration(pointSize: 45, weight: .bold, scale: .default)
             let largeImage = closeImage.withConfiguration(largeConfig)
             closeButton.setImage(largeImage, for: .normal)
         }
@@ -44,8 +44,8 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
 
         // Auto Layout 설정
         closeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(60)  // 상단에서 70px
-            $0.trailing.equalToSuperview().offset(0)  // 오른쪽에서 20px
+            $0.top.equalToSuperview().offset(65)  // 상단에서 65포인트
+            $0.trailing.equalToSuperview().offset(-5)  // 오른쪽에서 20포인트
             $0.width.height.equalTo(40)  // 버튼 크기
         }
         
