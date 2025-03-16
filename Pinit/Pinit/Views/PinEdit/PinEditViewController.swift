@@ -146,8 +146,8 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         //오토레이아웃 설정
         savebutton.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(120)
-            $0.top.equalToSuperview().offset(770)
-            $0.width.equalTo(160)
+            $0.top.equalToSuperview().offset(750)
+            $0.width.equalTo(170)
             $0.height.equalTo(70)
         }
         
