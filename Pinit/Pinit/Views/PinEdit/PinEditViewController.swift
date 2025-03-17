@@ -54,7 +54,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         //왼쪽 기록 날짜 버튼
         datebutton.backgroundColor = .clear
         datebutton.layer.cornerRadius = 10
-        datebutton.setTitle("기록 날짜", for: .normal)      //for: .normal은 아무런 상호작용 없을때 상태
+        datebutton.setTitle("3월 17일", for: .normal)      //for: .normal은 아무런 상호작용 없을때 상태
         self.view.addSubview(datebutton)        //뷰에 leftbutton 보여줌
         datebutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
         
@@ -69,7 +69,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         //오른쪽 날씨 버튼
         let weatherbutton = UIButton()
         weatherbutton.layer.cornerRadius = 10
-        weatherbutton.setTitle("날씨", for: .normal)
+        weatherbutton.setTitle("맑음", for: .normal)
         weatherbutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
         self.view.addSubview(weatherbutton)
         
@@ -98,6 +98,8 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         camerabutton.tintColor = UIColor(red: 96/255, green: 99/255, blue: 104/255, alpha: 1) // #606368 (다크 그레이)
         camerabutton.imageView?.contentMode = .scaleAspectFit
         
+        camerabutton.addTarget(self, action: #selector(cameraButtonTapped), for: .touchUpInside)
+
         self.view.addSubview(camerabutton)
         //사진 배경 흰색, 안에 아이콘을 검은색
         
@@ -189,6 +191,34 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         view.endEditing(true)  // 키보드 닫기
     }
     
+    @objc func cameraButtonTapped() {
+        let actionSheet = UIAlertController(title: "사진 선택", message: "사진을 가져올 방법을 선택하세요.", preferredStyle: .actionSheet)
+        
+        let cameraAction = UIAlertAction(title: "카메라", style: .default) { _ in
+            self.presentImagePicker(sourceType: .camera)
+        }
+        let galleryAction = UIAlertAction(title: "갤러리", style: .default) { _ in
+            self.presentImagePicker(sourceType: .photoLibrary)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        actionSheet.addAction(cameraAction)
+        actionSheet.addAction(galleryAction)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
+        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
+        
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sourceType
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
     
     func setUpKeyboard() {
         NotificationCenter.default.addObserver(self,
@@ -212,7 +242,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "남기고자 하는 메모가 있다면 작성해주세요." {
             textView.text = ""
-            textView.textColor = .white
+            textView.textColor = .black
         }
     }
 
@@ -221,6 +251,20 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             textView.text = "남기고자 하는 메모가 있다면 작성해주세요."
             textView.textColor = UIColor.lightGray
         }
+    }
+}
+
+extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
+            // Handle the selected image (save, display, etc.)
+            print("Selected Image: \(selectedImage)")
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
