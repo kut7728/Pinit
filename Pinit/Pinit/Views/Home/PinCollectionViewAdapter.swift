@@ -30,7 +30,7 @@ final class PinCollectionViewAdapter: NSObject {
         let width = (width / 2) - (spacing * 1.5)
         layout.itemSize = .init(width: width, height: width * 1.23)
         layout.minimumInteritemSpacing = spacing
-        layout.sectionInset = .init(top: 0, left: spacing, bottom: spacing, right: spacing)
+        layout.sectionInset = .init(top: spacing, left: spacing, bottom: spacing, right: spacing)
         collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.register(PinRecordCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .clear
@@ -65,7 +65,7 @@ extension PinCollectionViewAdapter: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         // 단일 선택의 컨텍스트 메뉴만 지원할거임
         guard let indexPath = indexPaths.first else { return nil }
-        
+
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { elements in
             let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive) {[weak self] action in
                 let deleted = self?.data.remove(at: indexPath.row)
