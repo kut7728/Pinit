@@ -18,7 +18,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white      //시뮬레이터 돌려보니 검은색 나와서 흰색으로 했ㄷ
+        self.view.backgroundColor = .white
         
         mapView = MKMapView(frame: self.view.bounds)    //mkmapview 초기화 및 뷰 추가함
         mapView = MKMapView(frame: CGRect(x: 0, y: 60, width: self.view.bounds.width, height: self.view.bounds.height / 4)) //화면의 1/4만 나오게 함
@@ -40,61 +40,66 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             closeButton.setImage(largeImage, for: .normal)
         }
         closeButton.tintColor = .black
+        closeButton.alpha = 0.7 // 투명도 50% 설정
 
         self.view.addSubview(closeButton)
 
         // Auto Layout 설정
         closeButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(65)  // 상단에서 65포인트
-            $0.trailing.equalToSuperview().offset(-5)  // 오른쪽에서 20포인트
+            $0.trailing.equalToSuperview().offset(-5)  // 오른쪽에서 5
             $0.width.height.equalTo(40)  // 버튼 크기
         }
         
         //왼쪽 기록 날짜 버튼
-        leftbutton.backgroundColor = .systemPink        //색 핑크임
+        leftbutton.backgroundColor = .clear
+        leftbutton.layer.cornerRadius = 10
         leftbutton.setTitle("기록 날짜", for: .normal)      //for: .normal은 아무런 상호작용 없을때 상태
         self.view.addSubview(leftbutton)        //뷰에 leftbutton 보여줌
-        leftbutton.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside) // 타겟 액션 추가
+        leftbutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
         
         //오토레이아웃 설정
         leftbutton.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(10) //왼쪽에서 10 떨어짐
             $0.top.equalToSuperview().offset(300)   //탑에서 300
-            $0.width.equalTo(190)       //너비 200
+            $0.width.equalTo(180)       //너비 200
             $0.height.equalTo(30)         //높이 30
         }
         
         //오른쪽 날씨 버튼
         let rightbutton = UIButton()
-        rightbutton.backgroundColor = .systemPink
+        rightbutton.layer.cornerRadius = 10
         rightbutton.setTitle("날씨", for: .normal)
+        rightbutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
         self.view.addSubview(rightbutton)
         
         //오토레이아웃 설정
         rightbutton.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(230)
+            $0.leading.equalToSuperview().offset(210)
             $0.top.equalToSuperview().offset(300)
-            $0.width.equalTo(160)
+            $0.width.equalTo(180)
             $0.height.equalTo(30)
         }
         
         //그 아래 카메라 버튼
         let camerabutton = UIButton()
-        camerabutton.backgroundColor = .systemPink
-        camerabutton.layer.cornerRadius = 10    //굴곡 10 넣음
+        camerabutton.backgroundColor = .white
+        camerabutton.layer.cornerRadius = 75
         camerabutton.layer.shadowColor = UIColor.black.cgColor // 색깔
         camerabutton.layer.masksToBounds = false  // 내부에 속한 요소들이 UIView 밖을 벗어날 때, 잘라낼 것인지. 그림자는 밖에 그려지는 것이므로 false 로 설정
         camerabutton.layer.shadowOffset = CGSize(width: 0, height: 4) // 위치조정
         camerabutton.layer.shadowRadius = 10 // 반경
         camerabutton.layer.shadowOpacity = 0.5
-        if let cameraImage = UIImage(systemName: "camera"){
-            let largeConfig = UIImage.SymbolConfiguration(pointSize: 80, weight: .regular, scale: .default)
+        if let cameraImage = UIImage(systemName: "camera.on.rectangle"){
+            let largeConfig = UIImage.SymbolConfiguration(pointSize: 60, weight: .regular, scale: .default)
             let largeImage = cameraImage.withConfiguration(largeConfig)
             camerabutton.setImage(largeImage, for: .normal)
         }
-        camerabutton.tintColor = .white
+        camerabutton.tintColor = UIColor(red: 96/255, green: 99/255, blue: 104/255, alpha: 1) // #606368 (다크 그레이)
         camerabutton.imageView?.contentMode = .scaleAspectFit
+        
         self.view.addSubview(camerabutton)
+        //사진 배경 흰색, 안에 아이콘을 검은색
         
         // Auto Layout 설정
         camerabutton.snp.makeConstraints{
@@ -105,14 +110,20 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             
         }
         
+        // 배경 흰색, stroke를 회색
         // 제목 작성 버튼
         let titlefield = UITextField()
-        titlefield.backgroundColor = .systemPink
-        titlefield.textColor = .white
+        titlefield.backgroundColor = .white
+        titlefield.layer.borderColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1).cgColor // #A9A9A9 (다크 라이트 그레이)
+        titlefield.layer.borderWidth = 2 // 테두리 두께 설정
+        titlefield.textColor = .black
+        titlefield.layer.cornerRadius = 5
         titlefield.attributedPlaceholder = NSAttributedString(
             string: "제목 작성",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white] //제목작성 글자 흰색으로
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.black] //제목작성 글자 흰색으로
         )
+        titlefield.font = DesignSystemFont.Pretendard_Bold14
+            .value
         titlefield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))  // 이거 개쩜 제목 작성 맨 앞에 여백을 주는거임
         titlefield.leftViewMode = .always      //항상
         
@@ -127,12 +138,14 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         // 추가메모 텍스트뷰 추가
         let contentTextView = UITextView()
-        contentTextView.backgroundColor = .systemPink
+        contentTextView.backgroundColor = .white
+        contentTextView.layer.borderColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1).cgColor // #A9A9A9 (다크 라이트 그레이)
+        contentTextView.layer.borderWidth = 2 // 테두리 두께 설정
+        contentTextView.layer.cornerRadius = 5
         contentTextView.text = "남기고자 하는 메모가 있다면 작성해주세요."
-        contentTextView.textColor = UIColor.white
+        contentTextView.textAlignment = .center
+        contentTextView.textColor = UIColor.black
         contentTextView.font = UIFont.systemFont(ofSize: 16)
-        contentTextView.layer.borderColor = UIColor.white.cgColor
-        contentTextView.layer.borderWidth = 1
         self.view.addSubview(contentTextView)
 
         contentTextView.snp.makeConstraints {
@@ -146,17 +159,17 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         //저장 버튼
         let savebutton = UIButton()
-        savebutton.backgroundColor = .systemPink
+        savebutton.backgroundColor = UIColor(red: 28/255, green: 70/255, blue: 245/255, alpha: 1) // #FF8C42 (딥 오렌지)
         savebutton.setTitle("저장", for: .normal)
         savebutton.layer.cornerRadius = 10
         self.view.addSubview(savebutton)
         
         //오토레이아웃 설정
         savebutton.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(120)
-            $0.top.equalToSuperview().offset(750)
-            $0.width.equalTo(170)
-            $0.height.equalTo(70)
+            $0.leading.equalToSuperview().offset(130)
+            $0.top.equalToSuperview().offset(760)
+            $0.width.equalTo(150)
+            $0.height.equalTo(55)
         }
         
         
@@ -170,31 +183,6 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         titlefield.inputAccessoryView = keyboardToolbar
         contentTextView.inputAccessoryView = keyboardToolbar
         
-    }
-    
-    @objc func showDatePicker() {
-        let alert = UIAlertController(title: "날짜 선택", message: "\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
-        
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.frame = CGRect(x: 10, y: 30, width: alert.view.bounds.width - 20, height: 200)
-        
-        alert.view.addSubview(datePicker)
-        
-        let selectAction = UIAlertAction(title: "선택", style: .default) { _ in
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            let selectedDate = dateFormatter.string(from: datePicker.date)
-            self.leftbutton.setTitle(selectedDate, for: .normal) // leftbutton에 접근
-        }
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
-        alert.addAction(selectAction)
-        alert.addAction(cancelAction)
-        
-        present(alert, animated: true, completion: nil)
     }
     
     @objc func doneBtnClicked() {
