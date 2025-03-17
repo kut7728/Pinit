@@ -41,7 +41,7 @@ final class PinRecordCell: UICollectionViewCell {
     
     func configure(model: PinEntity) {
         pinDateLabel.text = model.date.formatted()
-        pinTitleLabel.text = model.description
+        pinTitleLabel.text = model.title
         thumbnailImageView.image = UIImage(systemName: "house")
         //thumbnailImageView.image = model.mediaPath ?? UIImage(systemName: "house")
         
@@ -60,7 +60,9 @@ final class PinRecordCell: UICollectionViewCell {
         contentView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
         contentView.addSubviews(thumbnailImageView, pinTitleLabel, pinDateLabel)
-        thumbnailImageView.snp.makeConstraints {
+        
+#warning("재정의가 일어난다해서 기존 제약을 지우고 다시 설정하는 방식을 사용했음 근본적인 문제해결 필요")
+        thumbnailImageView.snp.remakeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(8)
             $0.height.equalTo(contentView.frame.width * 0.76)
         }
