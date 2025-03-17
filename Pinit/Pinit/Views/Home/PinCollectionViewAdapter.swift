@@ -30,7 +30,7 @@ final class PinCollectionViewAdapter: NSObject {
         let width = (width / 2) - (spacing * 1.5)
         layout.itemSize = .init(width: width, height: width * 1.23)
         layout.minimumInteritemSpacing = spacing
-        layout.sectionInset = .init(top: spacing, left: spacing, bottom: spacing, right: spacing)
+        layout.sectionInset = .init(top: 0, left: spacing, bottom: spacing, right: spacing)
         collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.register(PinRecordCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .clear
