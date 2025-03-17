@@ -20,7 +20,7 @@ struct PinEntity {
     
     static let sampleData: [PinEntity] = [
             PinEntity(pin_id: UUID(uuidString: "b44a6eaf-a5f8-426c-8200-0cf93a18c2ca")!,
-                      title: "샘플 핀 1",
+                      title: "샘플 핀 1 이라고 생각이 됩니다 서울특별시 도로명주소 24번지",
                       latitude: 37.56100504013702,
                       longitude: 126.97628375547349,
                       address: "서울특별시 도로명주소 24번지",
