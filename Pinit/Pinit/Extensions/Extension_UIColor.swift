@@ -8,9 +8,7 @@
 import UIKit
 
 extension UIColor {
-    
     convenience init(hex: String) {
-        
         var hexFormatted: String = hex.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
         
         if hexFormatted.hasPrefix("#") {
