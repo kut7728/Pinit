@@ -13,7 +13,7 @@ import SnapKit
 final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     private var mapView: MKMapView!     //mapview 불러옴
-    private let leftbutton = UIButton()   // leftbutton을 클래스 프로퍼티로 변경
+    private let datebutton = UIButton()   // leftbutton을 클래스 프로퍼티로 변경
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,14 +52,14 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         
         //왼쪽 기록 날짜 버튼
-        leftbutton.backgroundColor = .clear
-        leftbutton.layer.cornerRadius = 10
-        leftbutton.setTitle("기록 날짜", for: .normal)      //for: .normal은 아무런 상호작용 없을때 상태
-        self.view.addSubview(leftbutton)        //뷰에 leftbutton 보여줌
-        leftbutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
+        datebutton.backgroundColor = .clear
+        datebutton.layer.cornerRadius = 10
+        datebutton.setTitle("기록 날짜", for: .normal)      //for: .normal은 아무런 상호작용 없을때 상태
+        self.view.addSubview(datebutton)        //뷰에 leftbutton 보여줌
+        datebutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
         
         //오토레이아웃 설정
-        leftbutton.snp.makeConstraints{
+        datebutton.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(10) //왼쪽에서 10 떨어짐
             $0.top.equalToSuperview().offset(300)   //탑에서 300
             $0.width.equalTo(180)       //너비 200
@@ -67,14 +67,14 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         
         //오른쪽 날씨 버튼
-        let rightbutton = UIButton()
-        rightbutton.layer.cornerRadius = 10
-        rightbutton.setTitle("날씨", for: .normal)
-        rightbutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
-        self.view.addSubview(rightbutton)
+        let weatherbutton = UIButton()
+        weatherbutton.layer.cornerRadius = 10
+        weatherbutton.setTitle("날씨", for: .normal)
+        weatherbutton.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
+        self.view.addSubview(weatherbutton)
         
         //오토레이아웃 설정
-        rightbutton.snp.makeConstraints{
+        weatherbutton.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(210)
             $0.top.equalToSuperview().offset(300)
             $0.width.equalTo(180)
