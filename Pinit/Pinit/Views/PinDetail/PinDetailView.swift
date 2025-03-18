@@ -21,12 +21,10 @@ class PinDetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    
     // MARK: - View
-    public lazy var testLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Hello World"
-        return label
-    }()
     
     // 지도 뷰
     public lazy var mapView: MKMapView = {
@@ -49,48 +47,13 @@ class PinDetailView: UIView {
     
     // 탈출 버튼
     public lazy var dismissButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 45, weight: .bold, scale: .default)
+        let largeImage = UIImage(systemName: "xmark.circle.fill")?.withConfiguration(largeConfig)
+        let button = UIButton()
+        button.setImage(largeImage, for: .normal)
         button.tintColor = .black
+        button.alpha = 0.7 // 투명도 50% 설정
         return button
-    }()
-    
-    public lazy var pinTitle: UILabel = {
-        let label = UILabel()
-        label.text = "San Francisco"
-        return label
-    }()
-    
-    public lazy var pinWeather: UILabel = {
-        let label = UILabel()
-        label.text = "CA"
-        return label
-    }()
-    
-    public lazy var pinDate: UILabel = {
-        let label = UILabel()
-        label.text = "2021-01-01"
-        return label
-    }()
-    
-    
-    public lazy var pinMenuButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        button.tintColor = .black
-        return button
-    }()
-    
-    public lazy var pinImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "photo")
-        return imageView
-    }()
-    
-    public lazy var pinDescription: UITextView = {
-        let textView = UITextView()
-        textView.text = "San Francisco is a city in California."
-        return textView
     }()
     
     // 리뷰 컨테이너
@@ -100,11 +63,15 @@ class PinDetailView: UIView {
         return view
     }()
     
-    
+    // 리뷰 작성 패널
+    public lazy var reviewPanelContainerView: UIView = {
+        let view = NewPinReviewPanel()
+        return view
+    }()
     
     // MARK: - Layout
     private func addComponents() {
-        self.addSubviews(mapView, dismissButton, reviewContainerView)
+        self.addSubviews(mapView, dismissButton, reviewContainerView, reviewPanelContainerView)
         
         
         mapView.snp.makeConstraints {
@@ -114,14 +81,26 @@ class PinDetailView: UIView {
         }
         
         dismissButton.snp.makeConstraints {
+            $0.height.width.equalTo(40)
             $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).inset(5)
             $0.trailing.equalToSuperview().inset(5)
         }
         
-        reviewContainerView.snp.makeConstraints {
-            $0.top.equalTo(mapView.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
+        reviewPanelContainerView.snp.makeConstraints {
+//            $0.top.equalToSuperview().offset(100)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(100)
         }
+        
+        reviewContainerView.snp.makeConstraints {
+            $0.width.equalToSuperview()  // 가로길이 화면만큼
+            $0.top.equalTo(mapView.snp.bottom)  // 지도 밑으로
+            $0.bottom.equalTo(reviewPanelContainerView.snp.top)  // 리뷰 패널 위로
+            $0.leading.trailing.equalToSuperview()  // 가로세로 화면에 밀착
+        }
+        
+        
     }
 }
 

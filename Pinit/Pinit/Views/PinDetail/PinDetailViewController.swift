@@ -25,7 +25,6 @@ final class PinDetailViewController: UIViewController {
     private func setupTableViewController() {
             addChild(pinReviewTableViewController)
             pinDetailView.reviewContainerView.addSubview(pinReviewTableViewController.view)
-            
             pinReviewTableViewController.didMove(toParent: self)
         }
 }

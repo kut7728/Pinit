@@ -45,7 +45,8 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        let home = UINavigationController(rootViewController: HomeViewController())
+//        let home = UINavigationController(rootViewController: HomeViewController())
+        let home = UINavigationController(rootViewController: PinDetailViewController())
         home.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"),
                                        selectedImage: UIImage(systemName: "house.fill"))
