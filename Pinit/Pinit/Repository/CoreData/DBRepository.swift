@@ -22,7 +22,7 @@ protocol DBRepository {
     @discardableResult func updateReview(review: ReviewEntity) -> Bool
     func fetchReviewsByPinId(pinID: UUID) -> [ReviewEntity]
 }
-
+#warning("add 관련 기능 저장하고서 저장이 성공했는지에 따른 return 필요할듯?")
 final class DBRepositoryImpl: DBRepository {
     private let context: NSManagedObjectContext
     
@@ -41,7 +41,7 @@ final class DBRepositoryImpl: DBRepository {
         pinDTO.setValue(pin.latitude, forKey: "latitude")
         pinDTO.setValue(pin.longitude, forKey: "longitude")
         pinDTO.setValue(pin.date, forKey: "date")
-        pinDTO.setValue(pin.description, forKey: "desc")
+        pinDTO.setValue(pin.description, forKey: "content")
         pinDTO.setValue(pin.address, forKey: "address")
         pinDTO.setValue(pin.weather, forKey: "weather")
         if let image = pin.mediaPath,
@@ -62,6 +62,7 @@ final class DBRepositoryImpl: DBRepository {
             if let objectToDelete = results.first {
                 context.delete(objectToDelete)
                 saveContext()
+                return true
             }
             else {
                 print("삭제할 객체가 존재하지 않음")
@@ -88,7 +89,7 @@ final class DBRepositoryImpl: DBRepository {
             pinDTO.setValue(pin.latitude, forKey: "latitude")
             pinDTO.setValue(pin.longitude, forKey: "longitude")
             pinDTO.setValue(pin.date, forKey: "date")
-            pinDTO.setValue(pin.description, forKey: "desc")
+            pinDTO.setValue(pin.description, forKey: "content")
             pinDTO.setValue(pin.address, forKey: "address")
             pinDTO.setValue(pin.weather, forKey: "weather")
             
@@ -148,19 +149,75 @@ final class DBRepositoryImpl: DBRepository {
         else { return false }
         
         let reviewDTO = NSManagedObject(entity: entity, insertInto: context)
-        return false
+        reviewDTO.setValue(review.id, forKey: "id")
+        reviewDTO.setValue(review.pinID, forKey: "pinID")
+        reviewDTO.setValue(review.date, forKey: "date")
+        reviewDTO.setValue(review.description, forKey: "content")
+        
+        saveContext()
+        return true
     }
     
     func deleteReview(id: UUID) -> Bool {
+        let request = ReviewDTO.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        
+        do {
+            let results = try context.fetch(request)
+            
+            if let objectToDelete = results.first {
+                context.delete(objectToDelete)
+                saveContext()
+                return true
+            }
+            else {
+                print("삭제할 객체가 존재하지 않음")
+                
+            }
+        } catch {
+            print("\(error.localizedDescription)")
+        }
         return false
     }
     
     func updateReview(review: ReviewEntity) -> Bool {
-        return false
+        let request = ReviewDTO.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", review.id as CVarArg) // UUID로 해당 데이터 찾기
+        
+        do {
+            let fetchResult = try context.fetch(request)
+            
+            guard let pinDTO = fetchResult.first else {
+                print("업데이트할 데이터가 존재하지 않음")
+                return false
+            }
+            
+            pinDTO.setValue(review.description, forKey: "content")
+            pinDTO.setValue(review.date, forKey: "date")
+            
+            // 변경사항 저장
+            saveContext()
+            return true
+            
+        } catch {
+            print("업데이트 실패: \(error.localizedDescription)")
+            return false
+        }
     }
     
     func fetchReviewsByPinId(pinID: UUID) -> [ReviewEntity] {
-        return []
+        let request = ReviewDTO.fetchRequest()
+        request.predicate = NSPredicate(format: "pinID == %@", pinID as CVarArg)
+        do {
+            let fetchResult = try context.fetch(request)
+            return fetchResult.compactMap { dto -> ReviewEntity? in
+                return dto.toReviewEntity()
+            }
+        }
+        catch {
+            print(error.localizedDescription)
+            return []
+        }
     }
     private func saveContext () {
         if context.hasChanges {

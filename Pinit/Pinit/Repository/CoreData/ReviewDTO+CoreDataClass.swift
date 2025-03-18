@@ -15,12 +15,12 @@ public class ReviewDTO: NSManagedObject {
         guard let id = id,
               let pinID = pinID,
               let date = date,
-              let desc = desc else { return nil }
+              let content = content else { return nil }
         
         return ReviewEntity(id: id,
                             pinID: pinID,
                             date: date,
-                            description: desc
+                            description: content
         )
     }
 }

@@ -17,7 +17,7 @@ public class PinDTO: NSManagedObject {
               let address = address,
               let date = date,
               let weather = weather,
-              let desc = desc
+              let content = content
         else { return nil }
         
         var image: UIImage?
@@ -33,7 +33,7 @@ public class PinDTO: NSManagedObject {
             address: address,
             date: date,
             weather: weather,
-            description: desc,
+            description: content,
             mediaPath: image
         )
     }
