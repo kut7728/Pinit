@@ -14,7 +14,18 @@
 		D1BCDA062D892DA4002C03BB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D1BCDA052D892DA4002C03BB /* Kingfisher */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		220085DD2D8945550090A4C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DDB45B92D7ED702006C4A4B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DDB45C02D7ED702006C4A4B;
+			remoteInfo = Pinit;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		220085D92D8945550090A4C5 /* PinitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PinitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DDB45C12D7ED702006C4A4B /* Pinit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pinit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -29,6 +40,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		220085DA2D8945550090A4C5 /* PinitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PinitTests;
+			sourceTree = "<group>";
+		};
 		D1286F2B2D815BB8006B5E52 /* Pinit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -40,6 +56,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		220085D62D8945550090A4C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6DDB45BE2D7ED702006C4A4B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -59,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				D1286F2B2D815BB8006B5E52 /* Pinit */,
+				220085DA2D8945550090A4C5 /* PinitTests */,
 				6DDB45C22D7ED702006C4A4B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -67,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				6DDB45C12D7ED702006C4A4B /* Pinit.app */,
+				220085D92D8945550090A4C5 /* PinitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,6 +99,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		220085D82D8945550090A4C5 /* PinitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 220085E12D8945550090A4C5 /* Build configuration list for PBXNativeTarget "PinitTests" */;
+			buildPhases = (
+				220085D52D8945550090A4C5 /* Sources */,
+				220085D62D8945550090A4C5 /* Frameworks */,
+				220085D72D8945550090A4C5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				220085DE2D8945550090A4C5 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				220085DA2D8945550090A4C5 /* PinitTests */,
+			);
+			name = PinitTests;
+			packageProductDependencies = (
+			);
+			productName = PinitTests;
+			productReference = 220085D92D8945550090A4C5 /* PinitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		6DDB45C02D7ED702006C4A4B /* Pinit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6DDB45D72D7ED704006C4A4B /* Build configuration list for PBXNativeTarget "Pinit" */;
@@ -111,6 +159,10 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					220085D82D8945550090A4C5 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 6DDB45C02D7ED702006C4A4B;
+					};
 					6DDB45C02D7ED702006C4A4B = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -137,11 +189,19 @@
 			projectRoot = "";
 			targets = (
 				6DDB45C02D7ED702006C4A4B /* Pinit */,
+				220085D82D8945550090A4C5 /* PinitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		220085D72D8945550090A4C5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6DDB45BF2D7ED702006C4A4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -152,6 +212,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		220085D52D8945550090A4C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6DDB45BD2D7ED702006C4A4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -161,7 +228,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		220085DE2D8945550090A4C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DDB45C02D7ED702006C4A4B /* Pinit */;
+			targetProxy = 220085DD2D8945550090A4C5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		220085DF2D8945550090A4C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.justhm.PinitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pinit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pinit";
+			};
+			name = Debug;
+		};
+		220085E02D8945550090A4C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UUYBHY988H;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.justhm.PinitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pinit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pinit";
+			};
+			name = Release;
+		};
 		6DDB45D82D7ED704006C4A4B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -340,6 +451,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		220085E12D8945550090A4C5 /* Build configuration list for PBXNativeTarget "PinitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				220085DF2D8945550090A4C5 /* Debug */,
+				220085E02D8945550090A4C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6DDB45BC2D7ED702006C4A4B /* Build configuration list for PBXProject "Pinit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
