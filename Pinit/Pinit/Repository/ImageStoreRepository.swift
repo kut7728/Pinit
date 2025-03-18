@@ -12,7 +12,7 @@ protocol ImageStoreRepository {
     func saveImageToDocuments(image: UIImage?, fileName: String) -> String?
 }
 
-final class ImageStoreRepositoryImpl {
+final class ImageStoreRepositoryImpl: ImageStoreRepository {
     private lazy var fileManager = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     
     // 로컬 디렉토리에서 이미지 로드
