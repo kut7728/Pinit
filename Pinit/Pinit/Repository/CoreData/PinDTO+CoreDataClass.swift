@@ -38,12 +38,5 @@ public class PinDTO: NSManagedObject {
         )
     }
     
-    // 로컬 디렉토리에서 이미지 로드
-    private func fetchImageFromDocuments(fileName: String) -> UIImage? {
-        let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName).path
-        if FileManager.default.fileExists(atPath: filePath) {
-            return UIImage(contentsOfFile: filePath)
-        }
-        return nil
-    }
+    
 }

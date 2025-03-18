@@ -24,14 +24,15 @@ protocol UseCase {
 
 final class UseCaseImpl: UseCase {
     let dbRepository: DBRepository
-    
-    init(dbRepository: DBRepository) {
+    let imageStore: ImageStoreRepository
+    init(dbRepository: DBRepository, imageStore: ImageStoreRepository) {
 //        DBRepositoryImpl(context: NSManagedObjectContext)
         self.dbRepository = dbRepository
+        self.imageStore = imageStore
     }
     
     func addPin(pin: PinEntity) -> Bool {
-//        pin.mediaPath
+        imageStore.saveImageToDocuments(image: pin.mediaPath, fileName: pin.pin_id)
         return dbRepository.addPin(pin: pin)
     }
     
@@ -71,5 +72,27 @@ final class UseCaseImpl: UseCase {
         <#code#>
     }
     
+    // 로컬 디렉토리에서 이미지 로드
+    private func fetchImageFromDocuments(fileName: String) -> UIImage? {
+        let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName).path
+        if FileManager.default.fileExists(atPath: filePath) {
+            return UIImage(contentsOfFile: filePath)
+        }
+        return nil
+    }
+    
+    // 이미지 저장
+    private func saveImageToDocuments(image: UIImage, fileName: String) -> String? {
+        if let data = image.jpegData(compressionQuality: 1.0) {
+            let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName)
+            do {
+                try data.write(to: filePath)
+                return filePath.path
+            } catch {
+                print("Failed to save image to documents: \(error)")
+            }
+        }
+        return nil
+    }
     
 }

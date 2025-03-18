@@ -9,9 +9,9 @@ import UIKit
 import CoreData
 
 protocol DBRepository {
-    @discardableResult func addPin(pin: PinEntity) -> Bool
+    @discardableResult func addPin(pin: PinEntity, filePath: String?) -> Bool
     @discardableResult func deletePin(id: UUID) -> Bool
-    @discardableResult func updatePin(pin: PinEntity) -> Bool
+    @discardableResult func updatePin(pin: PinEntity, filePath: String?) -> Bool
     
     func fetchPinsAll() -> [PinEntity]
     func fetchPinsByDate(date: Date) -> [PinEntity]
@@ -30,7 +30,7 @@ final class DBRepositoryImpl: DBRepository {
         self.context = context
     }
     
-    func addPin(pin: PinEntity) -> Bool {
+    func addPin(pin: PinEntity, filePath: String?) -> Bool {
         guard let entity = NSEntityDescription.entity(forEntityName: "PinDTO", in: context)
         else { return false }
         
@@ -44,10 +44,8 @@ final class DBRepositoryImpl: DBRepository {
         pinDTO.setValue(pin.description, forKey: "content")
         pinDTO.setValue(pin.address, forKey: "address")
         pinDTO.setValue(pin.weather, forKey: "weather")
-        if let image = pin.mediaPath,
-           let filePath = saveImageToDocuments(image: image, fileName: pin.pin_id.uuidString) {
-            pinDTO.setValue(filePath, forKey: "mediaPath")
-        }
+        pinDTO.setValue(filePath, forKey: "mediaPath")
+        
         saveContext()
         return true
     }
@@ -73,7 +71,7 @@ final class DBRepositoryImpl: DBRepository {
         return false
     }
     
-    func updatePin(pin: PinEntity) -> Bool {
+    func updatePin(pin: PinEntity, filePath: String?) -> Bool {
         let request = PinDTO.fetchRequest()
         request.predicate = NSPredicate(format: "pin_id == %@", pin.pin_id as CVarArg) // UUID로 해당 데이터 찾기
         
@@ -92,16 +90,7 @@ final class DBRepositoryImpl: DBRepository {
             pinDTO.setValue(pin.description, forKey: "content")
             pinDTO.setValue(pin.address, forKey: "address")
             pinDTO.setValue(pin.weather, forKey: "weather")
-            
-            // 이미지 업데이트 (기존 이미지 삭제 후 새로 저장)
-            if let newImage = pin.mediaPath,
-               let filePath = saveImageToDocuments(image: newImage, fileName: pin.pin_id.uuidString) {
-                
-                pinDTO.setValue(filePath, forKey: "mediaPath")
-            }
-            else { // 이미지가 삭제되었다면 그냥 path nil로 만들기
-                pinDTO.setValue(nil, forKey: "mediaPath")
-            }
+            pinDTO.setValue(filePath, forKey: "mediaPath")
             
             // 변경사항 저장
             saveContext()
@@ -232,21 +221,3 @@ final class DBRepositoryImpl: DBRepository {
         }
     }
 }
-
-extension DBRepositoryImpl {
-    // 이미지 저장
-    private func saveImageToDocuments(image: UIImage, fileName: String) -> String? {
-        if let data = image.jpegData(compressionQuality: 1.0) {
-            let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName)
-            do {
-                try data.write(to: filePath)
-                return filePath.path
-            } catch {
-                print("Failed to save image to documents: \(error)")
-            }
-        }
-        return nil
-    }
-}
-
-// NSFetchResultsController ??
