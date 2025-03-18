@@ -20,7 +20,7 @@ public class PinDTO: NSManagedObject {
               let content = content
         else { return nil }
         
-        var image: UIImage?
+        var image: UIImage? = nil // 혹시몰라서 명시
         if let mediaPath = mediaPath {
             image = fetchImageFromDocuments(fileName: pin_id.uuidString)
         }
