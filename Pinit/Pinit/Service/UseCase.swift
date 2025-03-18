@@ -11,11 +11,15 @@ import Moya
 private let provider = MoyaProvider<Router>()
 
 protocol UseCase {
+    /*
+     Create, Update, Delete는 하나의 entity만 처리하기에 UIBlocking이 없어 그냥 처리했지만,
+     Read(fetch)의 경우 많은 데이터가 한번에 올 것을 고려해서 비동기로 처리함
+     */
     func addPin(pin: PinEntity) -> Bool
     func updatePin(pin: PinEntity) -> Bool
     func deletePin(pinID: UUID) -> Bool
-    func fetchAllPins() -> [PinEntity]
-    func fetchPinsByDate(date: Date) -> [PinEntity]
+    func fetchAllPins(completion: @escaping ([PinEntity]) -> Void)
+    func fetchPinsByDate(date: Date, completion: @escaping ([PinEntity]) -> Void)
     
     func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping ([WeatherResponse]) -> Void)
     
@@ -24,7 +28,7 @@ protocol UseCase {
     func addReview(review: ReviewEntity) -> Bool
     func updateReview(review: ReviewEntity) -> Bool
     func deleteReview(reviewId: UUID) -> Bool
-    func fetchAllReviewsByPinID(pinID: UUID) -> [ReviewEntity]
+    func fetchAllReviewsByPinID(pinID: UUID, completion: @escaping ([ReviewEntity]) -> Void)
 }
 
 final class UseCaseImpl: UseCase {
@@ -52,24 +56,32 @@ final class UseCaseImpl: UseCase {
         return dbRepository.deletePin(id: pinID)
     }
     
-    func fetchAllPins() -> [PinEntity] {
-        return dbRepository.fetchPinsAll()
-            .compactMap { item -> PinEntity? in
+    func fetchAllPins(completion: @escaping ([PinEntity]) -> Void) {
+        dbRepository.fetchPinsAll { [weak self] items in
+            let pinEntities = items.compactMap { item -> PinEntity? in
                 guard let id = item.pin_id else { return nil }
-                let image = imageStore.fetchImageFromDocuments(fileName: id.uuidString)
+                let image = self?.imageStore.fetchImageFromDocuments(fileName: id.uuidString)
                 return item.toPinEntity(image: image)
             }
-    }
-    //세훈
-    func fetchPinsByDate(date: Date) -> [PinEntity] {
-        return dbRepository.fetchPinsByDate(date: date)
-            .compactMap { item -> PinEntity? in
-                guard let id = item.pin_id else { return nil }
-                let image = imageStore.fetchImageFromDocuments(fileName: id.uuidString)
-                return item.toPinEntity(image: image)
+            DispatchQueue.main.async {
+                completion(pinEntities)
             }
+        }
     }
     
+    func fetchPinsByDate(date: Date, completion: @escaping ([PinEntity]) -> Void) {
+        dbRepository.fetchPinsByDate(date: date, completion: { [weak self] items in
+            let pinEntities = items.compactMap { item -> PinEntity? in
+                guard let id = item.pin_id else { return nil }
+                let image = self?.imageStore.fetchImageFromDocuments(fileName: id.uuidString)
+                return item.toPinEntity(image: image)
+            }
+            DispatchQueue.main.async {
+                completion(pinEntities)
+            }
+        })
+    }
+    //세훈
     //MARK: - 날씨 정보 받아오기.
     func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping ([WeatherResponse]) -> Void) {
         provider.request(.getWeather(lat: latitude, lon: longitude, lang: "kr")) { result in
@@ -108,10 +120,10 @@ final class UseCaseImpl: UseCase {
         return dbRepository.deleteReview(id: reviewId)
     }
     
-    func fetchAllReviewsByPinID(pinID: UUID) -> [ReviewEntity] {
-        return dbRepository.fetchReviewsByPinId(pinID: pinID)
-            .compactMap { item -> ReviewEntity? in
-                return item.toReviewEntity()
-            }
+    func fetchAllReviewsByPinID(pinID: UUID, completion: @escaping ([ReviewEntity]) -> Void) {
+        dbRepository.fetchReviewsByPinId(pinID: pinID) { items in
+            let reviewEntites = items.compactMap { $0.toReviewEntity() }
+            completion(reviewEntites)
+        }
     }
 }
