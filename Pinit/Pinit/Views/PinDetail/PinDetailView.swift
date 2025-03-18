@@ -60,11 +60,13 @@ class PinDetailView: UIView {
     public lazy var reviewContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
+//        view.addSubview(PinReviewTableViewController.pinTableView)
         return view
     }()
     
+    
     // 리뷰 작성 패널
-    public lazy var reviewPanelContainerView: UIView = {
+    public lazy var reviewPanelContainerView: NewPinReviewPanel = {
         let view = NewPinReviewPanel()
         return view
     }()
@@ -94,7 +96,6 @@ class PinDetailView: UIView {
         }
         
         reviewContainerView.snp.makeConstraints {
-            $0.width.equalToSuperview()  // 가로길이 화면만큼
             $0.top.equalTo(mapView.snp.bottom)  // 지도 밑으로
             $0.bottom.equalTo(reviewPanelContainerView.snp.top)  // 리뷰 패널 위로
             $0.leading.trailing.equalToSuperview()  // 가로세로 화면에 밀착
@@ -106,5 +107,5 @@ class PinDetailView: UIView {
 
 
 #Preview {
-    PinDetailView()
+    PinDetailViewController()
 }

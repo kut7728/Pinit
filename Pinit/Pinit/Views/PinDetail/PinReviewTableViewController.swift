@@ -6,7 +6,7 @@ class PinReviewTableViewController: UIViewController {
     //    private let coreData = CoreDataManager()
     //    private lazy var datasource: [Content] = coreData.fetchContents()
     private lazy var datasource: [ReviewEntity] = [ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "it's my life")]
-    private var tableView: UITableView!
+    public var pinTableView: UITableView!
     private let emptyView: EmptyGuideView = {
         let view = EmptyGuideView(
             systemImage: UIImage(systemName: "text.document"),
@@ -26,34 +26,34 @@ class PinReviewTableViewController: UIViewController {
     }
     
     private func setupTableView() {
-        tableView = UITableView()
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        
-        
-        
+        pinTableView = UITableView()
+        pinTableView.estimatedRowHeight = UITableView.automaticDimension
+        pinTableView.dataSource = self
+        pinTableView.delegate = self
+        pinTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     private func setupLayout() {
-        view.addSubviews(tableView, emptyView)
+        view.addSubviews(pinTableView, emptyView)
         
-        tableView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        pinTableView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
         emptyView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview()
         }
         
-        let headerView = PinDetailHeader()
-//        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 200)
-        headerView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200)
-        
-        tableView.tableHeaderView = headerView // `tableHeaderView` 설정
+//        let headerView = PinDetailHeader()
+//        //        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 200)
+//        headerView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200)
+//        
+//        tableView.tableHeaderView = headerView // `tableHeaderView` 설정
     }
 }
+
+
+
 
 // MARK: - Delegate
 extension PinReviewTableViewController: UITableViewDataSource, UITableViewDelegate {
@@ -64,7 +64,7 @@ extension PinReviewTableViewController: UITableViewDataSource, UITableViewDelega
         let action = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
             if let deleted = self?.datasource.remove(at: indexPath.row).id {
                 //                self?.coreData.deleteContent(id: deleted)
-                self?.tableView.deleteRows(at: [indexPath], with: .automatic)
+                self?.pinTableView.deleteRows(at: [indexPath], with: .automatic)
             }
         }
         return UISwipeActionsConfiguration(actions: [action])
@@ -106,7 +106,21 @@ extension PinReviewTableViewController: UITableViewDataSource, UITableViewDelega
         return cell
         
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return PinDetailHeader()
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 100
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
 }
+
 
 
 #Preview {

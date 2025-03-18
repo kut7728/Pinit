@@ -7,6 +7,7 @@
 
 
 import UIKit
+import SnapKit
 
 // MARK: - Pin Detail Main View Controller
 final class PinDetailViewController: UIViewController {
@@ -23,7 +24,7 @@ final class PinDetailViewController: UIViewController {
     }
     
     private func setupTableViewController() {
-            addChild(pinReviewTableViewController)
+//            addChild(pinReviewTableViewController)
             pinDetailView.reviewContainerView.addSubview(pinReviewTableViewController.view)
             pinReviewTableViewController.didMove(toParent: self)
         }

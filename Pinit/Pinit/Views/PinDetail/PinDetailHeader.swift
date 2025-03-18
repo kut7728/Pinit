@@ -70,15 +70,17 @@ class PinDetailHeader: UIView {
     
     // MARK: - 레이아웃
     private func addComponents() {
-//        self.addSubview(pinDetailPanel)
-//        pinDetailPanel.addSubviews(pinTitle, pinWeather, pinDate, pinMenuButton, pinImageView, pinDescription)
-        self.addSubviews(pinTitle, pinWeather, pinDate, pinMenuButton, pinImageView, pinDescription)
+        self.addSubview(pinDetailPanel)
+        pinDetailPanel.addSubviews(pinTitle, pinWeather, pinDate, pinMenuButton, pinImageView, pinDescription)
+//        self.addSubviews(pinTitle, pinWeather, pinDate, pinMenuButton, pinImageView, pinDescription)
         
         
-//        pinDetailPanel.snp.makeConstraints {
-//            $0.leading.trailing.equalToSuperview()
-//            $0.bottom.equalTo(pinDescription).offset(20)
-//        }
+        pinDetailPanel.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(pinDescription).offset(20)
+            
+//            $0.edges.equalToSuperview()
+        }
         
         // subView
         pinTitle.snp.makeConstraints {
