@@ -183,14 +183,14 @@ extension HomeViewController: CLLocationManagerDelegate {
         case .notDetermined:
             locationmanager.requestWhenInUseAuthorization()
         case .denied, .restricted:
-            showAlert()
+            showAlertAboutLocation()
         default:
             break
         }
     }
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .denied || status == .restricted {
-            showAlert()
+            showAlertAboutLocation()
         }
     }
 }
@@ -213,7 +213,7 @@ extension HomeViewController {
     @objc private func moveToAddPin() {
         // 유저 현재위치 못받아오면 권한 설정을 안한거니까 알럿띄움
         guard let location = locationmanager.location?.coordinate else {
-            showAlert()
+            showAlertAboutLocation()
             return
         }
         
@@ -222,7 +222,7 @@ extension HomeViewController {
     
     @objc private func moveToUserLocation() {
         guard let location = locationmanager.location?.coordinate else {
-            showAlert()
+            showAlertAboutLocation()
             return
         }
         mapView.setRegion(
@@ -270,16 +270,7 @@ extension HomeViewController {
 }
 
 extension HomeViewController {
-    private func showAlert() {
-        let alert = UIAlertController(title: "위치 서비스 권한 필요",
-                                      message: "위치 서비스를 허용해야지 사용할 수 있는 앱입니다.\n설정에서 위치권한을 켜주세요",
-                                      preferredStyle: .alert)
-        let action = UIAlertAction(title: "설정", style: .default) { _ in
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-        }
-        alert.addAction(action)
-        present(alert, animated: true)
-    }
+    
 }
 
 
