@@ -12,8 +12,6 @@ class PinDetailHeader: UIView {
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .gray
-        
         addComponents()
     }
     
@@ -76,10 +74,10 @@ class PinDetailHeader: UIView {
         
         
         pinDetailPanel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
+            $0.width.height.equalToSuperview()
+            $0.top.equalToSuperview()
             $0.bottom.equalTo(pinDescription).offset(20)
             
-//            $0.edges.equalToSuperview()
         }
         
         // subView
@@ -108,24 +106,21 @@ class PinDetailHeader: UIView {
         
         pinImageView.snp.makeConstraints {
             $0.top.equalTo(pinDate.snp.bottom).offset(10)
-//            $0.leading.equalTo(reviewText.snp.trailing).offset(10)
-//            $0.trailing.equalToSuperview().offset(-10)
+            $0.leading.equalToSuperview().inset(10)
+            $0.trailing.equalToSuperview().inset(-10)
+//            $0.height.equalTo(100)
+            $0.width.equalTo(100)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(100)
-            
         }
         
         pinDescription.snp.makeConstraints {
             $0.top.equalTo(pinImageView.snp.bottom).offset(10)
             $0.leading.equalToSuperview().inset(10)
             $0.trailing.equalToSuperview().inset(10)
-            $0.height.equalTo(200)
+            $0.height.equalTo(50)
         }
-        
-        
     }
-
 }
 
 #Preview {

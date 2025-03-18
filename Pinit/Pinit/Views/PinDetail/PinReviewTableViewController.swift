@@ -6,7 +6,11 @@ class PinReviewTableViewController: UIViewController {
     //    private let coreData = CoreDataManager()
     //    private lazy var datasource: [Content] = coreData.fetchContents()
     private lazy var datasource: [ReviewEntity] = [ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "it's my life")]
+    
+    
     public var pinTableView: UITableView!
+    
+    
     private let emptyView: EmptyGuideView = {
         let view = EmptyGuideView(
             systemImage: UIImage(systemName: "text.document"),
