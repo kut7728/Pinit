@@ -55,7 +55,7 @@ class PinDetailHeader: UIView {
     // 핀 메뉴 버튼
     public lazy var pinMenuButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
         button.tintColor = .black
         return button
     }()
@@ -71,6 +71,7 @@ class PinDetailHeader: UIView {
     public lazy var pinDescription: UITextView = {
         let textView = UITextView()
         textView.text = "San Francisco is a city in California. San Francisco is a city in California. San Francisco is a city in California."
+        textView.font = DesignSystemFont.Pretendard_Medium16.value
         return textView
     }()
     
@@ -89,13 +90,14 @@ class PinDetailHeader: UIView {
         
         // subView
         pinTitle.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().inset(10)
         }
         
         pinWeather.snp.makeConstraints {
             $0.top.equalToSuperview().inset(10)
             $0.leading.equalTo(pinTitle.snp.trailing).offset(10)
+            $0.bottomMargin.equalTo(pinTitle.snp.bottom)
         }
         
         pinMenuButton.snp.makeConstraints {

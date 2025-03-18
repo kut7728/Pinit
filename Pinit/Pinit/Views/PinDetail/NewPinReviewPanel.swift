@@ -28,7 +28,7 @@ class NewPinReviewPanel: UIView {
     
     public lazy var reviewDate: UILabel = {
         let label = UILabel()
-        label.text = "1998년 03월 02일"
+        label.text = Date().koreanDateString()
         label.font = DesignSystemFont.Pretendard_Medium16.value
         return label
     }()
@@ -77,14 +77,6 @@ class NewPinReviewPanel: UIView {
             $0.height.equalTo(100)
             $0.centerY.equalToSuperview()
         }
-        
-        
-//        topBorder.snp.makeConstraints {
-//            $0.top.equalToSuperview()
-//            $0.width.equalToSuperview().inset(10)
-//            $0.height.equalTo(1)
-//            $0.centerX.equalToSuperview()
-//        }
         
         reviewDate.snp.makeConstraints {
             $0.top.equalTo(newReviewPanel.snp.top).inset(10)

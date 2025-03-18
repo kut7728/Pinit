@@ -66,11 +66,11 @@ final class PinDetailViewController: UIViewController {
     
     // 리뷰 테이블뷰 설정
     private func setupReviewTable() {
-        pinTableView = UITableView()
+        pinTableView = UITableView(frame: .zero, style: .grouped)
         pinTableView.estimatedRowHeight = UITableView.automaticDimension
         pinTableView.dataSource = self
         pinTableView.delegate = self
-        pinTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        pinTableView.register(ReviewCell.self, forCellReuseIdentifier: "CustomCell")
     }
     
     
@@ -132,15 +132,15 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // swipeAction
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
-            if let deleted = self?.datasource.remove(at: indexPath.row).id {
-                //                self?.coreData.deleteContent(id: deleted)
-                self?.pinTableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-        }
-        return UISwipeActionsConfiguration(actions: [action])
-    }
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let action = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
+//            if let deleted = self?.datasource.remove(at: indexPath.row).id {
+//                self?.coreData.deleteContent(id: deleted)
+//                self?.pinTableView.deleteRows(at: [indexPath], with: .automatic)
+//            }
+//        }
+//        return UISwipeActionsConfiguration(actions: [action])
+//    }
     
     // numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -149,23 +149,15 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     // cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let data: ReviewEntity = datasource[indexPath.row]
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! ReviewCell
         
+        // 셀 재사용을 위한 찌꺼기 제거 절차
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         
-        let label = UILabel(frame: cell.contentView.bounds)
-        label.text = datasource[indexPath.row].description
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-            label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -16),
-            label.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 8),
-            label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -8)
-        ])
         
+        cell.configure(date: data.date.koreanDateString(), desc: data.description)
         return cell
         
     }
@@ -177,12 +169,16 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     // estimatedHeightForHeaderInSection
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return 1000
+        return 100
     }
     
     // heightForHeaderInSection
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
     }
     
 }

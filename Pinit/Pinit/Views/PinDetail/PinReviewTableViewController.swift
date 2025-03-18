@@ -47,12 +47,6 @@ class PinReviewTableViewController: UIViewController {
         emptyView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
-//        let headerView = PinDetailHeader()
-//        //        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 200)
-//        headerView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200)
-//        
-//        tableView.tableHeaderView = headerView // `tableHeaderView` 설정
     }
 }
 
