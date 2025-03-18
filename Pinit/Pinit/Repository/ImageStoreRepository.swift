@@ -15,6 +15,12 @@ protocol ImageStoreRepository {
 final class ImageStoreRepositoryImpl: ImageStoreRepository {
     private lazy var fileManager = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     
+    init(
+        fileManagerURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    ) {
+        fileManager = fileManagerURL
+    }
+    
     // 로컬 디렉토리에서 이미지 로드
     func fetchImageFromDocuments(fileName: String) -> UIImage? {
         let filePath = fileManager.appendingPathComponent(fileName).path
