@@ -61,8 +61,14 @@ final class PinDetailViewController: UIViewController {
         button.setImage(largeImage, for: .normal)
         button.tintColor = .black
         button.alpha = 0.7 // 투명도 50% 설정
+        button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
+
         return button
     }()
+    
+    @objc func dismissButtonTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
     
     // 리뷰 테이블뷰 설정
     private func setupReviewTable() {
@@ -71,6 +77,7 @@ final class PinDetailViewController: UIViewController {
         pinTableView.dataSource = self
         pinTableView.delegate = self
         pinTableView.register(ReviewCell.self, forCellReuseIdentifier: "CustomCell")
+        
     }
     
     
@@ -79,8 +86,6 @@ final class PinDetailViewController: UIViewController {
         let view = NewPinReviewPanel()
         return view
     }()
-    
-    
     
     // MARK: - Layout
     private func addComponents() {
@@ -164,7 +169,28 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     // viewForHeaderInSection
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return PinDetailHeader()
+        let header = PinDetailHeader()
+        header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
+        return header
+    }
+    
+    @objc func pinMenuButtonTapped() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let editAction = UIAlertAction(title: "수정", style: .default) { _ in
+            print("수정")
+            self.present(PinEditViewController(), animated: true, completion: nil)
+        }
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            print("삭제")
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        actionSheet.addAction(editAction)
+        actionSheet.addAction(deleteAction)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
     }
     
     // estimatedHeightForHeaderInSection

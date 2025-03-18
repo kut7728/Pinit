@@ -72,20 +72,34 @@ class PinDetailHeader: UIView {
         let textView = UITextView()
         textView.text = "San Francisco is a city in California. San Francisco is a city in California. San Francisco is a city in California."
         textView.font = DesignSystemFont.Pretendard_Medium16.value
+        textView.isScrollEnabled = false // 내부 텍스트가 길어질 때 자동으로 늘어나도록 설정
+        textView.sizeToFit()
         return textView
     }()
     
+    public lazy var reviewSectionTitle: UILabel = {
+       let label = UILabel()
+        label.text = "Reviews"
+        label.font = DesignSystemFont.Pretendard_Bold20.value
+        return label
+    }()
     
     // MARK: - 레이아웃
     private func addComponents() {
         self.addSubview(pinDetailPanel)
-        pinDetailPanel.addSubviews(pinTitle, pinWeather, pinDate, pinMenuButton, pinImageView, pinDescription)
+        pinDetailPanel.addSubviews(pinTitle,
+                                   pinWeather,
+                                   pinDate,
+                                   pinMenuButton,
+                                   pinImageView,
+                                   pinDescription,
+                                   reviewSectionTitle)
         
         
         pinDetailPanel.snp.makeConstraints {
             $0.width.height.equalToSuperview()
             $0.top.equalToSuperview()
-            $0.bottom.equalTo(pinDescription).offset(10)
+            $0.bottom.equalTo(reviewSectionTitle).offset(10)
         }
         
         // subView
@@ -122,7 +136,12 @@ class PinDetailHeader: UIView {
         pinDescription.snp.makeConstraints {
             $0.top.equalTo(pinImageView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(50)
+        }
+        
+        reviewSectionTitle.snp.makeConstraints {
+            $0.top.equalTo(pinDescription.snp.bottom).offset(10)
+            $0.leading.equalToSuperview().offset(10)
+            
         }
     }
 }
