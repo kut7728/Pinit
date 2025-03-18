@@ -13,14 +13,14 @@ protocol DBRepository {
     @discardableResult func deletePin(id: UUID) -> Bool
     @discardableResult func updatePin(pin: PinEntity, filePath: String?) -> Bool
     
-    func fetchPinsAll() -> [PinEntity]
-    func fetchPinsByDate(date: Date) -> [PinEntity]
+    func fetchPinsAll() -> [PinDTO]
+    func fetchPinsByDate(date: Date) -> [PinDTO]
     
     
     @discardableResult func addReview(review: ReviewEntity) -> Bool
     @discardableResult func deleteReview(id: UUID) -> Bool
     @discardableResult func updateReview(review: ReviewEntity) -> Bool
-    func fetchReviewsByPinId(pinID: UUID) -> [ReviewEntity]
+    func fetchReviewsByPinId(pinID: UUID) -> [ReviewDTO]
 }
 #warning("add 관련 기능 저장하고서 저장이 성공했는지에 따른 return 필요할듯?")
 final class DBRepositoryImpl: DBRepository {
@@ -102,19 +102,17 @@ final class DBRepositoryImpl: DBRepository {
         }
     }
     
-    func fetchPinsAll() -> [PinEntity] {
+    func fetchPinsAll() -> [PinDTO] {
         do {
             let fetchResult = try context.fetch(PinDTO.fetchRequest())
-            return fetchResult.compactMap { dto -> PinEntity? in
-                return dto.toPinEntity()
-            }
+            return fetchResult
         } catch {
             print(error.localizedDescription)
             return []
         }
     }
     
-    func fetchPinsByDate(date: Date) -> [PinEntity] {
+    func fetchPinsByDate(date: Date) -> [PinDTO] {
         // date로 저장하면 시간도 같이 저장되기 때문에 00~24시 까지를 가져옴
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date) // 당일 00:00
@@ -124,9 +122,7 @@ final class DBRepositoryImpl: DBRepository {
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as NSDate, endOfDay as NSDate)
         do {
             let fetchResult = try context.fetch(request)
-            return fetchResult.compactMap { dto -> PinEntity? in
-                return dto.toPinEntity()
-            }
+            return fetchResult
         } catch {
             print(error.localizedDescription)
             return []
@@ -194,14 +190,12 @@ final class DBRepositoryImpl: DBRepository {
         }
     }
     
-    func fetchReviewsByPinId(pinID: UUID) -> [ReviewEntity] {
+    func fetchReviewsByPinId(pinID: UUID) -> [ReviewDTO] {
         let request = ReviewDTO.fetchRequest()
         request.predicate = NSPredicate(format: "pinID == %@", pinID as CVarArg)
         do {
             let fetchResult = try context.fetch(request)
-            return fetchResult.compactMap { dto -> ReviewEntity? in
-                return dto.toReviewEntity()
-            }
+            return fetchResult
         }
         catch {
             print(error.localizedDescription)

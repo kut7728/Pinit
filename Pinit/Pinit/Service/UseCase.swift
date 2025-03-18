@@ -25,6 +25,7 @@ protocol UseCase {
 final class UseCaseImpl: UseCase {
     let dbRepository: DBRepository
     let imageStore: ImageStoreRepository
+    
     init(dbRepository: DBRepository, imageStore: ImageStoreRepository) {
 //        DBRepositoryImpl(context: NSManagedObjectContext)
         self.dbRepository = dbRepository
@@ -37,62 +38,52 @@ final class UseCaseImpl: UseCase {
     }
     
     func updatePin(pin: PinEntity) -> Bool {
-        <#code#>
+        let filePath = imageStore.saveImageToDocuments(image: pin.mediaPath, fileName: pin.pin_id.uuidString)
+        return dbRepository.updatePin(pin: pin, filePath: filePath)
     }
     
     func deletePin(pinID: UUID) -> Bool {
-        <#code#>
+        return dbRepository.deletePin(id: pinID)
     }
     
     func fetchAllPins() -> [PinEntity] {
-        <#code#>
+        return dbRepository.fetchPinsAll()
+            .compactMap { item -> PinEntity? in
+                guard let id = item.pin_id else { return nil }
+                let image = imageStore.fetchImageFromDocuments(fileName: id.uuidString)
+                return item.toPinEntity(image: image)
+            }
     }
     
     func fetchPinsByDate(date: Date) -> [PinEntity] {
-        <#code#>
+        return dbRepository.fetchPinsByDate(date: date)
+            .compactMap { item -> PinEntity? in
+                guard let id = item.pin_id else { return nil }
+                let image = imageStore.fetchImageFromDocuments(fileName: id.uuidString)
+                return item.toPinEntity(image: image)
+            }
     }
     
     func fetchCurrentWeather(latitude: Double, longitude: Double) -> UIImage? {
-        <#code#>
+        return nil
     }
     
     func addReview(review: ReviewEntity) -> Bool {
-        <#code#>
+        return dbRepository.addReview(review: review)
     }
     
     func updateReview(review: ReviewEntity) -> Bool {
-        <#code#>
+        return dbRepository.updateReview(review: review)
     }
     
     func deleteReview(reviewId: UUID) -> Bool {
-        <#code#>
+        return dbRepository.deleteReview(id: reviewId)
     }
     
     func fetchAllReviewsByPinID(pinID: UUID) -> [ReviewEntity] {
-        <#code#>
-    }
-    
-    // 로컬 디렉토리에서 이미지 로드
-    private func fetchImageFromDocuments(fileName: String) -> UIImage? {
-        let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName).path
-        if FileManager.default.fileExists(atPath: filePath) {
-            return UIImage(contentsOfFile: filePath)
-        }
-        return nil
-    }
-    
-    // 이미지 저장
-    private func saveImageToDocuments(image: UIImage, fileName: String) -> String? {
-        if let data = image.jpegData(compressionQuality: 1.0) {
-            let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName)
-            do {
-                try data.write(to: filePath)
-                return filePath.path
-            } catch {
-                print("Failed to save image to documents: \(error)")
+        return dbRepository.fetchReviewsByPinId(pinID: pinID)
+            .compactMap { item -> ReviewEntity? in
+                return item.toReviewEntity()
             }
-        }
-        return nil
     }
-    
 }
