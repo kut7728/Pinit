@@ -9,6 +9,9 @@
 import UIKit
 
 final class SettingViewController: UIViewController {
+    var data: [ProducerEntity] = ProducerEntity.sampleData
+    //모델에서 데이터를 가져옴
+    
     private let resetButton = UIButton()
     private var produceCollectionView : UICollectionView = {
         var layout = UICollectionViewFlowLayout()
@@ -17,7 +20,6 @@ final class SettingViewController: UIViewController {
         layout.sectionInset = .zero
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        //cv.backgroundColor = .green
         return cv
     }()
     
@@ -46,7 +48,9 @@ final class SettingViewController: UIViewController {
 
         let addAction = UIAlertAction(title: "확인", style: .destructive) { _ in
             if let text = alert.textFields?.first?.text, !text.isEmpty {
-                //저장된 내용이 지워지는 내용
+                //1.저장된 내용이 지워지는 내용
+                
+                //2.삭제되었습니다
                 
             }
         }
@@ -60,7 +64,7 @@ final class SettingViewController: UIViewController {
 extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { //컬랙션 뷰의 셀 갯수
-        return 5
+        return data.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -68,6 +72,7 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ProducerCollectionViewCell else {
             return UICollectionViewCell()
         }
+        cell.configure(model: data[indexPath.row])
         cell.backgroundColor = .none
         
         return cell
@@ -79,7 +84,7 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
         
         let myWidth : CGFloat = (collectionView.bounds.width - itemSpacing * 2) / 2
         
-        return CGSize(width: myWidth, height: 220)
+        return CGSize(width: myWidth, height: myWidth * 1.2)
     }
 }
 

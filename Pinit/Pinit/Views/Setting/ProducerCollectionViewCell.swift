@@ -8,7 +8,7 @@ import UIKit
 
 class ProducerCollectionViewCell : UICollectionViewCell {
     //그림자 뷰 추가
-    private let shadowContainerView: UIView = {
+    public let shadowContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         view.layer.shadowColor = UIColor.black.withAlphaComponent(0.25).cgColor
@@ -18,14 +18,14 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         return view
     }()
     
-    private lazy var thumbnailImageView: UIImageView = {
+    public lazy var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .lightGray
         return imageView
     }()
     
-    private lazy var pinTitleLabel: UILabel = {
+    public lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = DesignSystemFont.Pretendard_Bold16.value
         label.textColor = .black
@@ -33,7 +33,7 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         return label
     }()
     
-    private lazy var pinDateLabel: UILabel = {
+    public lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = DesignSystemFont.Pretendard_Medium12.value
         label.textColor = UIColor(hex: "808080")
@@ -41,14 +41,15 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         return label
     }()
     
-//    func configure(model: ProducerEntity) {
-//        pinDateLabel.text = model.date.formatted()
-//        pinTitleLabel.text = model.description
-//        thumbnailImageView.image = UIImage(systemName: "house")
-//        //thumbnailImageView.image = model.mediaPath ?? UIImage(systemName: "house")
-//
-//        cellSetting()
-//    } //모델에서 데이터 가져오는 부분
+    func configure(model: ProducerEntity) {
+        dateLabel.text = model.date.formatted()
+        titleLabel.text = model.name
+        //thumbnailImageView.image = UIImage(systemName: "house")
+        //프로필에 지정한 이미지가 없다면 기본이미지로 집모양으로 들어간다
+        thumbnailImageView.image = UIImage(named: model.mediaPath)
+        //model.mediaPath ?? UIImage(systemName: "house")
+        cellSetting()
+    } //모델(SettingView의 data)에서 데이터 가져오는 부분
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,9 +61,6 @@ class ProducerCollectionViewCell : UICollectionViewCell {
     }
     
     func cellSetting() {
-        pinDateLabel.text = "2021-09-30"//model.date.formatted()
-        pinTitleLabel.text = "title"//model.title
-        thumbnailImageView.image = UIImage(systemName: "house")
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 6
@@ -74,19 +72,19 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         shadowContainerView.snp.makeConstraints { $0.edges.equalToSuperview() }
         contentView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
-        contentView.addSubviews(thumbnailImageView, pinTitleLabel, pinDateLabel)
+        contentView.addSubviews(thumbnailImageView, titleLabel, dateLabel)
         
         //img.contentMode = .scaleToFill
         thumbnailImageView.snp.remakeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(8)
             $0.height.equalTo(contentView.frame.width * 0.76)
         }
-        pinTitleLabel.snp.makeConstraints {
+        titleLabel.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(8)
         }
-        pinDateLabel.snp.makeConstraints {
-            $0.top.equalTo(pinTitleLabel.snp.bottom).offset(8)
+        dateLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
         }
     }
