@@ -15,9 +15,9 @@ final class PinDetailViewController: UIViewController {
     
     // 더미 리뷰 데이터
     private lazy var datasource: [ReviewEntity] = [
-        ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "it's my life"),
-        ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "wachohu"),
-        ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "ysdkfsfsflkjsl")
+        ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "리뷰1"),
+        ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "리뷰2"),
+        ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "리뷰3")
     ]
     
     public var pinTableView: UITableView!
