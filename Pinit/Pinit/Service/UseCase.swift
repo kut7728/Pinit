@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Moya
+
+private let provider = MoyaProvider<Router>()
 
 protocol UseCase {
     func addPin(pin: PinEntity) -> Bool
@@ -14,7 +17,9 @@ protocol UseCase {
     func fetchAllPins() -> [PinEntity]
     func fetchPinsByDate(date: Date) -> [PinEntity]
     
-    func fetchCurrentWeather(latitude: Double, longitude: Double) -> UIImage?
+    func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping ([WeatherResponse]) -> Void)
+    
+    func fetchCurrentWeatherIcon(icon : String) -> UIImage?
     
     func addReview(review: ReviewEntity) -> Bool
     func updateReview(review: ReviewEntity) -> Bool
@@ -23,11 +28,12 @@ protocol UseCase {
 }
 
 final class UseCaseImpl: UseCase {
+    
     let dbRepository: DBRepository
     let imageStore: ImageStoreRepository
     
     init(dbRepository: DBRepository, imageStore: ImageStoreRepository) {
-//        DBRepositoryImpl(context: NSManagedObjectContext)
+        //        DBRepositoryImpl(context: NSManagedObjectContext)
         self.dbRepository = dbRepository
         self.imageStore = imageStore
     }
@@ -54,7 +60,7 @@ final class UseCaseImpl: UseCase {
                 return item.toPinEntity(image: image)
             }
     }
-    
+    //세훈
     func fetchPinsByDate(date: Date) -> [PinEntity] {
         return dbRepository.fetchPinsByDate(date: date)
             .compactMap { item -> PinEntity? in
@@ -64,7 +70,29 @@ final class UseCaseImpl: UseCase {
             }
     }
     
-    func fetchCurrentWeather(latitude: Double, longitude: Double) -> UIImage? {
+    //MARK: - 날씨 정보 받아오기.
+    func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping ([WeatherResponse]) -> Void) {
+        provider.request(.getWeather(lat: latitude, lon: longitude, lang: "kr")) { result in
+            switch result {
+            case .success(let response):
+                do {
+                    let weatherData = try JSONDecoder().decode([WeatherResponse].self, from: response.data)
+                    //fetchCurrentWeatherIcon(icon: String)
+                    completion(weatherData)
+                } catch {
+                    print("Decoding error: \(error.localizedDescription)")
+                    completion([])
+                }
+            case .failure(let error):
+                print("Network error: \(error.localizedDescription)")
+                completion([])
+            }
+        }
+    }
+    
+    //MARK: - 날씨 정보에서 나온 iCON을 이용해 이미지를 받습니다.
+    func fetchCurrentWeatherIcon(icon: String) -> UIImage? {
+        
         return nil
     }
     

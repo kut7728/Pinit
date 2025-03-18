@@ -46,7 +46,6 @@ final class PastPinViewController: UIViewController {
         view.backgroundColor = .secondarySystemBackground
         SetUI()
         setupAdapter()
-        //        APItest()
     }
     
     //MARK: - setui
@@ -68,25 +67,6 @@ final class PastPinViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
-    
-    //MARK: - TEST
-    //    private let provider = MoyaProvider<Router>()
-    //
-    //    func APItest() {
-    //        provider.request(.getWeather(lat: 37.56, lon: 126.98, lang: "kr")) { result in
-    //            switch result {
-    //            case let .success(response):
-    //                do {
-    //                    let data = try JSONDecoder().decode(WeatherResponse.self, from: response.data)
-    //                    print(data)
-    //                } catch {
-    //                    print("JSON Parsing Error: \(error)")
-    //                }
-    //            case let .failure(error):
-    //                print("Network Request Failed: \(error.localizedDescription)")
-    //            }
-    //        }
-    //    }
 }
 
 //MARK: - FsCalendar Extension
