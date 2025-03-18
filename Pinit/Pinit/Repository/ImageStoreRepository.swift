@@ -13,7 +13,7 @@ protocol ImageStoreRepository {
 }
 
 final class ImageStoreRepositoryImpl: ImageStoreRepository {
-    private lazy var fileManager = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    private var fileManager: URL!
     
     init(
         fileManagerURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

@@ -12,18 +12,23 @@ import CoreData
 final class PinitTests: XCTestCase {
     var usecase: UseCase!
     var context: NSManagedObjectContext!
+    var imageStore: ImageStoreRepository!
     
     override func setUpWithError() throws {
         let container = NSPersistentContainer(name: "Pinit")
         let description = NSPersistentStoreDescription()
-        description.type = NSInMemoryStoreType
+        description.type = NSInMemoryStoreType // 임시 메모리에 저장되게함.
         container.persistentStoreDescriptions = [description]
         container.loadPersistentStores { storeDescription, error in
             XCTAssertNil(error, "CoreData In-Memory Store 생성 실패")
         }
         context = container.newBackgroundContext()
+        
+        let tempDIR = URL(fileURLWithPath: NSTemporaryDirectory())
+        imageStore = ImageStoreRepositoryImpl(fileManagerURL: tempDIR) // 임시 메모리에 사진 저장되게함.
+        
         usecase = UseCaseImpl(dbRepository: DBRepositoryImpl(context: context),
-                              imageStore: ImageStoreRepositoryImpl())
+                              imageStore: imageStore)
     }
     
     override func tearDownWithError() throws {
@@ -79,7 +84,7 @@ final class PinitTests: XCTestCase {
     //    }
     
 }
-
+// 테스트용 equatable 
 extension PinEntity: Equatable {
     public static func == (lhs: PinEntity, rhs: PinEntity) -> Bool {
         return (
