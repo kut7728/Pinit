@@ -90,6 +90,7 @@ final class UseCaseImpl: UseCase {
                 do {
                     let weatherData = try JSONDecoder().decode([WeatherResponse].self, from: response.data)
                     //fetchCurrentWeatherIcon(icon: String)
+                    print("success문")
                     completion(weatherData)
                 } catch {
                     print("Decoding error: \(error.localizedDescription)")

@@ -74,6 +74,22 @@ final class PinitTests: XCTestCase {
         }
     }
     
+    func test_날씨정보_가져오기() {
+        // Given
+        let latitude = PinEntity.sampleData[0].latitude
+        let longitude = PinEntity.sampleData[0].longitude
+        
+        let expectation = XCTestExpectation(description: "날씨 정보를 성공적으로 가져와야 한다.")
+        // When
+        usecase.fetchCurrentWeather(latitude: latitude, longitude: longitude) { weatherData in
+            // Then
+            print(weatherData)
+            XCTAssertFalse(weatherData.isEmpty, "날씨 데이터가 비어있음")
+            expectation.fulfill() // 비동기 작업이 완료되었음을 알림
+        }
+        //5초 안에 expectation 실행
+        wait(for: [expectation], timeout: 5.0)
+    }
     
     
     //    func testPerformanceExample() throws {
