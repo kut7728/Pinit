@@ -248,3 +248,5 @@ extension DBRepositoryImpl {
         return nil
     }
 }
+
+// NSFetchResultsController ??
