@@ -14,10 +14,16 @@ final class SettingViewController: UIViewController {
     
     private let resetButton = UIButton()
     private var produceCollectionView : UICollectionView = {
+        
         var layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
         layout.scrollDirection = .vertical
         layout.sectionInset = .zero
+        let spacing = 5.0
+        var width: CGFloat = UIScreen.main.bounds.width
+        width = (width / 2) - (spacing * 1.5)
+        layout.itemSize = .init(width: width, height: width * 1.23)
+        layout.minimumInteritemSpacing = spacing
+        layout.sectionInset = .init(top: 0, left: spacing, bottom: spacing, right: spacing)
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return cv
@@ -63,6 +69,11 @@ final class SettingViewController: UIViewController {
 
 extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = PinDetailViewController()
+        present(detailVC, animated: true ,completion: nil )
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { //컬랙션 뷰의 셀 갯수
         return data.count
     }
@@ -73,7 +84,7 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
             return UICollectionViewCell()
         }
         cell.configure(model: data[indexPath.row])
-        cell.backgroundColor = .none
+        
         
         return cell
     }

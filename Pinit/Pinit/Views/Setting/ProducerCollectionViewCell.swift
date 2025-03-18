@@ -20,7 +20,7 @@ class ProducerCollectionViewCell : UICollectionViewCell {
     
     public lazy var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .lightGray
         return imageView
     }()
@@ -42,11 +42,11 @@ class ProducerCollectionViewCell : UICollectionViewCell {
     }()
     
     func configure(model: ProducerEntity) {
-        dateLabel.text = model.date.formatted()
-        titleLabel.text = model.name
+        dateLabel.text = model.date.snakeCaseDateString()
+        titleLabel.text = model.title
         //thumbnailImageView.image = UIImage(systemName: "house")
         //프로필에 지정한 이미지가 없다면 기본이미지로 집모양으로 들어간다
-        thumbnailImageView.image = UIImage(named: model.mediaPath)
+        thumbnailImageView.image = model.mediaPath
         //model.mediaPath ?? UIImage(systemName: "house")
         cellSetting()
     } //모델(SettingView의 data)에서 데이터 가져오는 부분
