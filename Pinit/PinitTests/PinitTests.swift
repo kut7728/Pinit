@@ -8,6 +8,7 @@
 import XCTest
 import CoreData
 import Moya
+import Kingfisher
 @testable import Pinit
 
 final class PinitTests: XCTestCase {
@@ -83,8 +84,8 @@ final class PinitTests: XCTestCase {
     
     func test_날씨정보_가져오기() {
         // Given
-        let latitude = PinEntity.sampleData[0].latitude
-        let longitude = PinEntity.sampleData[0].longitude
+        let latitude = PinEntity.sampleData[1].latitude
+        let longitude = PinEntity.sampleData[1].longitude
         
         let expectation = XCTestExpectation(description: "날씨 정보를 성공적으로 가져와야 한다.")
         // When
@@ -92,7 +93,7 @@ final class PinitTests: XCTestCase {
             // Then
             if let weatherData = weatherData {
                 print(weatherData)
-//                XCTAssertFalse(weatherData, "날씨 데이터가 비어있음")
+                //print(weatherData.weather.first?.icon)
             }
             
             expectation.fulfill() // 비동기 작업이 완료되었음을 알림
@@ -100,6 +101,9 @@ final class PinitTests: XCTestCase {
         //5초 안에 expectation 실행
         wait(for: [expectation], timeout: 5.0)
     }
+//    func test_날씨_아이콘_가져오기(){
+//        
+//    }
     
     
     //    func testPerformanceExample() throws {
