@@ -9,7 +9,7 @@ import UIKit
 
 protocol ImageStoreRepository {
     func fetchImageFromDocuments(fileName: String) -> UIImage?
-    func saveImageToDocuments(image: UIImage, fileName: String) -> String?
+    func saveImageToDocuments(image: UIImage?, fileName: String) -> String?
 }
 
 final class ImageStoreRepositoryImpl {

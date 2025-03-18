@@ -32,8 +32,8 @@ final class UseCaseImpl: UseCase {
     }
     
     func addPin(pin: PinEntity) -> Bool {
-        imageStore.saveImageToDocuments(image: pin.mediaPath, fileName: pin.pin_id)
-        return dbRepository.addPin(pin: pin)
+        let filePath = imageStore.saveImageToDocuments(image: pin.mediaPath, fileName: pin.pin_id.uuidString)
+        return dbRepository.addPin(pin: pin, filePath: filePath)
     }
     
     func updatePin(pin: PinEntity) -> Bool {
