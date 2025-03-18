@@ -10,19 +10,34 @@ import UIKit
 
 final class SettingViewController: UIViewController {
     private let resetButton = UIButton()
+    private var produceCollectionView : UICollectionView = {
+        var layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .vertical
+        layout.sectionInset = .zero
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        //cv.backgroundColor = .green
+        return cv
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        view.addSubview(produceCollectionView)
+        view.addSubview(resetButton)
+        
+        produceCollectionView.delegate = self
+        produceCollectionView.dataSource = self
         
         //버튼 레이아웃 설정
         resetButton.setTitle("전체 기록 삭제", for: .normal)
         resetButton.addTarget(self, action: #selector(resetAlert), for: .touchUpInside)
         resetButton.backgroundColor = .lightGray
         
-        view.addSubview(resetButton)
-        
         autoLayout()
+        produceCollectionView.register(ProducerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
     }
     
     @objc func resetAlert() {
@@ -41,17 +56,47 @@ final class SettingViewController: UIViewController {
         present(alert, animated: true)
     }
 }
+
+extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { //컬랙션 뷰의 셀 갯수
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ProducerCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.backgroundColor = .none
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //컬렉션 뷰의 셀의 크기
+        let itemSpacing : CGFloat = 10
+        
+        let myWidth : CGFloat = (collectionView.bounds.width - itemSpacing * 2) / 2
+        
+        return CGSize(width: myWidth, height: 220)
+    }
+}
+
 //오토레이아웃 제약 설정(snapkit) 부분
 extension SettingViewController {
     private func autoLayout() {
         resetButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-100)
+            $0.bottom.equalToSuperview().offset(-90)
             $0.height.equalTo(50)
-            $0.leading.equalTo(20)
+            $0.leading.equalTo(10)
         }
         //컬렉션 뷰 제약 설정 부분 예정
-        
+        produceCollectionView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(resetButton.snp.top).offset(-30)
+        }
     }
 }
 
