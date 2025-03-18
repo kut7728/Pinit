@@ -6,30 +6,94 @@
 //
 
 import XCTest
+import CoreData
+@testable import Pinit
 
 final class PinitTests: XCTestCase {
-
+    var usecase: UseCase!
+    var context: NSManagedObjectContext!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let container = NSPersistentContainer(name: "Pinit")
+        let description = NSPersistentStoreDescription()
+        description.type = NSInMemoryStoreType
+        container.persistentStoreDescriptions = [description]
+        container.loadPersistentStores { storeDescription, error in
+            XCTAssertNil(error, "CoreData In-Memory Store 생성 실패")
+        }
+        context = container.newBackgroundContext()
+        usecase = UseCaseImpl(dbRepository: DBRepositoryImpl(context: context),
+                              imageStore: ImageStoreRepositoryImpl())
     }
-
+    
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        context = nil
+        usecase = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+    
+    func test_샘플데이터로_핀추가_확인() throws {
+        // Given
+        let pins = PinEntity.sampleData
+        // When
+        for pin in pins {
+            // Then
+            XCTAssertTrue(usecase.addPin(pin: pin), "Pin 추가 실패")
+        }
+        do {
+            let request = PinDTO.fetchRequest()
+            let fetchResult = try context.fetch(request)
+            XCTAssertEqual(fetchResult.count, PinEntity.sampleData.count, "추가된 Pin 개수 다름")
+        }
+        catch {
+            XCTFail("Fetch 실패: \(error.localizedDescription)")
         }
     }
+    
+    func test_핀_전부가져오기() {
+        // Given
+        for sample in PinEntity.sampleData {
+            XCTAssertTrue(usecase.addPin(pin: sample), "Pin 추가 실패")
+        }
+        
+        // When
+        var pins: [PinEntity] = []
+        usecase.fetchAllPins { items in
+            pins = items
+            
+            // Then
+            XCTAssertEqual(pins.count, PinEntity.sampleData.count, "Pin 개수 다름")
+            for i in 0..<pins.count { //저장 순서 보장 되나봄
+                XCTAssertEqual(pins[i], PinEntity.sampleData[i], "Pin 데이터가 다름!!")
+            }
+        }
+    }
+    
+    
+    
+    //    func testPerformanceExample() throws {
+    //        // This is an example of a performance test case.
+    //        measure {
+    //            // Put the code you want to measure the time of here.
+    //        }
+    //    }
+    
+}
 
+extension PinEntity: Equatable {
+    public static func == (lhs: PinEntity, rhs: PinEntity) -> Bool {
+        return (
+            lhs.pin_id == rhs.pin_id &&
+            lhs.latitude == rhs.latitude &&
+            lhs.longitude == rhs.longitude &&
+            lhs.title == rhs.title &&
+            lhs.description == rhs.description &&
+            lhs.mediaPath == rhs.mediaPath &&
+            lhs.date == rhs.date &&
+            lhs.address == rhs.address &&
+            lhs.weather == rhs.weather
+        )
+    }
+    
+    
 }
