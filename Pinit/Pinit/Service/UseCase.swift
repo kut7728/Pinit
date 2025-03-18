@@ -8,8 +8,6 @@
 import UIKit
 import Moya
 
-private let provider = MoyaProvider<Router>()
-
 protocol UseCase {
     /*
      Create, Update, Delete는 하나의 entity만 처리하기에 UIBlocking이 없어 그냥 처리했지만,
@@ -21,7 +19,7 @@ protocol UseCase {
     func fetchAllPins(completion: @escaping ([PinEntity]) -> Void)
     func fetchPinsByDate(date: Date, completion: @escaping ([PinEntity]) -> Void)
     
-    func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping ([WeatherResponse]) -> Void)
+    func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping (WeatherResponse?) -> Void)
     
     func fetchCurrentWeatherIcon(icon : String) -> UIImage?
     
@@ -32,14 +30,15 @@ protocol UseCase {
 }
 
 final class UseCaseImpl: UseCase {
-    
+    let provider: MoyaProvider<Router>
     let dbRepository: DBRepository
     let imageStore: ImageStoreRepository
     
-    init(dbRepository: DBRepository, imageStore: ImageStoreRepository) {
+    init(dbRepository: DBRepository, imageStore: ImageStoreRepository, moyaProvider: MoyaProvider<Router>) {
         //        DBRepositoryImpl(context: NSManagedObjectContext)
         self.dbRepository = dbRepository
         self.imageStore = imageStore
+        self.provider = moyaProvider
     }
     
     func addPin(pin: PinEntity) -> Bool {
@@ -83,22 +82,22 @@ final class UseCaseImpl: UseCase {
     }
     //세훈
     //MARK: - 날씨 정보 받아오기.
-    func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping ([WeatherResponse]) -> Void) {
+    func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping (WeatherResponse?) -> Void) {
         provider.request(.getWeather(lat: latitude, lon: longitude, lang: "kr")) { result in
             switch result {
             case .success(let response):
                 do {
-                    let weatherData = try JSONDecoder().decode([WeatherResponse].self, from: response.data)
+                    let weatherData = try JSONDecoder().decode(WeatherResponse.self, from: response.data)
                     //fetchCurrentWeatherIcon(icon: String)
                     print("success문")
                     completion(weatherData)
                 } catch {
                     print("Decoding error: \(error.localizedDescription)")
-                    completion([])
+                    completion(nil)
                 }
             case .failure(let error):
                 print("Network error: \(error.localizedDescription)")
-                completion([])
+                completion(nil)
             }
         }
     }

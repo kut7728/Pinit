@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+import Moya
+
 final class DIContainer: NSObject {
     static let usecase: UseCase = {
         let container = NSPersistentContainer(name: "Pinit")
@@ -18,7 +20,10 @@ final class DIContainer: NSObject {
         // context.perform을 제대로 사용하기위해 백그라운드컨텍스트로 가져옴
         // 비동기 작업에 사용됌
         let context = container.newBackgroundContext()
-        return UseCaseImpl(dbRepository: DBRepositoryImpl(context: context),
-                    imageStore: ImageStoreRepositoryImpl())
+        return UseCaseImpl(
+            dbRepository: DBRepositoryImpl(context: context),
+            imageStore: ImageStoreRepositoryImpl(),
+            moyaProvider: MoyaProvider<Router>()
+        )
     }()
 }
