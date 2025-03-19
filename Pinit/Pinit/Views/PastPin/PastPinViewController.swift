@@ -11,15 +11,12 @@ import SnapKit
 
 final class PastPinViewController: UIViewController {
     
+    //MARK: - 모든 PinEntity를 가져옵니다.
+    let pinData = PinEntity.sampleData
+    
     //MARK: - calendar
     private let PinCalendar : FSCalendar = {
         let calendar = FSCalendar()
-        calendar.appearance.selectionColor = .systemBlue
-        calendar.backgroundColor = .white
-        calendar.layer.cornerRadius = 10
-        calendar.locale = Locale(identifier: "ko_KR")
-        calendar.firstWeekday = 1
-        calendar.appearance.headerDateFormat = "YYYY년 MM월"
         return calendar
     }()
     
@@ -46,7 +43,9 @@ final class PastPinViewController: UIViewController {
         view.backgroundColor = .secondarySystemBackground
         SetUI()
         setupAdapter()
+        calendarUI()
     }
+    
     
     //MARK: - setui
     
@@ -59,7 +58,7 @@ final class PastPinViewController: UIViewController {
         PinCalendar.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.height.equalTo(370)
+            $0.height.equalTo(300)
         }
         PinCollectionView.snp.makeConstraints{
             $0.top.equalTo(PinCalendar.snp.bottom).offset(16)
@@ -67,28 +66,58 @@ final class PastPinViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    
+    private func calendarUI(){
+        PinCalendar.backgroundColor = .white
+        PinCalendar.layer.cornerRadius = 10
+        PinCalendar.locale = Locale.init(identifier: "ko_KR")
+        PinCalendar.firstWeekday = 1
+        PinCalendar.appearance.headerDateFormat = "YYYY년 MM월"
+        PinCalendar.appearance.headerMinimumDissolvedAlpha = 0.0
+        PinCalendar.placeholderType = .none
+        
+        //년월 폰트
+        PinCalendar.appearance.headerTitleFont = DesignSystemFont.Pretendard_Bold20.value
+        PinCalendar.appearance.headerTitleColor = .black
+        //요일 폰트
+        PinCalendar.appearance.weekdayFont = DesignSystemFont.Pretendard_Bold12.value
+        PinCalendar.appearance.weekdayTextColor = .black
+        //날짜 폰트
+        PinCalendar.appearance.titleFont = DesignSystemFont.Pretendard_Medium12.value
+        //오늘
+        PinCalendar.appearance.todayColor = .systemGray3
+        //오늘 아님
+        PinCalendar.appearance.selectionColor = .systemBlue
+    }
 }
 
 //MARK: - FsCalendar Extension
 
 extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance{
     
+//    func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
+//        return UIImage(named: "01d")
+//    }
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print("didSelect date: \(date)")
+        print(date)
     }
-    //    func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-    //        return UIImage(systemName: "scribble")
-    //    }
+    
+    
+    //해당 pinEntity안에 데이터의 유무에 따라 해당 날짜에 dot이 노출댑니당>.<
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        return pinData.contains { Calendar.current.isDate($0.date, inSameDayAs: date) } ? 1 : 0
+    }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         let day = Calendar.current.component(.weekday, from: date) - 1
         
         if Calendar.current.shortWeekdaySymbols[day] == "Sun" || Calendar.current.shortWeekdaySymbols[day] == "일" {
-            return .systemRed
+            return .systemRed //일요일 색
         } else if Calendar.current.shortWeekdaySymbols[day] == "Sat" || Calendar.current.shortWeekdaySymbols[day] == "토" {
-            return .systemBlue
+            return .systemBlue //토요일 색
         } else {
-            return .label
+            return .label //기본색
         }
     }
 }

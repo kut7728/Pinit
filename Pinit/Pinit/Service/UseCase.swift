@@ -22,8 +22,6 @@ protocol UseCase {
     
     func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping (WeatherResponse?) -> Void)
     
-    func fetchCurrentWeatherIcon(icon : String) -> URL?
-    
     func addReview(review: ReviewEntity) -> Bool
     func updateReview(review: ReviewEntity) -> Bool
     func deleteReview(reviewId: UUID) -> Bool
@@ -89,10 +87,6 @@ final class UseCaseImpl: UseCase {
             case .success(let response):
                 do {
                     let weatherData = try JSONDecoder().decode(WeatherResponse.self, from: response.data)
-                    if let icon = weatherData.weather.first?.icon {
-                        let iconURL = self.fetchCurrentWeatherIcon(icon: icon)
-                        print("URL: \(iconURL?.absoluteString ?? "없음")")
-                    }
                     completion(weatherData)
                 } catch {
                     print("Decoding error: \(error.localizedDescription)")
@@ -103,12 +97,6 @@ final class UseCaseImpl: UseCase {
                 completion(nil)
             }
         }
-    }
-    
-    //MARK: - 날씨 정보에서 나온 iCON을 이용해 이미지를 받습니다.
-    func fetchCurrentWeatherIcon(icon: String) -> URL? {
-        let imageURL = "https://openweathermap.org/img/wn/\(icon)@2x.png"
-        return URL(string: imageURL)
     }
     
     func addReview(review: ReviewEntity) -> Bool {
