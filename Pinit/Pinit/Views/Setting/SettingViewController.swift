@@ -5,7 +5,6 @@
 //  Created by 안정흠 on 3/12/25.
 //
 
-
 import UIKit
 
 final class SettingViewController: UIViewController {
@@ -42,7 +41,15 @@ final class SettingViewController: UIViewController {
         //버튼 레이아웃 설정
         resetButton.setTitle("전체 기록 삭제", for: .normal)
         resetButton.addTarget(self, action: #selector(resetAlert), for: .touchUpInside)
-        resetButton.backgroundColor = .lightGray
+        
+        resetButton.setTitleColor(.red, for: .normal)
+        
+        resetButton.backgroundColor = .white
+        resetButton.layer.cornerRadius = 10
+        
+        resetButton.layer.masksToBounds = false
+        resetButton.layer.shadowOpacity = 0.5
+        resetButton.layer.shadowOffset = CGSize(width: 0, height: 4)
         
         autoLayout()
         produceCollectionView.register(ProducerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -89,14 +96,6 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //컬렉션 뷰의 셀의 크기
-        let itemSpacing : CGFloat = 10
-        
-        let myWidth : CGFloat = (collectionView.bounds.width - itemSpacing * 2) / 2
-        
-        return CGSize(width: myWidth, height: myWidth * 1.2)
-    }
 }
 
 //오토레이아웃 제약 설정(snapkit) 부분
