@@ -41,13 +41,9 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         return label
     }()
     
-    func configure(model: ProducerEntity) {
-        let myFormatter = DateFormatter()
-        myFormatter.dateFormat = "yyyy-MM-dd"  // String의 문자열 형식과 동일 해야함
-            
-        let birDate = myFormatter.date(from: model.date)! //생일 데이터를 불러온다
-        
-        dateLabel.text = birDate.snakeCaseDateString()
+    func configure(model: PinEntity) {
+
+        dateLabel.text = model.date.snakeCaseDateString()
         titleLabel.text = model.title
         thumbnailImageView.image = model.mediaPath
         

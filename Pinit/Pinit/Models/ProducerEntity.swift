@@ -6,63 +6,83 @@
 //
 import UIKit
 
-struct ProducerEntity {
-    //이름, 위,경도(지역), 생일, 각자사진, 소개, 문구, 기분(날씨)
-    let title: String
-    let latitude: Double
-    let longitude: Double
-    let date: String
-    let mediaPath: UIImage
-    let description: String?
-    let weather: String
+extension PinEntity {
+    
+    private static func toDate(_ dateString: String)-> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone.current // 현재 시간대 사용
+        dateFormatter.locale = Locale(identifier: "ko_KR") // 한국 로캘 설정 (선택사항)
+        
+        if let date = dateFormatter.date(from: dateString) {
+            return date
+        }else{
+            return Date()
+        }
+    }
     
     
-    static let sampleData: [ProducerEntity] = [
+    static let producerData: [PinEntity] = [
         //데이터 부분들
         
-        ProducerEntity(
+        PinEntity(
+            pin_id: UUID(),
             title: "JustHm",
             latitude: 37.9244577,
-            longitude: 128.800009, //본인 지역의 의,경도
-            date: "1998-05-01", //생년월일
-            mediaPath: UIImage(named: "JustHMImg")!,
-            description: "안녕하세요 ! 감자 개발자 안정흠입니다!",//istj
-            weather: "구름"),
+            longitude: 128.800009,//본인 지역의 의,경도
+            address: "",
+            date: toDate("1998-05-01"), //생년월일
+            weather: "istj",
+            description: "안녕하세요 ! 감자 개발자 안정흠입니다!",
+            mediaPath: UIImage(named: "JustHMImg")!
+        ),
         
-        ProducerEntity(
+        PinEntity(
+            pin_id: UUID(),
             title: "Ikhwan0204",
             latitude: 37.506610,
-            longitude: 126.885332, //본인 지역의 의,경도
-            date: "2002-04-12", //생년월일
-            mediaPath: UIImage(named: "Ikhwan0204Img")!,
-            description: "개발개바발 개발자 이규현입니다.ㅎㅎㅎ", //enfj
-            weather: "흐림"),
+            longitude: 126.885332,
+            address: "",
+            date: toDate("2002-04-12"),
+            weather: "enfj",
+            description: "개발개바발 개발자 이규현입니다.ㅎㅎㅎ",
+            mediaPath: UIImage(named: "Ikhwan0204Img")!
+            ),
         
-        ProducerEntity(
+        PinEntity(
+            pin_id: UUID(),
             title: "IntakHan304",
             latitude: 37.434981,
-            longitude: 126.902328, //본인 지역의 의,경도
-            date: "1991-03-04", //생년월일
-            mediaPath: UIImage(named: "IntakHan304Img")!,
-            description: "나는 누구 입니다3",
-            weather: "비"),
+            longitude: 126.902328,
+            address: "",
+            date: toDate("1991-03-04"),
+            weather: "infj" ,
+            description: "처음 시작하는 개발자 한인탁 입니다.",
+            mediaPath: UIImage(named: "IntakHan304Img")!
+            ),
         
-        ProducerEntity(
+        PinEntity(
+            pin_id: UUID(),
             title: "HISEHOONAN",
             latitude: 37.508645,
-            longitude: 126.703513, //본인 지역의 의,경도
-            date: "1998.06.17", //생년월일
-            mediaPath: UIImage(named: "HISEHOONImg")! ,
-            description: "안녕하세요 ! 개발새발 개발자 안세훈입니다 !",//infp
-            weather: "눈"),
+            longitude: 126.703513,
+            address: "",
+            date: toDate("1999.06.17"),
+            weather: "infp",
+            description: "안녕하세요 ! 개발새발 개발자 안세훈입니다 ! ",
+            mediaPath: UIImage(named: "HISEHOONImg")!
+        ),
         
-        ProducerEntity(
+        PinEntity(
+            pin_id: UUID(),
             title: "kut7728",
             latitude: 37.554267,
             longitude: 126.953922, //본인 지역의 의,경도
-            date: "1998.03.02", //생년월일
-            mediaPath: UIImage(named: "kut7728Img")! ,
-            description: "네이티브 앱, 애플, 테크기기에 관심이 많은 앱 개발자(지망)입니다.", //infj
-            weather: "맑음")
+            address: "",
+            date: toDate("1998.03.02"), //생년월일
+            weather: "intj",
+            description: "네이티브 앱, 애플, 테크기기에 관심이 많은 앱 개발자(지망)입니다.", //
+            mediaPath: UIImage(named: "kut7728Img")!
+        )
     ]
 }

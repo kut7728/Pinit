@@ -8,7 +8,7 @@
 import UIKit
 
 final class SettingViewController: UIViewController {
-    var data: [ProducerEntity] = ProducerEntity.sampleData
+    var data: [PinEntity] = PinEntity.producerData
     //모델에서 데이터를 가져옴
     
     private let resetButton = UIButton()
@@ -43,14 +43,14 @@ final class SettingViewController: UIViewController {
         resetButton.titleLabel?.font = DesignSystemFont.Pretendard_Medium18.value
         resetButton.addTarget(self, action: #selector(resetAlert), for: .touchUpInside)
         
-        resetButton.setTitleColor(.red, for: .normal)
+        resetButton.setTitleColor(.white, for: .normal)
         
-        resetButton.backgroundColor = .white
+        resetButton.backgroundColor = .red
         resetButton.layer.cornerRadius = 10
         
         resetButton.layer.masksToBounds = false
-        resetButton.layer.shadowOpacity = 0.5
-        resetButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        //resetButton.layer.shadowOpacity = 0.5
+        //resetButton.layer.shadowOffset = CGSize(width: 0, height: 4)
         
         autoLayout()
         produceCollectionView.register(ProducerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -104,15 +104,16 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
 extension SettingViewController {
     private func autoLayout() {
         resetButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-90)
-            $0.height.equalTo(50)
-            $0.leading.equalTo(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(70)
+            $0.leading.equalToSuperview().inset(10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
         //컬렉션 뷰 제약 설정 부분 예정
         produceCollectionView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.equalTo(resetButton.snp.top).offset(-30)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.width.equalToSuperview()
+            $0.bottom.equalTo(resetButton.snp.top)
         }
     }
 }
