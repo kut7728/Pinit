@@ -30,13 +30,16 @@ final class SettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        extendedLayoutIncludesOpaqueBars = true
+        view.backgroundColor = .secondarySystemBackground
         
         view.addSubview(produceCollectionView)
         view.addSubview(resetButton)
         
         produceCollectionView.delegate = self
         produceCollectionView.dataSource = self
+        produceCollectionView.backgroundColor = .secondarySystemBackground
         
         //버튼 레이아웃 설정
         resetButton.setTitle("전체 기록 삭제", for: .normal)
@@ -78,7 +81,7 @@ final class SettingViewController: UIViewController {
 extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let detailVC = PinDetailViewController() //프로필 누르면 상세 화면으로
+        let detailVC = PinDetailViewController(PinEntity.producerData[indexPath.row]) //프로필 누르면 상세 화면으로
         
         present(detailVC, animated: true ,completion: nil )
     }
@@ -104,8 +107,8 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
 extension SettingViewController {
     private func autoLayout() {
         resetButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(70)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.height.equalTo(60)
             $0.leading.equalToSuperview().inset(10)
             $0.trailing.equalToSuperview().offset(-10)
         }
@@ -113,7 +116,7 @@ extension SettingViewController {
         produceCollectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.width.equalToSuperview()
-            $0.bottom.equalTo(resetButton.snp.top)
+            $0.bottom.equalTo(resetButton.snp.top).offset(-10)
         }
     }
 }

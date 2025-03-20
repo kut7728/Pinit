@@ -20,7 +20,7 @@ class ProducerCollectionViewCell : UICollectionViewCell {
     
     public lazy var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleToFill
         imageView.backgroundColor = .lightGray
         return imageView
     }()
@@ -86,4 +86,8 @@ class ProducerCollectionViewCell : UICollectionViewCell {
             $0.leading.trailing.equalToSuperview().inset(8)
         }
     }
+}
+
+#Preview {
+    SettingViewController()
 }
