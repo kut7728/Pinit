@@ -41,6 +41,7 @@ final class PastPinViewController: UIViewController {
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .secondarySystemBackground
         SetUI()
         setupAdapter()

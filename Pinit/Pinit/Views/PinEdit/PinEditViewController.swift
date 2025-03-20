@@ -22,7 +22,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         mapView = MKMapView(frame: self.view.bounds)    //mkmapview 초기화 및 뷰 추가함
         mapView = MKMapView(frame: CGRect(x: 0, y: 60, width: self.view.bounds.width, height: self.view.bounds.height / 4)) //화면의 1/4만 나오게 함
         
-        self.view.addSubview(mapView)       //mapview 뷰에 보이게 합니다다아암;ㄹㅇ너리ㅏ머
+        self.view.addSubview(mapView)       //mapview 뷰에 보이게
         
         setUpKeyboard()
         
