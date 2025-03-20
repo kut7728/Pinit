@@ -64,6 +64,7 @@ class PinDetailHeader: UIView {
     public lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "sampleImg.jpg")
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -150,6 +151,3 @@ class PinDetailHeader: UIView {
     PinDetailHeader()
 }
 
-#Preview {
-    PinDetailViewController()
-}

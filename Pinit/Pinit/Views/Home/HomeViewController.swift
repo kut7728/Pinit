@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     private lazy var bottomSheetHeight: CGFloat = view.frame.height / 14
     private let circleButtonSize: CGFloat = 48
     private let locationmanager = CLLocationManager()
+    private let usecase: UseCase
     
     // MARK: UI Components
     private var adapter: PinCollectionViewAdapter?
@@ -38,12 +39,26 @@ class HomeViewController: UIViewController {
         return button
     }()
     
+    init(usecase: UseCase) {
+        self.usecase = usecase
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProperties()
         setupMapLocation()
         setupAdapter()
         setupLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        //        loadAnnotations()
     }
     
     private func setupMapLocation() {
@@ -62,14 +77,22 @@ class HomeViewController: UIViewController {
         )
         mapView.isRotateEnabled = false
         mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
-//        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: "ClusterView")
-        let annotations = PinEntity.sampleData.map { customPin -> CustomAnnotation in
-            let annotation = CustomAnnotation(pinData: customPin)
-            //annotation.clusteringIdentifier = "pinCluster" // 클러스터 그룹 지정
-            return annotation
-        }
+        //        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: "ClusterView")
         
-        mapView.addAnnotations(annotations)
+        loadAnnotations(PinEntity.sampleData)
+    }
+    
+    private func loadAnnotations(_ samepleData: [PinEntity]? = nil) {
+        if let sampleData = samepleData { // 테스트용
+            let annotations = PinEntity.sampleData.map{CustomAnnotation(pinData: $0)}
+            mapView.addAnnotations(annotations)
+        }
+        else {
+            usecase.fetchAllPins {[weak self] pins in
+                let annotations = pins.map { CustomAnnotation(pinData: $0) }
+                self?.mapView.addAnnotations(annotations)
+            }
+        }
     }
     
     private func setupProperties() {
@@ -159,6 +182,7 @@ extension HomeViewController: MKMapViewDelegate {
         
         return clusterView!
     }
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let annotation = view.annotation as? CustomAnnotation {
             print("Selected pin ID: \(annotation.pinData.pin_id)")
@@ -200,11 +224,18 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity) {
         print("Selected: \(selected)")
         // 여기서 화면 이동
+        //        PinDetailViewController(usecase: usecase, pin: selected)
     }
     
     func deletedItem(deleted: PinEntity?) {
-        print("Deleted: \(deleted)")
+        print("Deleted: \(deleted?.title ?? "empty")")
         // 여기서 CoreData 업데이트
+        guard let deleted = deleted else { return }
+        usecase.deletePin(pinID: deleted.pin_id)
+        let deletedAnnotation = CustomAnnotation(pinData: deleted)
+        mapView.removeAnnotation(deletedAnnotation)
+        // 삭제후 현재 위치의 어노테이션이 뭐가 있는지 다시 로드
+        mapView(mapView, regionDidChangeAnimated: true)
     }
 }
 
@@ -269,11 +300,6 @@ extension HomeViewController {
     }
 }
 
-extension HomeViewController {
-    
-}
-
-
 #Preview{
-    HomeViewController()
+    HomeViewController(usecase: DIContainer.usecase)
 }
