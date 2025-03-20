@@ -13,6 +13,7 @@ final class PastPinViewController: UIViewController {
     
     //MARK: - 모든 PinEntity를 가져옵니다.
     let pinData = PinEntity.sampleData
+    private let usecase: UseCase
     
     //MARK: - calendar
     private let PinCalendar : FSCalendar = {
@@ -46,9 +47,17 @@ final class PastPinViewController: UIViewController {
         calendarUI()
     }
     
+    //MARK: - init
+    init(usecase: UseCase) {
+        self.usecase = usecase
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    //MARK: - setui
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
+    //MARK: - SetUI
     private func SetUI() {
         PinCalendar.delegate = self
         PinCalendar.dataSource = self
@@ -95,14 +104,13 @@ final class PastPinViewController: UIViewController {
 
 extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance{
     
-//    func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
-//        return UIImage(named: "01d")
-//    }
-    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print(date)
+        usecase.fetchPinsByDate(date: date) { items in
+            self.adapter?.data = items
+            self.PinCollectionView.reloadData()
+        }
+        
     }
-    
     
     //해당 pinEntity안에 데이터의 유무에 따라 해당 날짜에 dot이 노출댑니당>.<
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
@@ -123,7 +131,7 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
 }
 
 //MARK: - extension
-extension PastPinViewController : PinCollectionViewAdapterDelegate{
+extension PastPinViewController : PinCollectionViewAdapterDelegate {
     
     func selectedItem(selected: PinEntity) { //화면 이동
         print("selectedItem")
@@ -132,10 +140,11 @@ extension PastPinViewController : PinCollectionViewAdapterDelegate{
     func deletedItem(deleted: PinEntity?) { //아이템 삭제 클릭시
         print("deletedItem")
     }
+    
 }
 
 
 #Preview {
-    PastPinViewController()
+    PastPinViewController(usecase: DIContainer.usecase)
 }
 

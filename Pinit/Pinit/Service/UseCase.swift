@@ -7,13 +7,14 @@
 
 import UIKit
 import Moya
-import Kingfisher
 
 protocol UseCase {
+    
     /*
      Create, Update, Delete는 하나의 entity만 처리하기에 UIBlocking이 없어 그냥 처리했지만,
      Read(fetch)의 경우 많은 데이터가 한번에 올 것을 고려해서 비동기로 처리함
      */
+    
     func addPin(pin: PinEntity) -> Bool
     func updatePin(pin: PinEntity) -> Bool
     func deletePin(pinID: UUID) -> Bool
@@ -26,6 +27,7 @@ protocol UseCase {
     func updateReview(review: ReviewEntity) -> Bool
     func deleteReview(reviewId: UUID) -> Bool
     func fetchAllReviewsByPinID(pinID: UUID, completion: @escaping ([ReviewEntity]) -> Void)
+    
 }
 
 final class UseCaseImpl: UseCase {
