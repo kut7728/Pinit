@@ -83,7 +83,7 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnnotations(_ samepleData: [PinEntity]? = nil) {
-        if let sampleData = samepleData {
+        if let sampleData = samepleData { // 테스트용
             let annotations = PinEntity.sampleData.map{CustomAnnotation(pinData: $0)}
             mapView.addAnnotations(annotations)
         }
@@ -230,12 +230,12 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
     func deletedItem(deleted: PinEntity?) {
         print("Deleted: \(deleted?.title ?? "empty")")
         // 여기서 CoreData 업데이트
-        //                guard let deleted = deleted else { return }
-        //        usecase.deletePin(pinID: deleted.pin_id)
-        //        let deletedAnnotation = CustomAnnotation(pinData: deleted)
-        //        mapView.removeAnnotation(deletedAnnotation)
-        //        삭제후 현재 위치의 어노테이션이 뭐가 있는지 다시 로드
-        //        mapView(mapView, regionDidChangeAnimated: true)
+        guard let deleted = deleted else { return }
+        usecase.deletePin(pinID: deleted.pin_id)
+        let deletedAnnotation = CustomAnnotation(pinData: deleted)
+        mapView.removeAnnotation(deletedAnnotation)
+        // 삭제후 현재 위치의 어노테이션이 뭐가 있는지 다시 로드
+        mapView(mapView, regionDidChangeAnimated: true)
     }
 }
 

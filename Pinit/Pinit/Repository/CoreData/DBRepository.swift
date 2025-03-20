@@ -9,17 +9,17 @@ import UIKit
 import CoreData
 
 protocol DBRepository {
-    @discardableResult func addPin(pin: PinEntity, filePath: String?) -> Bool
-    @discardableResult func deletePin(id: UUID) -> Bool
-    @discardableResult func updatePin(pin: PinEntity, filePath: String?) -> Bool
+    func addPin(pin: PinEntity, filePath: String?) -> Bool
+    func deletePin(id: UUID) -> Bool
+    func updatePin(pin: PinEntity, filePath: String?) -> Bool
     
     func fetchPinsAll(completion: @escaping ([PinDTO]) -> Void)
     func fetchPinsByDate(date: Date, completion: @escaping ([PinDTO]) -> Void)
     
     
-    @discardableResult func addReview(review: ReviewEntity) -> Bool
-    @discardableResult func deleteReview(id: UUID) -> Bool
-    @discardableResult func updateReview(review: ReviewEntity) -> Bool
+    func addReview(review: ReviewEntity) -> Bool
+    func deleteReview(id: UUID) -> Bool
+    func updateReview(review: ReviewEntity) -> Bool
     func fetchReviewsByPinId(pinID: UUID, completion: @escaping ([ReviewDTO]) -> Void)
 }
 #warning("add 관련 기능 저장하고서 저장이 성공했는지에 따른 return 필요할듯?")

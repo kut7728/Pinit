@@ -15,17 +15,17 @@ protocol UseCase {
      Read(fetch)의 경우 많은 데이터가 한번에 올 것을 고려해서 비동기로 처리함
      */
     
-    func addPin(pin: PinEntity) -> Bool
-    func updatePin(pin: PinEntity) -> Bool
-    func deletePin(pinID: UUID) -> Bool
+    @discardableResult func addPin(pin: PinEntity) -> Bool
+    @discardableResult func updatePin(pin: PinEntity) -> Bool
+    @discardableResult func deletePin(pinID: UUID) -> Bool
     func fetchAllPins(completion: @escaping ([PinEntity]) -> Void)
     func fetchPinsByDate(date: Date, completion: @escaping ([PinEntity]) -> Void)
     
     func fetchCurrentWeather(latitude: Double, longitude: Double, completion: @escaping (WeatherResponse?) -> Void)
     
-    func addReview(review: ReviewEntity) -> Bool
-    func updateReview(review: ReviewEntity) -> Bool
-    func deleteReview(reviewId: UUID) -> Bool
+    @discardableResult func addReview(review: ReviewEntity) -> Bool
+    @discardableResult func updateReview(review: ReviewEntity) -> Bool
+    @discardableResult func deleteReview(reviewId: UUID) -> Bool
     func fetchAllReviewsByPinID(pinID: UUID, completion: @escaping ([ReviewEntity]) -> Void)
     
 }
