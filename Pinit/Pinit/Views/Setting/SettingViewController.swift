@@ -40,6 +40,7 @@ final class SettingViewController: UIViewController {
         
         //버튼 레이아웃 설정
         resetButton.setTitle("전체 기록 삭제", for: .normal)
+        resetButton.titleLabel?.font = DesignSystemFont.Pretendard_Medium18.value
         resetButton.addTarget(self, action: #selector(resetAlert), for: .touchUpInside)
         
         resetButton.setTitleColor(.red, for: .normal)
@@ -77,7 +78,8 @@ final class SettingViewController: UIViewController {
 extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let detailVC = PinDetailViewController()
+        let detailVC = PinDetailViewController() //프로필 누르면 상세 화면으로
+        
         present(detailVC, animated: true ,completion: nil )
     }
     
