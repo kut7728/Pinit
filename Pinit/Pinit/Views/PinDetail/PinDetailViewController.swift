@@ -20,10 +20,6 @@ final class PinDetailViewController: UIViewController {
     init(_ entity: PinEntity) {
         self.pinEntity = entity
         
-        if entity.address == "" {
-            self.reviewPanelContainer.isHidden = true
-            self.pinTableView.isHidden = true
-        }
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -66,8 +62,8 @@ final class PinDetailViewController: UIViewController {
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
-        annotation.title = "San Francisco"
-        annotation.subtitle = "CA"
+        annotation.title = pinEntity.title
+        annotation.subtitle = pinEntity.weather
         map.addAnnotation(annotation)
         
         return map
@@ -219,6 +215,7 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let header = PinDetailHeader()
         header.pinDate.text = pinEntity.date.koreanDateString()
         header.pinTitle.text = pinEntity.title
+        header.pinImageView.image = pinEntity.mediaPath
         header.pinWeather.text = pinEntity.weather
         header.pinDescription.text = pinEntity.description
         header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
