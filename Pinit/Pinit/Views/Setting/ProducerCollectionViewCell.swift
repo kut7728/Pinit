@@ -41,13 +41,12 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         return label
     }()
     
-    func configure(model: ProducerEntity) {
+    func configure(model: PinEntity) {
+
         dateLabel.text = model.date.snakeCaseDateString()
         titleLabel.text = model.title
-        //thumbnailImageView.image = UIImage(systemName: "house")
-        //프로필에 지정한 이미지가 없다면 기본이미지로 집모양으로 들어간다
         thumbnailImageView.image = model.mediaPath
-        //model.mediaPath ?? UIImage(systemName: "house")
+        
         cellSetting()
     } //모델(SettingView의 data)에서 데이터 가져오는 부분
     
@@ -74,7 +73,6 @@ class ProducerCollectionViewCell : UICollectionViewCell {
         
         contentView.addSubviews(thumbnailImageView, titleLabel, dateLabel)
         
-        //img.contentMode = .scaleToFill
         thumbnailImageView.snp.remakeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(8)
             $0.height.equalTo(contentView.frame.width * 0.76)
