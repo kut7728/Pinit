@@ -8,8 +8,8 @@
 import Foundation
 
 struct WeatherResponse : Codable {
-    let coord: Coord?
-    let weather: [Weather]?
+    let coord: Coord
+    let weather: [Weather]
 }
 
 // MARK: - Coord
