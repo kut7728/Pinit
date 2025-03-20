@@ -11,7 +11,6 @@ import CoreLocation
 final class LocationManager: NSObject {
     let manager = CLLocationManager()
     
-    
     override init() {
         super.init()
         manager.delegate = self

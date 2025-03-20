@@ -7,6 +7,22 @@
 
 import UIKit
 
+enum DesignSystemColor {
+    case Purple
+    case Lavender
+}
+extension DesignSystemColor {
+    var value: UIColor {
+        switch self {
+        case .Purple:
+            UIColor(hex: "#561CE2")
+        case .Lavender:
+            UIColor(hex: "#6450E2")
+        
+        }
+    }
+}
+
 enum DesignSystemFont {
     case Pretendard_Bold8
     case Pretendard_Bold12
