@@ -10,8 +10,27 @@ import UIKit
 import SnapKit
 import MapKit
 
-// MARK: - Pin Detail Main View Controller
+
+// MARK: - Pin Detail Main ViewController
 final class PinDetailViewController: UIViewController {
+    
+    private var pinTableView = UITableView(frame: .zero, style: .grouped)
+    private var pinEntity: PinEntity
+    
+    init(_ entity: PinEntity) {
+        self.pinEntity = entity
+        
+        if entity.address == "" {
+            self.reviewPanelContainer.isHidden = true
+            self.pinTableView.isHidden = true
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     // 더미 리뷰 데이터
     private lazy var datasource: [ReviewEntity] = [
@@ -20,7 +39,6 @@ final class PinDetailViewController: UIViewController {
         ReviewEntity(id: UUID(), pinID: UUID(), date: Date(), description: "리뷰3")
     ]
     
-    public var pinTableView: UITableView!
     
     // MARK: - VIewDidLoad
     override func viewDidLoad() {
@@ -37,15 +55,17 @@ final class PinDetailViewController: UIViewController {
     // 지도 뷰
     public lazy var mapView: MKMapView = {
         let map = MKMapView()
+        let lat = pinEntity.latitude
+        let long = pinEntity.longitude
         
-        let center = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194) // San Francisco, CA
+        let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
         
         map.setRegion(region, animated: true)
         map.showsUserLocation = true
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194) // San Francisco, CA
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
         annotation.title = "San Francisco"
         annotation.subtitle = "CA"
         map.addAnnotation(annotation)
@@ -66,13 +86,9 @@ final class PinDetailViewController: UIViewController {
         return button
     }()
     
-    @objc func dismissButtonTapped() {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     // 리뷰 테이블뷰 설정
     private func setupReviewTable() {
-        pinTableView = UITableView(frame: .zero, style: .grouped)
+//        pinTableView = UITableView(frame: .zero, style: .grouped)
         pinTableView.estimatedRowHeight = UITableView.automaticDimension
         pinTableView.dataSource = self
         pinTableView.delegate = self
@@ -122,11 +138,42 @@ final class PinDetailViewController: UIViewController {
             $0.top.equalTo(mapView.snp.bottom)
             $0.bottom.equalTo(reviewPanelContainer.snp.top)
         }
+    }
+}
+
+
+
+// MARK: - objc function
+extension PinDetailViewController {
+    
+    @objc func dismissButtonTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func pinMenuButtonTapped() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
+        let editAction = UIAlertAction(title: "수정", style: .default) { _ in
+            print("수정")
+            let vc = PinEditViewController()
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+        }
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            print("삭제")
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
+        actionSheet.addAction(editAction)
+        actionSheet.addAction(deleteAction)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
     }
     
 }
+
+
 
 // MARK: - Delegate
 extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
@@ -170,28 +217,15 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     // viewForHeaderInSection
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = PinDetailHeader()
+        header.pinDate.text = pinEntity.date.koreanDateString()
+        header.pinTitle.text = pinEntity.title
+        header.pinWeather.text = pinEntity.weather
+        header.pinDescription.text = pinEntity.description
         header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
         return header
     }
     
-    @objc func pinMenuButtonTapped() {
-        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        let editAction = UIAlertAction(title: "수정", style: .default) { _ in
-            print("수정")
-            self.present(PinEditViewController(), animated: true, completion: nil)
-        }
-        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
-            print("삭제")
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
-        actionSheet.addAction(editAction)
-        actionSheet.addAction(deleteAction)
-        actionSheet.addAction(cancelAction)
-        
-        present(actionSheet, animated: true, completion: nil)
-    }
+    
     
     // estimatedHeightForHeaderInSection
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
@@ -211,5 +245,5 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
 
 
 #Preview {
-    PinDetailViewController()
+    PinDetailViewController(PinEntity.sampleData[0])
 }

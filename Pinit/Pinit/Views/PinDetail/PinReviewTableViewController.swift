@@ -124,7 +124,3 @@ extension PinReviewTableViewController: UITableViewDataSource, UITableViewDelega
 #Preview {
     PinReviewTableViewController()
 }
-
-#Preview {
-    PinDetailViewController()
-}

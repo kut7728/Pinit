@@ -150,6 +150,3 @@ class PinDetailHeader: UIView {
     PinDetailHeader()
 }
 
-#Preview {
-    PinDetailViewController()
-}
