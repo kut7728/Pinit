@@ -13,17 +13,15 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     private var mapView: MKMapView!     //mapview 불러옴
     private let datebutton = UIButton()   // leftbutton을 클래스 프로퍼티로 변경
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.backgroundColor = .white
         
         mapView = MKMapView(frame: self.view.bounds)    //mkmapview 초기화 및 뷰 추가함
         mapView = MKMapView(frame: CGRect(x: 0, y: 60, width: self.view.bounds.width, height: self.view.bounds.height / 4)) //화면의 1/4만 나오게 함
         
         self.view.addSubview(mapView)       //mapview 뷰에 보이게
-        
         setUpKeyboard()
         
         let center = CLLocationCoordinate2D(latitude: 37.506446, longitude: 126.885397)     //중심좌표
@@ -40,9 +38,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         closeButton.tintColor = .black
         closeButton.alpha = 0.7 // 투명도 50% 설정
-
+        
         self.view.addSubview(closeButton)
-
+        
         // Auto Layout 설정
         closeButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(65)  // 상단에서 65포인트
@@ -98,7 +96,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         camerabutton.imageView?.contentMode = .scaleAspectFit
         
         camerabutton.addTarget(self, action: #selector(cameraButtonTapped), for: .touchUpInside)
-
+        
         self.view.addSubview(camerabutton)
         //사진 배경 흰색, 안에 아이콘을 검은색
         
@@ -148,7 +146,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         contentTextView.textColor = UIColor.black
         contentTextView.font = UIFont.systemFont(ofSize: 16)
         self.view.addSubview(contentTextView)
-
+        
         contentTextView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.top.equalTo(titlefield.snp.bottom).offset(10)
@@ -244,7 +242,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             textView.textColor = .black
         }
     }
-
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = "남기고자 하는 메모가 있다면 작성해주세요."

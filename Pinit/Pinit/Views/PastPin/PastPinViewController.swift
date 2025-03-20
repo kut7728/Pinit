@@ -15,7 +15,7 @@ final class PastPinViewController: UIViewController {
     let pinData = PinEntity.sampleData
     private let usecase: UseCase
     
-    //MARK: - calendar
+    //MARK: - properties
     private let PinCalendar : FSCalendar = {
         let calendar = FSCalendar()
         return calendar
@@ -60,9 +60,6 @@ final class PastPinViewController: UIViewController {
     
     //MARK: - SetUI
     private func SetUI() {
-        PinCalendar.delegate = self
-        PinCalendar.dataSource = self
-        
         view.addSubviews(PinCalendar,PinCollectionView)
         
         PinCalendar.snp.makeConstraints{
@@ -77,7 +74,12 @@ final class PastPinViewController: UIViewController {
         }
     }
     
+    //MARK: - 캘린더 세팅ㅇㅇ
+
     private func calendarUI(){
+        PinCalendar.delegate = self
+        PinCalendar.dataSource = self
+        
         PinCalendar.backgroundColor = .white
         PinCalendar.layer.cornerRadius = 10
         PinCalendar.locale = Locale.init(identifier: "ko_KR")
