@@ -22,6 +22,8 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
+        
         switch pinmode {
         case let .create(latitude, longtitude):
             print("\(latitude), \(longtitude)")
@@ -49,6 +51,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         closeButton.tintColor = .black
         closeButton.alpha = 0.7 // 투명도 50% 설정
+        closeButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         
         //MARK: 왼쪽 기록 날짜 버튼
         datebutton.backgroundColor = .clear
@@ -222,6 +225,10 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
                                                selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
+    }
+    
+    @objc func dismissButtonTapped() {
+        self.dismiss(animated: true)
     }
     
     //MARK: 키보드가 나타낼때 화면을 -300
