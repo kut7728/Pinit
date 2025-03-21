@@ -8,10 +8,13 @@
 import UIKit
 
 class PinDetailHeader: UIView {
+    
+    private var entity: PinEntity
 
     // MARK: - init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(entity: PinEntity) {
+        self.entity = entity
+        super.init(frame: .zero)
         addComponents()
     }
     
@@ -23,32 +26,33 @@ class PinDetailHeader: UIView {
     // MARK: - 컴포넌트
     
     // 핀 상세 뷰 컨테이너
-    public lazy var pinDetailPanel: UIView = {
+    private lazy var pinDetailPanel: UIView = {
         let view = UIView()
+
         view.backgroundColor = .white
         return view
     }()
     
     // 핀 제목
-    public lazy var pinTitle: UILabel = {
+    private lazy var pinTitle: UILabel = {
         let label = UILabel()
-        label.text = "핀 제목 예시"
+        label.text = entity.title
         label.font = DesignSystemFont.Pretendard_Bold30.value
         label.numberOfLines = 0
         return label
     }()
     
-    public lazy var pinWeather: UIImageView = {
+    private lazy var pinWeather: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "clear-day")
+        view.image = UIImage(named: entity.weather)
         view.contentMode = .scaleAspectFit
         return view
     }()
     
     // 핀 생성 날짜
-    public lazy var pinDate: UILabel = {
+    private lazy var pinDate: UILabel = {
         let label = UILabel()
-        label.text = "2021년 1월 1일"
+        label.text = entity.date.koreanDateString()
         label.textColor = .gray
         return label
     }()
@@ -62,26 +66,26 @@ class PinDetailHeader: UIView {
     }()
     
     // 핀 사진
-    public lazy var pinImageView: UIImageView = {
+    private lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "sampleImg.jpg")
+        imageView.image = entity.mediaPath
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     // 핀 추가 설명
-    public lazy var pinDescription: UITextView = {
+    private lazy var pinDescription: UITextView = {
         let textView = UITextView()
-        textView.text = "San Francisco is a city in California. San Francisco is a city in California. San Francisco is a city in California."
+        textView.text = entity.description
         textView.font = DesignSystemFont.Pretendard_Medium16.value
         textView.isScrollEnabled = false // 내부 텍스트가 길어질 때 자동으로 늘어나도록 설정
         textView.sizeToFit()
         return textView
     }()
     
-    public lazy var reviewSectionTitle: UILabel = {
+    private lazy var reviewSectionTitle: UILabel = {
        let label = UILabel()
-        label.text = "Reviews"
+        label.text = entity.address == "" ? "방명록" : "리뷰"
         label.font = DesignSystemFont.Pretendard_Bold20.value
         return label
     }()
@@ -134,16 +138,26 @@ class PinDetailHeader: UIView {
             
             $0.centerX.equalToSuperview()
             $0.width.equalTo(250)
-            $0.height.equalTo(160)
+            
+            if pinImageView.image == nil {
+                $0.height.equalTo(0)
+            } else {
+                $0.height.equalTo(160)
+            }
         }
+        
         
         pinDescription.snp.makeConstraints {
             $0.top.equalTo(pinImageView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
+            
+            if pinDescription.text == nil || pinDescription.text == "" {
+                $0.height.equalTo(0)
+            }
         }
         
         reviewSectionTitle.snp.makeConstraints {
-            $0.top.equalTo(pinDescription.snp.bottom).offset(10)
+            $0.top.equalTo(pinDescription.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(10)
             
         }
@@ -151,9 +165,9 @@ class PinDetailHeader: UIView {
 }
 
 #Preview {
-    PinDetailHeader()
+    PinDetailHeader(entity: PinEntity.sampleData[0])
 }
 
 #Preview {
-    PinDetailViewController(PinEntity.sampleData[0])
+    PinDetailViewController(PinEntity.producerData[1], isPin: true)
 }

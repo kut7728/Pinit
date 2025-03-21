@@ -81,7 +81,7 @@ final class SettingViewController: UIViewController {
 extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let detailVC = PinDetailViewController(PinEntity.producerData[indexPath.row]) //프로필 누르면 상세 화면으로
+        let detailVC = PinDetailViewController(PinEntity.producerData[indexPath.row], isPin: false) //프로필 누르면 상세 화면으로
         
         present(detailVC, animated: true ,completion: nil )
     }

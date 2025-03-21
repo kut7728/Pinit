@@ -16,12 +16,13 @@ final class PinDetailViewController: UIViewController {
     
     private var pinTableView = UITableView(frame: .zero, style: .grouped)
     private var pinEntity: PinEntity
+    private var isPin: Bool
     private var useCase = DIContainer.usecase
     var sendToBack: ((PinEntity?) -> Void)!
     
-    init(_ entity: PinEntity) {
+    init(_ entity: PinEntity, isPin: Bool) {
         self.pinEntity = entity
-        
+        self.isPin = isPin
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -237,12 +238,8 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     // viewForHeaderInSection
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = PinDetailHeader()
-        header.pinDate.text = pinEntity.date.koreanDateString()
-        header.pinTitle.text = pinEntity.title
-        header.pinImageView.image = pinEntity.mediaPath
-        header.pinWeather.image = UIImage(named: pinEntity.weather)
-        header.pinDescription.text = pinEntity.description
+        let header = PinDetailHeader(entity: pinEntity)
+        if !isPin { header.pinMenuButton.isHidden = true }
         header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
         return header
     }
@@ -266,5 +263,5 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
 
 
 #Preview {
-    PinDetailViewController(PinEntity.sampleData[0])
+    PinDetailViewController(PinEntity.sampleData[1], isPin: true)
 }
