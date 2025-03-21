@@ -177,7 +177,9 @@ extension HomeViewController: MKMapViewDelegate {
         let visibleMarkers = visibleAnnotations.compactMap { $0 as? CustomAnnotation }
 //        let visibleClusters = visibleAnnotations.compactMap{ $0 as? MKClusterAnnotation } // 할필요없음
         // BottomSheet의 CollectionView 업데이트
-        adapter?.data = visibleMarkers.map{ $0.pinData }
+        adapter?.data = visibleMarkers.map{ $0.pinData }.sorted(by: {
+            $0.date > $1.date
+        })
         bottomSheet.collectionView.reloadData()
     }
 }

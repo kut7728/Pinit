@@ -49,6 +49,7 @@ extension PinCollectionViewAdapter: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PinRecordCell
         else { return UICollectionViewCell() }
         
+        cell.thumbnailImageView.image = nil
         cell.configure(model: data[indexPath.row])
         cell.layoutIfNeeded()
         
