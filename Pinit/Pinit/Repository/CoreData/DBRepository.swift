@@ -9,18 +9,18 @@ import UIKit
 import CoreData
 
 protocol DBRepository {
-    @discardableResult func addPin(pin: PinEntity) -> Bool
-    @discardableResult func deletePin(id: UUID) -> Bool
-    @discardableResult func updatePin(pin: PinEntity) -> Bool
+    func addPin(pin: PinEntity, filePath: String?) -> Bool
+    func deletePin(id: UUID) -> Bool
+    func updatePin(pin: PinEntity, filePath: String?) -> Bool
     
-    func fetchPinsAll() -> [PinEntity]
-    func fetchPinsByDate(date: Date) -> [PinEntity]
+    func fetchPinsAll(completion: @escaping ([PinDTO]) -> Void)
+    func fetchPinsByDate(date: Date, completion: @escaping ([PinDTO]) -> Void)
     
     
-    @discardableResult func addReview(review: ReviewEntity) -> Bool
-    @discardableResult func deleteReview(id: UUID) -> Bool
-    @discardableResult func updateReview(review: ReviewEntity) -> Bool
-    func fetchReviewsByPinId(pinID: UUID) -> [ReviewEntity]
+    func addReview(review: ReviewEntity) -> Bool
+    func deleteReview(id: UUID) -> Bool
+    func updateReview(review: ReviewEntity) -> Bool
+    func fetchReviewsByPinId(pinID: UUID, completion: @escaping ([ReviewDTO]) -> Void)
 }
 #warning("add 관련 기능 저장하고서 저장이 성공했는지에 따른 return 필요할듯?")
 final class DBRepositoryImpl: DBRepository {
@@ -30,7 +30,7 @@ final class DBRepositoryImpl: DBRepository {
         self.context = context
     }
     
-    func addPin(pin: PinEntity) -> Bool {
+    func addPin(pin: PinEntity, filePath: String?) -> Bool {
         guard let entity = NSEntityDescription.entity(forEntityName: "PinDTO", in: context)
         else { return false }
         
@@ -44,10 +44,8 @@ final class DBRepositoryImpl: DBRepository {
         pinDTO.setValue(pin.description, forKey: "content")
         pinDTO.setValue(pin.address, forKey: "address")
         pinDTO.setValue(pin.weather, forKey: "weather")
-        if let image = pin.mediaPath,
-           let filePath = saveImageToDocuments(image: image, fileName: pin.pin_id.uuidString) {
-            pinDTO.setValue(filePath, forKey: "mediaPath")
-        }
+        pinDTO.setValue(filePath, forKey: "mediaPath")
+        
         saveContext()
         return true
     }
@@ -73,7 +71,7 @@ final class DBRepositoryImpl: DBRepository {
         return false
     }
     
-    func updatePin(pin: PinEntity) -> Bool {
+    func updatePin(pin: PinEntity, filePath: String?) -> Bool {
         let request = PinDTO.fetchRequest()
         request.predicate = NSPredicate(format: "pin_id == %@", pin.pin_id as CVarArg) // UUID로 해당 데이터 찾기
         
@@ -92,16 +90,7 @@ final class DBRepositoryImpl: DBRepository {
             pinDTO.setValue(pin.description, forKey: "content")
             pinDTO.setValue(pin.address, forKey: "address")
             pinDTO.setValue(pin.weather, forKey: "weather")
-            
-            // 이미지 업데이트 (기존 이미지 삭제 후 새로 저장)
-            if let newImage = pin.mediaPath,
-               let filePath = saveImageToDocuments(image: newImage, fileName: pin.pin_id.uuidString) {
-                
-                pinDTO.setValue(filePath, forKey: "mediaPath")
-            }
-            else { // 이미지가 삭제되었다면 그냥 path nil로 만들기
-                pinDTO.setValue(nil, forKey: "mediaPath")
-            }
+            pinDTO.setValue(filePath, forKey: "mediaPath")
             
             // 변경사항 저장
             saveContext()
@@ -112,35 +101,39 @@ final class DBRepositoryImpl: DBRepository {
             return false
         }
     }
-    
-    func fetchPinsAll() -> [PinEntity] {
-        do {
-            let fetchResult = try context.fetch(PinDTO.fetchRequest())
-            return fetchResult.compactMap { dto -> PinEntity? in
-                return dto.toPinEntity()
+#warning("지도 위치별로 도로명주소 시? 군? 별 페치하게하면 더 효율적임 나중에 고려하기")
+    func fetchPinsAll(completion: @escaping ([PinDTO]) -> Void) {
+        let context = self.context
+        context.perform {
+            do {
+                let request = PinDTO.fetchRequest()
+                //request.fetchLimit = 100 //이건 못씀.. 현재 지도 위치별로 패치해오게 변경하면.. 그때도 쓸모는 없을듯?
+                let fetchResult = try context.fetch(request)
+                completion(fetchResult)
+            } catch {
+                print(error.localizedDescription)
+                completion([])
             }
-        } catch {
-            print(error.localizedDescription)
-            return []
         }
     }
     
-    func fetchPinsByDate(date: Date) -> [PinEntity] {
-        // date로 저장하면 시간도 같이 저장되기 때문에 00~24시 까지를 가져옴
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date) // 당일 00:00
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)! // 익일 00:00 (당일 23:59까지 포함)
-        
-        let request = PinDTO.fetchRequest()
-        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as NSDate, endOfDay as NSDate)
-        do {
-            let fetchResult = try context.fetch(request)
-            return fetchResult.compactMap { dto -> PinEntity? in
-                return dto.toPinEntity()
+    func fetchPinsByDate(date: Date, completion: @escaping ([PinDTO]) -> Void) {
+        let context = self.context
+        context.perform {
+            // date로 저장하면 시간도 같이 저장되기 때문에 00~24시 까지를 가져옴
+            let calendar = Calendar.current
+            let startOfDay = calendar.startOfDay(for: date) // 당일 00:00
+            let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)! // 익일 00:00 (당일 23:59까지 포함)
+            
+            let request = PinDTO.fetchRequest()
+            request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as NSDate, endOfDay as NSDate)
+            do {
+                let fetchResult = try context.fetch(request)
+                completion(fetchResult)
+            } catch {
+                print(error.localizedDescription)
+                completion([])
             }
-        } catch {
-            print(error.localizedDescription)
-            return []
         }
     }
     
@@ -205,18 +198,19 @@ final class DBRepositoryImpl: DBRepository {
         }
     }
     
-    func fetchReviewsByPinId(pinID: UUID) -> [ReviewEntity] {
-        let request = ReviewDTO.fetchRequest()
-        request.predicate = NSPredicate(format: "pinID == %@", pinID as CVarArg)
-        do {
-            let fetchResult = try context.fetch(request)
-            return fetchResult.compactMap { dto -> ReviewEntity? in
-                return dto.toReviewEntity()
+    func fetchReviewsByPinId(pinID: UUID, completion: @escaping ([ReviewDTO]) -> Void) {
+        let context = self.context
+        context.perform {
+            let request = ReviewDTO.fetchRequest()
+            request.predicate = NSPredicate(format: "pinID == %@", pinID as CVarArg)
+            do {
+                let fetchResult = try context.fetch(request)
+                completion(fetchResult)
             }
-        }
-        catch {
-            print(error.localizedDescription)
-            return []
+            catch {
+                print(error.localizedDescription)
+                completion([])
+            }
         }
     }
     private func saveContext () {
@@ -224,29 +218,8 @@ final class DBRepositoryImpl: DBRepository {
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                print("CoreData 저장 실패 \(error.localizedDescription)")
             }
         }
     }
 }
-
-extension DBRepositoryImpl {
-    // 이미지 저장
-    private func saveImageToDocuments(image: UIImage, fileName: String) -> String? {
-        if let data = image.jpegData(compressionQuality: 1.0) {
-            let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName)
-            do {
-                try data.write(to: filePath)
-                return filePath.path
-            } catch {
-                print("Failed to save image to documents: \(error)")
-            }
-        }
-        return nil
-    }
-}
-
-// NSFetchResultsController ??
