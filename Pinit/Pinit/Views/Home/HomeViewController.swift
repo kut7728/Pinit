@@ -58,6 +58,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("HHH")
         //        loadAnnotations()
     }
     
@@ -193,8 +194,8 @@ extension HomeViewController: MKMapViewDelegate {
         let visibleAnnotations = mapView.annotations(in: mapView.visibleMapRect)
         let visibleMarkers = visibleAnnotations.compactMap { $0 as? CustomAnnotation }
         // BottomSheet의 CollectionView 업데이트
-        adapter?.data = visibleMarkers.map{ $0.pinData }
-        bottomSheet.collectionView.reloadData()
+//        adapter?.data = visibleMarkers.map{ $0.pinData }
+//        bottomSheet.collectionView.reloadData()
     }
 }
 
@@ -224,7 +225,8 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity) {
         print("Selected: \(selected)")
         // 여기서 화면 이동
-        //        PinDetailViewController(usecase: usecase, pin: selected)
+        let vc = PinDetailViewController(selected)
+        present(vc, animated: true)
     }
     
     func deletedItem(deleted: PinEntity?) {
