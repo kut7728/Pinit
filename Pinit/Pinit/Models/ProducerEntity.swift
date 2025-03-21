@@ -26,7 +26,7 @@ extension PinEntity {
         //데이터 부분들
         
         PinEntity(
-            pin_id: UUID(),
+            pin_id: UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
             title: "JustHm",
             latitude: 37.9244577,
             longitude: 128.800009,//본인 지역의 의,경도
@@ -38,7 +38,7 @@ extension PinEntity {
         ),
         
         PinEntity(
-            pin_id: UUID(),
+            pin_id: UUID(uuidString: "22222222-2222-2222-2222-222222222222")!,
             title: "Ikhwan0204",
             latitude: 37.506610,
             longitude: 126.885332,
@@ -50,7 +50,7 @@ extension PinEntity {
             ),
         
         PinEntity(
-            pin_id: UUID(),
+            pin_id: UUID(uuidString: "33333333-3333-3333-3333-333333333333")!,
             title: "IntakHan304",
             latitude: 37.434981,
             longitude: 126.902328,
@@ -62,7 +62,7 @@ extension PinEntity {
             ),
         
         PinEntity(
-            pin_id: UUID(),
+            pin_id: UUID(uuidString: "44444444-4444-4444-4444-444444444444")!,
             title: "HISEHOONAN",
             latitude: 37.508645,
             longitude: 126.703513,
