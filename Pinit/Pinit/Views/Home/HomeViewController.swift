@@ -174,12 +174,14 @@ extension HomeViewController: MKMapViewDelegate {
     }
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let visibleAnnotations = mapView.annotations(in: mapView.visibleMapRect)
-        let visibleMarkers = visibleAnnotations.compactMap { $0 as? CustomAnnotation }
-//        let visibleClusters = visibleAnnotations.compactMap{ $0 as? MKClusterAnnotation } // 할필요없음
-        // BottomSheet의 CollectionView 업데이트
-        adapter?.data = visibleMarkers.map{ $0.pinData }.sorted(by: {
-            $0.date > $1.date
-        })
+        let visibleMarkers = visibleAnnotations.compactMap { ($0 as? CustomAnnotation)?.pinData }
+        
+        guard let adapterData = adapter?.data else { return }
+        let adapterSet = Set(adapterData.map(\.pin_id))
+        let temp = Set(visibleMarkers.map{$0.pin_id}).symmetricDifference(adapterSet).count
+        guard temp != 0 else { return }
+        
+        adapter?.data = visibleMarkers.sorted(by: { $0.date > $1.date })
         bottomSheet.collectionView.reloadData()
     }
 }
