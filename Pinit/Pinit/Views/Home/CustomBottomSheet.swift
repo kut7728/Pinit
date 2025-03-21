@@ -20,6 +20,7 @@ final class CustomBottomSheet: UIView {
         grabber.isUserInteractionEnabled = false //Grabber는 Guide용으로만 사용
         return grabber
     }()
+    
     init() {
         super.init(frame: .zero)
         setupLayout()

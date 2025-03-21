@@ -58,6 +58,11 @@ class HomeViewController: UIViewController {
         setupLayout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadAnnotations()
+    }
+    
     private func setupMapLocation() {
         locationmanager.delegate = self
         mapView.delegate = self
@@ -73,7 +78,7 @@ class HomeViewController: UIViewController {
             animated: true
         )
         mapView.isRotateEnabled = false
-//        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
+        //        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "annotation")
         mapView.register(CustomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomClusterAnnotationView.identifier)
         
@@ -81,10 +86,13 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
         usecase.fetchAllPins { pins in
             let annotations = pins.map { CustomAnnotation(pinData: $0) }
             self.mapView.addAnnotations(annotations)
             self.mapView(self.mapView, regionDidChangeAnimated: true)
+            self.adapter?.data = pins.sorted(by: { $0.date > $1.date })
+            self.bottomSheet.collectionView.reloadData()
         }
     }
     
@@ -152,7 +160,7 @@ extension HomeViewController: MKMapViewDelegate {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: "annotation", for: annotation) as! MKMarkerAnnotationView
         view.annotation = annotation
         view.clusteringIdentifier = "pinCluster" // 클러스터링 가능하게
-            
+        
         return view
     }
     
@@ -257,6 +265,8 @@ extension HomeViewController {
             mapView.removeAnnotation(annotationToRemove)
         }
         mapView(mapView, regionDidChangeAnimated: true)
+        adapter?.data = adapter?.data.filter{$0.pin_id != pinEntity.pin_id} ?? []
+        bottomSheet.collectionView.reloadData()
     }
 }
 

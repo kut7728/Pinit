@@ -191,12 +191,16 @@ extension PinDetailViewController {
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
         }
+        
         let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
             print("삭제")
             self.useCase.deletePin(pinID: (self.pinEntity.pin_id))
             self.deletePinNoti?(self.pinEntity)
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true){
+                self.showToast(message: "삭제가 완료되었습니다.")
+            }
         }
+        
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
         actionSheet.addAction(editAction)

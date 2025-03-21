@@ -248,6 +248,11 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     //MARK: 저장버튼 눌림
     @objc private func saveButtonTapped() {
+        guard let text = titleTextField.text, !text.isEmpty else {
+            self.showToast(message: "제목을 입력해주세요.")
+            return
+        }
+        
         pinEntity?.title = titleTextField.text ?? ""
         pinEntity?.description = contentTextView.text ?? ""
         
@@ -286,7 +291,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = sourceType
         imagePicker.delegate = self
-//        imagePicker.allowsEditing = true
+        //        imagePicker.allowsEditing = true
         
         present(imagePicker, animated: true, completion: nil)
     }
@@ -342,9 +347,9 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
             self.pickedImage = selectedImage
             cameraButton.backgroundColor = .clear
             cameraButton.setImage(nil, for: .normal)
-//            
-//            // 이미지를 버튼 크기에 맞게 조정하여 설정
-//            let resizedImage = resizeImage(image: pickedImage, targetSize: CGSize(width: 150, height: 150))
+            //
+            //            // 이미지를 버튼 크기에 맞게 조정하여 설정
+            //            let resizedImage = resizeImage(image: pickedImage, targetSize: CGSize(width: 150, height: 150))
             
             cameraButton.clipsToBounds = true
             cameraButton.layer.cornerRadius = 75
