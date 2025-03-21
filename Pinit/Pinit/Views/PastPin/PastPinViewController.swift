@@ -149,22 +149,20 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
 //MARK: - extension
 extension PastPinViewController : PinCollectionViewAdapterDelegate {
     
-    func selectedItem(selected: PinEntity) { //화면 이동
+    func selectedItem(selected: PinEntity, indexPath: IndexPath) { //화면 이동
         let vc = PinDetailViewController(selected, isPin: true)
         vc.deletePinNoti = { pin in
-            guard let data = self.adapter?.data else { return }
-            self.adapter?.data = data.filter { $0.pin_id != pin.pin_id }
+            self.adapter?.data.remove(at: indexPath.row)
             self.PinCollectionView.reloadData()
         }
         vc.updatePinNoti = { before, after in
-            guard let data = self.adapter?.data else { return }
-            data.first{ $0.pin_id == before.pin_id }
-            
+            self.adapter?.data[indexPath.row] = after
+            self.PinCollectionView.reloadData()
         }
         present(vc, animated: true)
     }
     
-    func deletedItem(deleted: PinEntity?) { //아이템 삭제 클릭시
+    func deletedItem(deleted: PinEntity?, indexPath: IndexPath) { //아이템 삭제 클릭시
         guard let deleted = deleted else { return }
         usecase.deletePin(pinID: deleted.pin_id)
         self.pinData = pinData.filter{ $0.pin_id != deleted.pin_id }

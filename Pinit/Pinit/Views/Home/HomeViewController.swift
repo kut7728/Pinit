@@ -211,11 +211,11 @@ extension HomeViewController: CLLocationManagerDelegate {
 
 // MARK: PinCollectionViewAdapterDelegate
 extension HomeViewController: PinCollectionViewAdapterDelegate {
-    func selectedItem(selected: PinEntity) {
+    func selectedItem(selected: PinEntity, indexPath: IndexPath) {
         presentPinDetailViewController(selected: selected)
     }
     
-    func deletedItem(deleted: PinEntity?) {
+    func deletedItem(deleted: PinEntity?, indexPath: IndexPath) {
         guard let deleted = deleted else { return }
         usecase.deletePin(pinID: deleted.pin_id)
         removePinEntity(pinEntity: deleted)

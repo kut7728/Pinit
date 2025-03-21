@@ -10,9 +10,9 @@ import UIKit
 // MARK: CollectionView Adapter Delegate
 protocol PinCollectionViewAdapterDelegate: AnyObject {
     // 선택된 아이템 넘겨줌
-    func selectedItem(selected: PinEntity)
+    func selectedItem(selected: PinEntity, indexPath: IndexPath)
     // 삭제된 아이템 넘겨줌 (id만 넘겨줄지 고민중 CoreData에서 id에 따라 삭제하는거 말고는 필요 없어서)
-    func deletedItem(deleted: PinEntity?)
+    func deletedItem(deleted: PinEntity?, indexPath: IndexPath)
 }
 
 // MARK: CollectionView Adapter
@@ -60,7 +60,7 @@ extension PinCollectionViewAdapter: UICollectionViewDataSource {
 // MARK: CollectionView Delegate
 extension PinCollectionViewAdapter: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.selectedItem(selected: data[indexPath.row]) // 선택된 아이템 delegate로 보냄
+        delegate?.selectedItem(selected: data[indexPath.row], indexPath: indexPath) // 선택된 아이템 delegate로 보냄
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
@@ -70,7 +70,7 @@ extension PinCollectionViewAdapter: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { elements in
             let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive) {[weak self] action in
                 let deleted = self?.data.remove(at: indexPath.row)
-                self?.delegate?.deletedItem(deleted: deleted) // 삭제된 아이템 delegate로 보냄
+                self?.delegate?.deletedItem(deleted: deleted, indexPath: indexPath) // 삭제된 아이템 delegate로 보냄
             }
             return UIMenu(title: "", children: [deleteAction])
         }
