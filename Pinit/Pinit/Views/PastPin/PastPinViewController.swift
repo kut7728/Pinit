@@ -13,6 +13,8 @@ final class PastPinViewController: UIViewController {
     
     //MARK: - 모든 PinEntity를 가져옵니다.
     let pinData = PinEntity.sampleData
+    let pinEntity = PinEntity.self
+    
     private let usecase: UseCase
     
     //MARK: - properties
@@ -137,7 +139,8 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
 extension PastPinViewController : PinCollectionViewAdapterDelegate {
     
     func selectedItem(selected: PinEntity) { //화면 이동
-        print("selectedItem")
+        let vc = PinDetailViewController(selected)
+        self.present(vc, animated: true)
     }
     
     func deletedItem(deleted: PinEntity?) { //아이템 삭제 클릭시
