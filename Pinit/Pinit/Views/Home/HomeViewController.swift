@@ -225,7 +225,7 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity) {
         print("Selected: \(selected)")
         // 여기서 화면 이동
-        let vc = PinDetailViewController(selected)
+        let vc = PinDetailViewController(selected, isPin: true)
         vc.sendToBack = {[weak self] entity in
             guard let entity else { return }
             let annotation = CustomAnnotation(pinData: entity)

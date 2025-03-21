@@ -46,7 +46,7 @@ class NewPinReviewPanel: UIView {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
         textField.leftViewMode = .always
         
-        textField.placeholder = "리뷰 내용을 입력해주세요"
+        textField.placeholder = "내용을 입력해주세요"
         return textField
     }()
     
