@@ -13,7 +13,6 @@ final class PastPinViewController: UIViewController {
     
     //MARK: - 모든 PinEntity를 가져옵니다.
     let pinData = PinEntity.sampleData
-    let pinEntity = PinEntity.self
     
     private let usecase: UseCase
     
