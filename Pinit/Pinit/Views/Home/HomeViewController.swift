@@ -71,8 +71,9 @@ class HomeViewController: UIViewController {
             animated: true
         )
         mapView.isRotateEnabled = false
-        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
-        //        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: "ClusterView")
+//        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "annotation")
+        mapView.register(CustomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomClusterAnnotationView.identifier)
         
         loadAnnotations()
     }
@@ -146,31 +147,22 @@ extension HomeViewController: MKMapViewDelegate {
     }
     
     private func createCustomAnnotationView(for annotation: CustomAnnotation, in mapView: MKMapView) -> MKAnnotationView {
-        let identifier = CustomAnnotationView.identifier
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? CustomAnnotationView
-        
-        if annotationView == nil {
-            annotationView = CustomAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-        } else {
-            annotationView?.annotation = annotation
-        }
-        annotationView?.configure(with: annotation)
-        return annotationView!
+        let view = mapView.dequeueReusableAnnotationView(withIdentifier: "annotation", for: annotation) as! MKMarkerAnnotationView
+        view.annotation = annotation
+        view.clusteringIdentifier = "pinCluster" // 클러스터링 가능하게
+            
+        return view
     }
     
     private func createClusterView(for cluster: MKClusterAnnotation) -> MKAnnotationView {
-        let identifier = "ClusterView"
-        var clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
+        let identifier = CustomClusterAnnotationView.identifier
+        var clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? CustomClusterAnnotationView
         
         if clusterView == nil {
-            clusterView = MKMarkerAnnotationView(annotation: cluster, reuseIdentifier: identifier)
+            clusterView = CustomClusterAnnotationView(annotation: cluster, reuseIdentifier: identifier)
         } else {
             clusterView?.annotation = cluster
         }
-        
-        clusterView?.markerTintColor = .systemBlue
-        clusterView?.glyphText = "\(cluster.memberAnnotations.count)" // 클러스터 내 개수 표시
-        clusterView?.displayPriority = .defaultHigh  // 클러스터를 우선적으로 표시
         
         return clusterView!
     }
@@ -183,6 +175,7 @@ extension HomeViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let visibleAnnotations = mapView.annotations(in: mapView.visibleMapRect)
         let visibleMarkers = visibleAnnotations.compactMap { $0 as? CustomAnnotation }
+//        let visibleClusters = visibleAnnotations.compactMap{ $0 as? MKClusterAnnotation } // 할필요없음
         // BottomSheet의 CollectionView 업데이트
         adapter?.data = visibleMarkers.map{ $0.pinData }
         bottomSheet.collectionView.reloadData()

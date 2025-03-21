@@ -12,7 +12,7 @@ import SnapKit
 final class PastPinViewController: UIViewController {
     
     //MARK: - 모든 PinEntity를 가져옵니다.
-    var pinData = PinEntity.sampleData
+    var pinData: [PinEntity] = []
     
     private let usecase: UseCase
     
@@ -47,6 +47,18 @@ final class PastPinViewController: UIViewController {
         SetUI()
         setupAdapter()
         calendarUI()
+        usecase.fetchPinsByDate(date: Date()) { items in
+            self.adapter?.data = items
+            self.PinCollectionView.reloadData()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        usecase.fetchPinsByDate(date: Date()) { items in
+            self.adapter?.data = items
+            self.PinCollectionView.reloadData()
+        }
     }
     
     //MARK: - init

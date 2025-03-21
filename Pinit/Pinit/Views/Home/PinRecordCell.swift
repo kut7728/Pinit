@@ -98,38 +98,19 @@ final class PinRecordCell: UICollectionViewCell {
 extension PinRecordCell {
     func captureMapSnapshotWithPin(center: CLLocationCoordinate2D, imageSize: CGSize, completion: @escaping (UIImage?) -> Void) {
         let options = MKMapSnapshotter.Options()
-        options.region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
-        options.size = imageSize
-        options.mapType = .standard
-        
-        let snapshotter = MKMapSnapshotter(options: options)
-        snapshotter.start { snapshot, error in
-            guard let snapshot = snapshot, error == nil else {
-                print("스냅샷 생성 실패")
-                completion(nil)
-                return
-            }
+            options.region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
+            options.size = imageSize
+            options.mapType = .standard
             
-            // 핀 이미지 불러오기 (CustomAnnotationView에서 쓰는 이미지와 동일하게)
-            guard let pinImage = UIImage(named: "recordPin2") else {
-                print("핀 이미지 로드 실패")
-                completion(nil)
-                return
+            let snapshotter = MKMapSnapshotter(options: options)
+            snapshotter.start { snapshot, error in
+                guard let snapshot = snapshot, error == nil else {
+                    print("스냅샷 생성 실패")
+                    completion(nil)
+                    return
+                }
+                
+                completion(snapshot.image)
             }
-
-            // 중심 좌표에 해당하는 이미지 상의 위치 계산
-            let point = snapshot.point(for: center)
-            let pinSize = CGSize(width: 30, height: 30)
-            let pinOrigin = CGPoint(x: point.x - pinSize.width / 2, y: point.y - pinSize.height)
-
-            // 스냅샷에 핀 그리기
-            UIGraphicsBeginImageContextWithOptions(snapshot.image.size, true, snapshot.image.scale)
-            snapshot.image.draw(at: .zero)
-            pinImage.draw(in: CGRect(origin: pinOrigin, size: pinSize))
-            let finalImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            completion(finalImage)
-        }
     }
 }
