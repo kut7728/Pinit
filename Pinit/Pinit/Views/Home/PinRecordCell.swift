@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 final class PinRecordCell: UICollectionViewCell {
     //그림자 뷰 추가
@@ -42,8 +43,23 @@ final class PinRecordCell: UICollectionViewCell {
     func configure(model: PinEntity) {
         pinDateLabel.text = model.date.formatted()
         pinTitleLabel.text = model.title
-        thumbnailImageView.image = UIImage(systemName: "house")
-        //thumbnailImageView.image = model.mediaPath ?? UIImage(systemName: "house")
+        
+        if let image = model.mediaPath {
+            thumbnailImageView.image = image
+        }
+        else {
+            captureMapSnapshotWithPin(
+                center: CLLocationCoordinate2D(
+                    latitude: model.latitude,
+                    longitude: model.longitude
+                ),
+                imageSize: CGSize(
+                    width: contentView.frame.height,
+                    height: contentView.frame.width
+                )) { image in
+                    self.thumbnailImageView.image = image ?? UIImage(systemName: "house")
+                }
+        }
         
         setupLayout()
     }
@@ -75,5 +91,26 @@ final class PinRecordCell: UICollectionViewCell {
             $0.leading.trailing.equalToSuperview().inset(8)
         }
         
+    }
+}
+
+
+extension PinRecordCell {
+    func captureMapSnapshotWithPin(center: CLLocationCoordinate2D, imageSize: CGSize, completion: @escaping (UIImage?) -> Void) {
+        let options = MKMapSnapshotter.Options()
+            options.region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
+            options.size = imageSize
+            options.mapType = .standard
+            
+            let snapshotter = MKMapSnapshotter(options: options)
+            snapshotter.start { snapshot, error in
+                guard let snapshot = snapshot, error == nil else {
+                    print("스냅샷 생성 실패")
+                    completion(nil)
+                    return
+                }
+                
+                completion(snapshot.image)
+            }
     }
 }

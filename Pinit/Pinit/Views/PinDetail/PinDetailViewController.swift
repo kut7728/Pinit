@@ -71,12 +71,12 @@ final class PinDetailViewController: UIViewController {
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         
         map.setRegion(region, animated: true)
-        map.showsUserLocation = true
+        map.showsUserLocation = false
+        map.isUserInteractionEnabled = false
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
         annotation.title = pinEntity.title
-        annotation.subtitle = pinEntity.weather
         map.addAnnotation(annotation)
         
         return map

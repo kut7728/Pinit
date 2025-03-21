@@ -14,6 +14,7 @@ final class CustomAnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?){
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         setupUI()
+        clusteringIdentifier = "pinCluster"
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -31,7 +32,7 @@ final class CustomAnnotationView: MKAnnotationView {
         let originalImage = UIImage(named: "recordPin2")!
         let resizedImage = resizeImage(originalImage, targetSize: CGSize(width: 40, height: 40))
         self.image = resizedImage
-        self.centerOffset = CGPoint(x: 0, y: frame.size.height / 2)
+        self.centerOffset = CGPoint(x: 0, y: self.bounds.minY - (frame.size.height / 2))
         self.layer.shadowColor = UIColor.black.withAlphaComponent(0.25).cgColor
         self.layer.shadowOpacity = 1
         self.layer.shadowRadius = 4
@@ -48,7 +49,6 @@ final class CustomAnnotationView: MKAnnotationView {
         ]
         titleLabel.attributedText = NSAttributedString(string: annotation.pinData.title, attributes: attributes)
         titleLabel.sizeToFit()
-        
         
         titleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
