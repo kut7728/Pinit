@@ -34,14 +34,15 @@ class PinDetailHeader: UIView {
         let label = UILabel()
         label.text = "핀 제목 예시"
         label.font = DesignSystemFont.Pretendard_Bold30.value
+        label.numberOfLines = 0
         return label
     }()
     
-    // 핀 날씨
-    public lazy var pinWeather: UILabel = {
-        let label = UILabel()
-        label.text = "맑음"
-        return label
+    public lazy var pinWeather: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "clear-day")
+        view.contentMode = .scaleAspectFit
+        return view
     }()
     
     // 핀 생성 날짜
@@ -106,19 +107,21 @@ class PinDetailHeader: UIView {
         // subView
         pinTitle.snp.makeConstraints {
             $0.top.equalToSuperview().inset(10)
+            $0.width.lessThanOrEqualTo(260)
+            $0.width.greaterThanOrEqualTo(160)
             $0.leading.equalToSuperview().inset(10)
         }
         
         pinWeather.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(10)
-            $0.leading.equalTo(pinTitle.snp.trailing).offset(10)
-            $0.bottomMargin.equalTo(pinTitle.snp.bottom)
+            $0.trailing.equalTo(pinMenuButton.snp.leading).offset(-10)
+            
+            $0.top.equalTo(pinTitle).offset(5)
+            $0.width.height.equalTo(40)
         }
         
         pinMenuButton.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(10)
+            $0.top.equalTo(pinTitle)
             $0.trailing.equalToSuperview().inset(10)
-            
         }
         
         pinDate.snp.makeConstraints {
@@ -151,3 +154,6 @@ class PinDetailHeader: UIView {
     PinDetailHeader()
 }
 
+#Preview {
+    PinDetailViewController(PinEntity.sampleData[0])
+}

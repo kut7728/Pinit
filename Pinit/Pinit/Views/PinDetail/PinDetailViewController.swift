@@ -16,6 +16,8 @@ final class PinDetailViewController: UIViewController {
     
     private var pinTableView = UITableView(frame: .zero, style: .grouped)
     private var pinEntity: PinEntity
+    private var useCase = DIContainer.usecase
+    var sendToBack: ((PinEntity?) -> Void)!
     
     init(_ entity: PinEntity) {
         self.pinEntity = entity
@@ -43,9 +45,18 @@ final class PinDetailViewController: UIViewController {
         
         setupReviewTable()
         addComponents()
+        loadReviewData()
+        
+        reviewPanelContainer.commitButton.addTarget(self, action: #selector(onCommitButtonTapped), for: .touchUpInside)
     }
     
     
+    private func loadReviewData() {
+        self.useCase.fetchAllReviewsByPinID(pinID: self.pinEntity.pin_id) {[weak self] items in
+            self?.datasource = items
+            self?.pinTableView.reloadData()
+        }
+    }
     
     // MARK: - View
     // 지도 뷰
@@ -55,7 +66,7 @@ final class PinDetailViewController: UIViewController {
         let long = pinEntity.longitude
         
         let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         
         map.setRegion(region, animated: true)
         map.showsUserLocation = true
@@ -146,6 +157,17 @@ extension PinDetailViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc func onCommitButtonTapped() {
+        var review: ReviewEntity = ReviewEntity(id: UUID(), pinID: pinEntity.pin_id, date: Date(), description: reviewPanelContainer.reviewText.text ?? "")
+        
+        reviewPanelContainer.reviewText.text = ""
+        
+        useCase.addReview(review: review)
+        self.datasource.append(review)
+        
+        self.pinTableView.reloadData()
+    }
+    
     @objc func pinMenuButtonTapped() {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
@@ -155,8 +177,11 @@ extension PinDetailViewController {
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
         }
-        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) {[weak self] _ in
             print("삭제")
+            self?.useCase.deletePin(pinID: (self?.pinEntity.pin_id)!)
+            self?.sendToBack(self?.pinEntity)
+            self?.dismiss(animated: true, completion: nil)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
@@ -180,15 +205,15 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // swipeAction
-//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        let action = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
-//            if let deleted = self?.datasource.remove(at: indexPath.row).id {
-//                self?.coreData.deleteContent(id: deleted)
-//                self?.pinTableView.deleteRows(at: [indexPath], with: .automatic)
-//            }
-//        }
-//        return UISwipeActionsConfiguration(actions: [action])
-//    }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
+            if let deleted = self?.datasource.remove(at: indexPath.row).id {
+                self?.useCase.deleteReview(reviewId: deleted)
+                self?.pinTableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+        }
+        return UISwipeActionsConfiguration(actions: [action])
+    }
     
     // numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -216,7 +241,7 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         header.pinDate.text = pinEntity.date.koreanDateString()
         header.pinTitle.text = pinEntity.title
         header.pinImageView.image = pinEntity.mediaPath
-        header.pinWeather.text = pinEntity.weather
+        header.pinWeather.image = UIImage(named: pinEntity.weather)
         header.pinDescription.text = pinEntity.description
         header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
         return header
@@ -237,7 +262,6 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
-    
 }
 
 
