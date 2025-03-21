@@ -14,16 +14,30 @@ enum PinMode {
     case edit(PinEntity : PinEntity)
 }
 
+
+
 final class PinEditViewController: UIViewController, UITextViewDelegate {
-    
+    var pinEntity: PinEntity?
     var pinmode: PinMode?
+    var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     
-    private var mapView: MKMapView = {
-        let view = MKMapView()
-        let center = CLLocationCoordinate2D(latitude: 37.506446, longitude: 126.885397)     //중심좌표
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
-        view.setRegion(region, animated: true)
-        return view
+    public lazy var mapView: MKMapView = {
+        var map = MKMapView()
+        var lat = 37.506446
+        var long = 126.885397
+        let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+        
+        map.setRegion(region, animated: true)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
+        annotation.title = "test"
+        map.addAnnotation(annotation)
+        map.showsUserLocation = false
+        map.isUserInteractionEnabled = false
+        
+        return map
     }()
     
     private let saveButton : UIButton = {
@@ -82,25 +96,20 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         button.tintColor = UIColor(red: 96/255, green: 99/255, blue: 104/255, alpha: 1)
         button.imageView?.contentMode = .scaleAspectFit
-        button.addTarget(PinEditViewController.self, action: #selector(cameraButtonTapped), for: .touchUpInside)
+        
         return button
     }()
     
-    private let weatherButton : UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 10
-        button.setTitle("맑음", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal) // 글자색을 검은색으로 변경
-        return button
+    private let weatherImage : UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "01d")
+        return view
     }()
     
-    private let dateButton : UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 10
-        button.setTitle("3월 17일", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        return button
+    private let dateLabel : UILabel = {
+        let label = UILabel()
+        label.text = "테스트 날짜"
+        return label
     }()
     
     private let closeButton : UIButton = {
@@ -113,19 +122,19 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         button.tintColor = .black
         button.alpha = 0.7 // 투명도 50% 설정
-        button.addTarget(PinEditViewController.self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         return button
     }()
     
-    private let keyboardToolBar: UIToolbar = {
+    private lazy var keyboardToolBar: UIToolbar = {
         let toolbar = UIToolbar()
         let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneBarButton = UIBarButtonItem(title: "완료", style: .plain, target: PinEditViewController.self, action: #selector(doneBtnClicked))
+        let doneBarButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneBtnClicked))
         toolbar.items = [flexBarButton, doneBarButton]
         toolbar.sizeToFit()
         return toolbar
     }()
     
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -140,68 +149,107 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         switch pinmode {
         case let .create(latitude, longtitude):
             print("\(latitude), \(longtitude)")
+            
+            pinEntity = PinEntity(pin_id: UUID(),
+                                  title: "",
+                                  latitude: latitude, longitude: longtitude,
+                                  address: "",
+                                  date: Date(),
+                                  weather: "",
+                                  description: "",
+                                  mediaPath: nil)
+            
         case let .edit(PinEntity):
             print(PinEntity)
-            //    titleTextField.text = PinEntity.description
+            self.pinEntity = PinEntity
             print("편집 모드입니다")
+            dateLabel.text = pinEntity?.date.koreanDateString()
+            titleTextField.text = pinEntity?.title
+            contentTextView.text = pinEntity?.description
         case .none:
             print("?")
         }
     }
     
+    // MARK: - SetUI
     private func SetUI() {
         titleTextField.inputAccessoryView = keyboardToolBar
         contentTextView.inputAccessoryView = keyboardToolBar
         contentTextView.delegate = self
         
-        self.view.addSubviews(mapView, saveButton, contentTextView, titleTextField, cameraButton, weatherButton, dateButton, closeButton)
+        closeButton.addTarget(PinEditViewController.self, action: #selector(dismissButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        cameraButton.addTarget(PinEditViewController.self, action: #selector(cameraButtonTapped), for: .touchUpInside)
         
-        saveButton.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(130)
-            $0.top.equalToSuperview().offset(760)
-            $0.width.equalTo(150)
-            $0.height.equalTo(55)
+        self.view.addSubviews(mapView, saveButton, contentTextView, titleTextField, cameraButton, weatherImage, dateLabel, closeButton)
+        
+        mapView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.width.equalToSuperview()
+            $0.height.equalToSuperview().dividedBy(4)
         }
-        contentTextView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
-            $0.top.equalTo(titleTextField.snp.bottom).offset(10)
-            $0.width.equalTo(360)
-            $0.height.equalTo(150)
-        }
-        titleTextField.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(20)
-            $0.top.equalToSuperview().offset(540)
-            $0.width.equalTo(360)
-            $0.height.equalTo(40)
-        }
-        cameraButton.snp.makeConstraints{
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(150)
-            $0.height.equalTo(150)
-        }
-        weatherButton.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(210)
-            $0.top.equalToSuperview().offset(300)
-            $0.width.equalTo(180)
-            $0.height.equalTo(30)
-        }
-        dateButton.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(10)
-            $0.top.equalToSuperview().offset(300)
-            $0.width.equalTo(180)
-            $0.height.equalTo(30)
-        }
+        
         closeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(65)
-            $0.trailing.equalToSuperview().offset(-5)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
             $0.width.height.equalTo(40)
         }
+        
+        weatherImage.snp.makeConstraints{
+            $0.top.equalTo(mapView.snp.bottom).offset(10)
+            $0.leading.equalTo(view.snp.centerX).offset(100)
+            $0.height.width.equalTo(30)
+        }
+        
+        dateLabel.snp.makeConstraints{
+            $0.top.equalTo(mapView.snp.bottom).offset(10)
+            $0.leading.equalToSuperview().offset(10)
+            $0.width.equalTo(180)
+            $0.height.equalTo(30)
+        }
+        
+        
+        
+        cameraButton.snp.makeConstraints{
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(dateLabel.snp.bottom).offset(20)
+            $0.width.equalTo(150)
+            $0.height.equalTo(150)
+        }
+        
+        titleTextField.snp.makeConstraints{
+            $0.top.equalTo(cameraButton.snp.bottom).offset(30)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.height.equalTo(40)
+        }
+        
+        contentTextView.snp.makeConstraints {
+            $0.top.equalTo(titleTextField.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.bottom.equalTo(saveButton.snp.top).offset(-30)
+        }
+        
+        saveButton.snp.makeConstraints{
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(60)
+            $0.height.equalTo(55)
+        }
+        
+        
     }
     
     private func SetMap(){
         mapView = MKMapView(frame: self.view.bounds)
         mapView = MKMapView(frame: CGRect(x: 0, y: 60, width: self.view.bounds.width, height: self.view.bounds.height / 4))
+    }
+    
+    //MARK: 저장버튼 눌림
+    @objc private func saveButtonTapped() {
+        guard let newPin = pinEntity else { return }
+        isAdded?(newPin)
+        dismiss(animated: true)
     }
     
     //MARK: 키보드 닫기
@@ -280,7 +328,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     }
 }
 
-//MARK: PinEditViewController 내에서 사진 선택 기능을 쉽게 사용
+//MARK: - PinEditViewController 내에서 사진 선택 기능을 쉽게 사용
 extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
@@ -296,5 +344,7 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
 }
 
 #Preview{
+    
     PinEditViewController()
+
 }

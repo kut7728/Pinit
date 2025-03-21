@@ -18,7 +18,8 @@ final class PinDetailViewController: UIViewController {
     private var pinEntity: PinEntity
     private var isPin: Bool
     private var useCase = DIContainer.usecase
-    var sendToBack: ((PinEntity?) -> Void)!
+    var deletePinNoti: ((PinEntity) -> Void)?
+    var updatePinNoti: ((_ before: PinEntity, _ after: PinEntity) -> Void)?
     
     init(_ entity: PinEntity, isPin: Bool) {
         self.pinEntity = entity
@@ -159,7 +160,12 @@ extension PinDetailViewController {
     }
     
     @objc func onCommitButtonTapped() {
-        var review: ReviewEntity = ReviewEntity(id: UUID(), pinID: pinEntity.pin_id, date: Date(), description: reviewPanelContainer.reviewText.text ?? "")
+        let review: ReviewEntity = ReviewEntity(
+            id: UUID(),
+            pinID: pinEntity.pin_id,
+            date: Date(),
+            description: reviewPanelContainer.reviewText.text ?? ""
+        )
         
         reviewPanelContainer.reviewText.text = ""
         
@@ -175,14 +181,21 @@ extension PinDetailViewController {
         let editAction = UIAlertAction(title: "수정", style: .default) { _ in
             print("수정")
             let vc = PinEditViewController()
+            vc.pinmode = .edit(PinEntity: self.pinEntity)
+            vc.isAdded = { pin in
+                self.useCase.updatePin(pin: pin)
+                self.updatePinNoti!(self.pinEntity, pin)
+                self.pinEntity = pin
+                // 디테일 화면 수정
+            }
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
         }
-        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) {[weak self] _ in
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
             print("삭제")
-            self?.useCase.deletePin(pinID: (self?.pinEntity.pin_id)!)
-            self?.sendToBack(self?.pinEntity)
-            self?.dismiss(animated: true, completion: nil)
+            self.useCase.deletePin(pinID: (self.pinEntity.pin_id))
+            self.deletePinNoti?(self.pinEntity)
+            self.dismiss(animated: true, completion: nil)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
@@ -239,7 +252,10 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     // viewForHeaderInSection
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = PinDetailHeader(entity: pinEntity)
-        if !isPin { header.pinMenuButton.isHidden = true }
+        if !isPin {
+            header.pinMenuButton.isHidden = true
+            header.reviewSectionTitle.text = "방명록"
+        }
         header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
         return header
     }

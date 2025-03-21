@@ -83,9 +83,9 @@ class PinDetailHeader: UIView {
         return textView
     }()
     
-    private lazy var reviewSectionTitle: UILabel = {
+    public lazy var reviewSectionTitle: UILabel = {
        let label = UILabel()
-        label.text = entity.address == "" ? "방명록" : "리뷰"
+        label.text = "리뷰"
         label.font = DesignSystemFont.Pretendard_Bold20.value
         return label
     }()
