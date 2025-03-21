@@ -17,6 +17,7 @@ final class PinDetailViewController: UIViewController {
     private var pinTableView = UITableView(frame: .zero, style: .grouped)
     private var pinEntity: PinEntity
     private var useCase = DIContainer.usecase
+    var sendToBack: ((PinEntity?) -> Void)!
     
     init(_ entity: PinEntity) {
         self.pinEntity = entity
@@ -179,6 +180,7 @@ extension PinDetailViewController {
         let deleteAction = UIAlertAction(title: "삭제", style: .destructive) {[weak self] _ in
             print("삭제")
             self?.useCase.deletePin(pinID: (self?.pinEntity.pin_id)!)
+            self?.sendToBack(self?.pinEntity)
             self?.dismiss(animated: true, completion: nil)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)

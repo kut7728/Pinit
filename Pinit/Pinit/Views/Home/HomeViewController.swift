@@ -226,6 +226,11 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
         print("Selected: \(selected)")
         // 여기서 화면 이동
         let vc = PinDetailViewController(selected)
+        vc.sendToBack = {[weak self] entity in
+            guard let entity else { return }
+            let annotation = CustomAnnotation(pinData: entity)
+            self?.mapView.removeAnnotation(annotation)
+        }
         present(vc, animated: true)
     }
     
