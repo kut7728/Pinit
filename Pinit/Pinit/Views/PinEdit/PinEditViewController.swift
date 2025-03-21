@@ -162,9 +162,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         contentTextView.inputAccessoryView = keyboardToolBar
         contentTextView.delegate = self
         
-        closeButton.addTarget(PinEditViewController.self, action: #selector(dismissButtonTapped), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        cameraButton.addTarget(PinEditViewController.self, action: #selector(cameraButtonTapped), for: .touchUpInside)
+        cameraButton.addTarget(self, action: #selector(cameraButtonTapped), for: .touchUpInside)
         
         self.view.addSubviews(mapView, saveButton, contentTextView, titleTextField, cameraButton, weatherButton, dateButton, closeButton)
         
@@ -218,8 +218,10 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     //MARK: 저장버튼 눌림
     @objc private func saveButtonTapped() {
-        guard let newPin = pinEntity else { return }
-        isAdded?(newPin)
+        pinEntity?.title = titleTextField.text ?? ""
+        pinEntity?.description = contentTextView.text ?? ""
+//        pinEntity?.mediaPath = image ????
+        isAdded?(pinEntity!)
         dismiss(animated: true)
     }
     

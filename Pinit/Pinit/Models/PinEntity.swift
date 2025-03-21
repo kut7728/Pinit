@@ -9,14 +9,14 @@ import UIKit
 
 struct PinEntity {
     let pin_id: UUID
-    let title: String
+    var title: String
     let latitude: Double
     let longitude: Double
     let address: String
     let date: Date
     let weather: String
-    let description: String?
-    let mediaPath: UIImage?
+    var description: String?
+    var mediaPath: UIImage?
     
     static let sampleData: [PinEntity] = [
             PinEntity(pin_id: UUID(uuidString: "b44a6eaf-a5f8-426c-8200-0cf93a18c2ca")!,
