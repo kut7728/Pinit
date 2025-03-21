@@ -24,7 +24,7 @@ final class MainTabBarController: UITabBarController {
         appearance.shadowColor = UIColor.clear
         
         // set tabbar background color
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = .secondarySystemBackground
         
         tabBar.standardAppearance = appearance
         
@@ -34,7 +34,7 @@ final class MainTabBarController: UITabBarController {
         }
         
         // set tabbar tintColor
-        tabBar.tintColor = .black
+        tabBar.tintColor = DesignSystemColor.Purple.value
         
         // set tabbar shadow
         tabBar.layer.masksToBounds = false

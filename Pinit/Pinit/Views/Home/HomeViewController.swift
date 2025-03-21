@@ -26,6 +26,7 @@ class HomeViewController: UIViewController {
         let image = UIImage(systemName: "pencil.line")
         button.setImage(UIImage(systemName: "pencil.line"), for: .normal)
         button.backgroundColor = .secondarySystemBackground
+        button.tintColor = DesignSystemColor.Purple.value
         button.layer.cornerRadius = circleButtonSize / 2
         button.clipsToBounds = true
         return button
@@ -34,6 +35,7 @@ class HomeViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "dot.scope"), for: .normal)
         button.backgroundColor = .secondarySystemBackground
+        button.tintColor = DesignSystemColor.Purple.value
         button.layer.cornerRadius = circleButtonSize / 2
         button.clipsToBounds = true
         return button

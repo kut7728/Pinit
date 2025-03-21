@@ -152,10 +152,14 @@ extension PastPinViewController : PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity) { //화면 이동
         let vc = PinDetailViewController(selected, isPin: true)
         vc.deletePinNoti = { pin in
-            // 여기서 삭제된 핀이 무엇인지 알려주니까 여기서 삭제된 핀 데이터 소스에서 제거하기
+            guard let data = self.adapter?.data else { return }
+            self.adapter?.data = data.filter { $0.pin_id != pin.pin_id }
+            self.PinCollectionView.reloadData()
         }
         vc.updatePinNoti = { before, after in
-            // 여기서 수정된 핀 비포, 애프터로 나오니까 데이터 소스에서 업데이트 하기
+            guard let data = self.adapter?.data else { return }
+            data.first{ $0.pin_id == before.pin_id }
+            
         }
         present(vc, animated: true)
     }

@@ -186,7 +186,7 @@ extension PinDetailViewController {
                 self.useCase.updatePin(pin: pin)
                 self.updatePinNoti!(self.pinEntity, pin)
                 self.pinEntity = pin
-                // 디테일 화면 수정
+                #warning("업데이트 후 헤더 업데이트 해줘야함ㅇㅇ")
             }
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
