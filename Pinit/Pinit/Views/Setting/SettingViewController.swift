@@ -5,11 +5,10 @@
 //  Created by 안정흠 on 3/12/25.
 //
 
-
 import UIKit
 
 final class SettingViewController: UIViewController {
-    var data: [ProducerEntity] = ProducerEntity.sampleData
+    var data: [PinEntity] = PinEntity.producerData
     //모델에서 데이터를 가져옴
     
     private let resetButton = UIButton()
@@ -31,18 +30,30 @@ final class SettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        extendedLayoutIncludesOpaqueBars = true
+        view.backgroundColor = .secondarySystemBackground
         
         view.addSubview(produceCollectionView)
         view.addSubview(resetButton)
         
         produceCollectionView.delegate = self
         produceCollectionView.dataSource = self
+        produceCollectionView.backgroundColor = .secondarySystemBackground
         
         //버튼 레이아웃 설정
         resetButton.setTitle("전체 기록 삭제", for: .normal)
+        resetButton.titleLabel?.font = DesignSystemFont.Pretendard_Medium18.value
         resetButton.addTarget(self, action: #selector(resetAlert), for: .touchUpInside)
-        resetButton.backgroundColor = .lightGray
+        
+        resetButton.setTitleColor(.white, for: .normal)
+        
+        resetButton.backgroundColor = .red
+        resetButton.layer.cornerRadius = 10
+        
+        resetButton.layer.masksToBounds = false
+        //resetButton.layer.shadowOpacity = 0.5
+        //resetButton.layer.shadowOffset = CGSize(width: 0, height: 4)
         
         autoLayout()
         produceCollectionView.register(ProducerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -70,7 +81,8 @@ final class SettingViewController: UIViewController {
 extension SettingViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let detailVC = PinDetailViewController()
+        let detailVC = PinDetailViewController(PinEntity.producerData[indexPath.row]) //프로필 누르면 상세 화면으로
+        
         present(detailVC, animated: true ,completion: nil )
     }
     
@@ -89,29 +101,22 @@ extension SettingViewController : UICollectionViewDelegate, UICollectionViewDele
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //컬렉션 뷰의 셀의 크기
-        let itemSpacing : CGFloat = 10
-        
-        let myWidth : CGFloat = (collectionView.bounds.width - itemSpacing * 2) / 2
-        
-        return CGSize(width: myWidth, height: myWidth * 1.2)
-    }
 }
 
 //오토레이아웃 제약 설정(snapkit) 부분
 extension SettingViewController {
     private func autoLayout() {
         resetButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-90)
-            $0.height.equalTo(50)
-            $0.leading.equalTo(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.height.equalTo(60)
+            $0.leading.equalToSuperview().inset(10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
         //컬렉션 뷰 제약 설정 부분 예정
         produceCollectionView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.equalTo(resetButton.snp.top).offset(-30)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.width.equalToSuperview()
+            $0.bottom.equalTo(resetButton.snp.top).offset(-10)
         }
     }
 }

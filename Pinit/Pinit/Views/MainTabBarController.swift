@@ -6,9 +6,9 @@
 //
 
 import UIKit
+import CoreData
 
 final class MainTabBarController: UITabBarController {
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewControllers()
@@ -19,23 +19,23 @@ final class MainTabBarController: UITabBarController {
         let appearance = UITabBarAppearance()
         // set tabbar opacity
         appearance.configureWithOpaqueBackground()
-
+        
         // remove tabbar border line
         appearance.shadowColor = UIColor.clear
-
+        
         // set tabbar background color
         appearance.backgroundColor = .white
-
+        
         tabBar.standardAppearance = appearance
-
+        
         if #available(iOS 15.0, *) {
-                // set tabbar opacity
-                tabBar.scrollEdgeAppearance = tabBar.standardAppearance
+            // set tabbar opacity
+            tabBar.scrollEdgeAppearance = tabBar.standardAppearance
         }
-
+        
         // set tabbar tintColor
         tabBar.tintColor = .black
-
+        
         // set tabbar shadow
         tabBar.layer.masksToBounds = false
         tabBar.layer.shadowColor = UIColor.black.cgColor
@@ -45,16 +45,15 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        let home = UINavigationController(rootViewController: HomeViewController())
-        
+        let home = UINavigationController(rootViewController: HomeViewController(usecase: DIContainer.usecase))
         home.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"),
                                        selectedImage: UIImage(systemName: "house.fill"))
         
-        let pastPin = UINavigationController(rootViewController: PastPinViewController())
+        let pastPin = UINavigationController(rootViewController: PastPinViewController(usecase: DIContainer.usecase))
         pastPin.tabBarItem = UITabBarItem(title: "PastPin",
-                                       image: UIImage(systemName: "calendar"),
-                                       tag: 1)
+                                          image: UIImage(systemName: "calendar"),
+                                          tag: 1)
         
         let setting = UINavigationController(rootViewController: SettingViewController())
         setting.tabBarItem = UITabBarItem(title: "Setting",

@@ -95,6 +95,3 @@ class ReviewCell: UITableViewCell {
     ReviewCell()
 }
 
-#Preview {
-    PinDetailViewController()
-}

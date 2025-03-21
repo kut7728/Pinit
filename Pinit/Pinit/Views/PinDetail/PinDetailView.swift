@@ -107,5 +107,5 @@ class PinDetailView: UIView {
 
 
 #Preview {
-    PinDetailViewController()
+    PinDetailViewController(PinEntity.sampleData[0])
 }
