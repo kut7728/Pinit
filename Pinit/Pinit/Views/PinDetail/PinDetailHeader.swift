@@ -69,7 +69,12 @@ class PinDetailHeader: UIView {
     private lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = entity.mediaPath
+        imageView.backgroundColor = DesignSystemColor.Lavender.value
+//        imageView.layer.borderWidth = 4
+//        imageView.layer.borderColor = DesignSystemColor.Purple.value.cgColor
+        imageView.layer.cornerRadius = 8
         imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
         return imageView
     }()
     

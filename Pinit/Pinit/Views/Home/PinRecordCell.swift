@@ -19,9 +19,9 @@ final class PinRecordCell: UICollectionViewCell {
         view.layer.shadowOffset = CGSize(width: 0, height: 4)
         return view
     }()
-    private lazy var thumbnailImageView: UIImageView = {
+    public lazy var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
         imageView.backgroundColor = .lightGray
         return imageView
     }()

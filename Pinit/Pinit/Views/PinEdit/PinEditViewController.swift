@@ -20,6 +20,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     var pinEntity: PinEntity?
     var pinmode: PinMode?
     var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
+    private var pickedImage: UIImage?
     
     public lazy var mapView: MKMapView = {
         var map = MKMapView()
@@ -247,9 +248,16 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     //MARK: 저장버튼 눌림
     @objc private func saveButtonTapped() {
+        guard let text = titleTextField.text, !text.isEmpty else {
+            self.showToast(message: "제목을 입력해주세요.")
+            return
+        }
+        
         pinEntity?.title = titleTextField.text ?? ""
         pinEntity?.description = contentTextView.text ?? ""
-//        pinEntity?.mediaPath = image ????
+        
+        pinEntity?.mediaPath = pickedImage
+        
         isAdded?(pinEntity!)
         dismiss(animated: true)
     }
@@ -269,6 +277,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             self.presentImagePicker(sourceType: .photoLibrary)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
         actionSheet.addAction(cameraAction)
         actionSheet.addAction(galleryAction)
         actionSheet.addAction(cancelAction)
@@ -282,7 +291,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = sourceType
         imagePicker.delegate = self
-        imagePicker.allowsEditing = true
+        //        imagePicker.allowsEditing = true
         
         present(imagePicker, animated: true, completion: nil)
     }
@@ -332,10 +341,22 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
 
 //MARK: - PinEditViewController 내에서 사진 선택 기능을 쉽게 사용
 extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-            // Handle the selected image (save, display, etc.)
-            print("Selected Image: \(selectedImage)")
+            self.pickedImage = selectedImage
+            cameraButton.backgroundColor = .clear
+            cameraButton.setImage(nil, for: .normal)
+            //
+            //            // 이미지를 버튼 크기에 맞게 조정하여 설정
+            //            let resizedImage = resizeImage(image: pickedImage, targetSize: CGSize(width: 150, height: 150))
+            
+            cameraButton.clipsToBounds = true
+            cameraButton.layer.cornerRadius = 75
+            cameraButton.setBackgroundImage(pickedImage, for: .normal)
+            
+            // 선택한 이미지를 pinEntity에 저장 (나중에 경로로 변환하는 로직 추가 필요)
+            // pinEntity?.mediaPath = ...
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -348,5 +369,5 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
 #Preview{
     
     PinEditViewController()
-
+    
 }

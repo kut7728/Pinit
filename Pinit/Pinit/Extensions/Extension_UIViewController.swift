@@ -35,7 +35,8 @@ extension UIViewController {
 
         // Container view for the toast
         let containerView = UIView()
-        containerView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+//        containerView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+        containerView.backgroundColor = DesignSystemColor.Lavender.value.withAlphaComponent(0.9)
         containerView.layer.cornerRadius = 4
         containerView.clipsToBounds = true
         blockingView.addSubview(containerView)

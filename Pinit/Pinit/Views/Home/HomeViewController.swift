@@ -26,6 +26,7 @@ class HomeViewController: UIViewController {
         let image = UIImage(systemName: "pencil.line")
         button.setImage(UIImage(systemName: "pencil.line"), for: .normal)
         button.backgroundColor = .secondarySystemBackground
+        button.tintColor = DesignSystemColor.Purple.value
         button.layer.cornerRadius = circleButtonSize / 2
         button.clipsToBounds = true
         return button
@@ -34,6 +35,7 @@ class HomeViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "dot.scope"), for: .normal)
         button.backgroundColor = .secondarySystemBackground
+        button.tintColor = DesignSystemColor.Purple.value
         button.layer.cornerRadius = circleButtonSize / 2
         button.clipsToBounds = true
         return button
@@ -56,6 +58,11 @@ class HomeViewController: UIViewController {
         setupLayout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadAnnotations()
+    }
+    
     private func setupMapLocation() {
         locationmanager.delegate = self
         mapView.delegate = self
@@ -71,7 +78,7 @@ class HomeViewController: UIViewController {
             animated: true
         )
         mapView.isRotateEnabled = false
-//        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
+        //        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "annotation")
         mapView.register(CustomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomClusterAnnotationView.identifier)
         
@@ -79,10 +86,13 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
         usecase.fetchAllPins { pins in
             let annotations = pins.map { CustomAnnotation(pinData: $0) }
             self.mapView.addAnnotations(annotations)
             self.mapView(self.mapView, regionDidChangeAnimated: true)
+            self.adapter?.data = pins.sorted(by: { $0.date > $1.date })
+            self.bottomSheet.collectionView.reloadData()
         }
     }
     
@@ -150,7 +160,7 @@ extension HomeViewController: MKMapViewDelegate {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: "annotation", for: annotation) as! MKMarkerAnnotationView
         view.annotation = annotation
         view.clusteringIdentifier = "pinCluster" // 클러스터링 가능하게
-            
+        
         return view
     }
     
@@ -174,10 +184,14 @@ extension HomeViewController: MKMapViewDelegate {
     }
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let visibleAnnotations = mapView.annotations(in: mapView.visibleMapRect)
-        let visibleMarkers = visibleAnnotations.compactMap { $0 as? CustomAnnotation }
-//        let visibleClusters = visibleAnnotations.compactMap{ $0 as? MKClusterAnnotation } // 할필요없음
-        // BottomSheet의 CollectionView 업데이트
-        adapter?.data = visibleMarkers.map{ $0.pinData }
+        let visibleMarkers = visibleAnnotations.compactMap { ($0 as? CustomAnnotation)?.pinData }
+        
+        guard let adapterData = adapter?.data else { return }
+        let adapterSet = Set(adapterData.map(\.pin_id))
+        let temp = Set(visibleMarkers.map{$0.pin_id}).symmetricDifference(adapterSet).count
+        guard temp != 0 else { return }
+        
+        adapter?.data = visibleMarkers.sorted(by: { $0.date > $1.date })
         bottomSheet.collectionView.reloadData()
     }
 }
@@ -205,11 +219,11 @@ extension HomeViewController: CLLocationManagerDelegate {
 
 // MARK: PinCollectionViewAdapterDelegate
 extension HomeViewController: PinCollectionViewAdapterDelegate {
-    func selectedItem(selected: PinEntity) {
+    func selectedItem(selected: PinEntity, indexPath: IndexPath) {
         presentPinDetailViewController(selected: selected)
     }
     
-    func deletedItem(deleted: PinEntity?) {
+    func deletedItem(deleted: PinEntity?, indexPath: IndexPath) {
         guard let deleted = deleted else { return }
         usecase.deletePin(pinID: deleted.pin_id)
         removePinEntity(pinEntity: deleted)
@@ -251,6 +265,8 @@ extension HomeViewController {
             mapView.removeAnnotation(annotationToRemove)
         }
         mapView(mapView, regionDidChangeAnimated: true)
+        adapter?.data = adapter?.data.filter{$0.pin_id != pinEntity.pin_id} ?? []
+        bottomSheet.collectionView.reloadData()
     }
 }
 
