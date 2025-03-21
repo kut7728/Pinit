@@ -241,7 +241,7 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         header.pinDate.text = pinEntity.date.koreanDateString()
         header.pinTitle.text = pinEntity.title
         header.pinImageView.image = pinEntity.mediaPath
-        header.pinWeather.text = pinEntity.weather
+        header.pinWeather.image = UIImage(named: pinEntity.weather)
         header.pinDescription.text = pinEntity.description
         header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
         return header

@@ -25,7 +25,7 @@ struct PinEntity {
                       longitude: 126.97628375547349,
                       address: "서울특별시 도로명주소 24번지",
                       date: Date(),
-                      weather: "비",
+                      weather: "01d",
                       description: "샘플 설명 83",
                       mediaPath: nil),  // 이미지 없음
             
@@ -35,7 +35,7 @@ struct PinEntity {
                       longitude: 126.98134546666795,
                       address: "서울특별시 도로명주소 51번지",
                       date: Date(),
-                      weather: "눈",
+                      weather: "11d",
                       description: "샘플 설명 67",
                       mediaPath: nil),  // 이미지 변환
             
