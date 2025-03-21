@@ -15,8 +15,9 @@ enum PinMode {
 }
 
 final class PinEditViewController: UIViewController, UITextViewDelegate {
-    
+    var pinEntity: PinEntity?
     var pinmode: PinMode?
+    var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     
     private var mapView: MKMapView = {
         let view = MKMapView()
@@ -82,7 +83,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         button.tintColor = UIColor(red: 96/255, green: 99/255, blue: 104/255, alpha: 1)
         button.imageView?.contentMode = .scaleAspectFit
-        button.addTarget(PinEditViewController.self, action: #selector(cameraButtonTapped), for: .touchUpInside)
+        
         return button
     }()
     
@@ -113,7 +114,6 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         }
         button.tintColor = .black
         button.alpha = 0.7 // 투명도 50% 설정
-        button.addTarget(PinEditViewController.self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -140,9 +140,17 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         switch pinmode {
         case let .create(latitude, longtitude):
             print("\(latitude), \(longtitude)")
+            pinEntity = PinEntity(pin_id: UUID(),
+                                  title: "",
+                                  latitude: latitude, longitude: longtitude,
+                                  address: "",
+                                  date: Date(),
+                                  weather: "",
+                                  description: "",
+                                  mediaPath: nil)
         case let .edit(PinEntity):
             print(PinEntity)
-            //    titleTextField.text = PinEntity.description
+            self.pinEntity = PinEntity
             print("편집 모드입니다")
         case .none:
             print("?")
@@ -153,6 +161,10 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         titleTextField.inputAccessoryView = keyboardToolBar
         contentTextView.inputAccessoryView = keyboardToolBar
         contentTextView.delegate = self
+        
+        closeButton.addTarget(PinEditViewController.self, action: #selector(dismissButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        cameraButton.addTarget(PinEditViewController.self, action: #selector(cameraButtonTapped), for: .touchUpInside)
         
         self.view.addSubviews(mapView, saveButton, contentTextView, titleTextField, cameraButton, weatherButton, dateButton, closeButton)
         
@@ -202,6 +214,13 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     private func SetMap(){
         mapView = MKMapView(frame: self.view.bounds)
         mapView = MKMapView(frame: CGRect(x: 0, y: 60, width: self.view.bounds.width, height: self.view.bounds.height / 4))
+    }
+    
+    //MARK: 저장버튼 눌림
+    @objc private func saveButtonTapped() {
+        guard let newPin = pinEntity else { return }
+        isAdded?(newPin)
+        dismiss(animated: true)
     }
     
     //MARK: 키보드 닫기

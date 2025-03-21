@@ -56,12 +56,6 @@ class HomeViewController: UIViewController {
         setupLayout()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("HHH")
-        //        loadAnnotations()
-    }
-    
     private func setupMapLocation() {
         locationmanager.delegate = self
         mapView.delegate = self
@@ -80,19 +74,14 @@ class HomeViewController: UIViewController {
         mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
         //        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: "ClusterView")
         
-        loadAnnotations(PinEntity.sampleData)
+        loadAnnotations()
     }
     
-    private func loadAnnotations(_ samepleData: [PinEntity]? = nil) {
-        if let sampleData = samepleData { // 테스트용
-            let annotations = PinEntity.sampleData.map{CustomAnnotation(pinData: $0)}
-            mapView.addAnnotations(annotations)
-        }
-        else {
-            usecase.fetchAllPins {[weak self] pins in
-                let annotations = pins.map { CustomAnnotation(pinData: $0) }
-                self?.mapView.addAnnotations(annotations)
-            }
+    private func loadAnnotations() {
+        usecase.fetchAllPins { pins in
+            let annotations = pins.map { CustomAnnotation(pinData: $0) }
+            self.mapView.addAnnotations(annotations)
+            self.mapView(self.mapView, regionDidChangeAnimated: true)
         }
     }
     
@@ -136,6 +125,7 @@ class HomeViewController: UIViewController {
             $0.size.equalTo(circleButtonSize)
         }
     }
+    
 }
 
 // MARK: MapView Delegate
@@ -154,6 +144,7 @@ extension HomeViewController: MKMapViewDelegate {
         return nil
         
     }
+    
     private func createCustomAnnotationView(for annotation: CustomAnnotation, in mapView: MKMapView) -> MKAnnotationView {
         let identifier = CustomAnnotationView.identifier
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? CustomAnnotationView
@@ -186,16 +177,15 @@ extension HomeViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let annotation = view.annotation as? CustomAnnotation {
-            print("Selected pin ID: \(annotation.pinData.pin_id)")
-            // 상세 화면 이동
+            presentPinDetailViewController(selected: annotation.pinData)
         }
     }
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let visibleAnnotations = mapView.annotations(in: mapView.visibleMapRect)
         let visibleMarkers = visibleAnnotations.compactMap { $0 as? CustomAnnotation }
         // BottomSheet의 CollectionView 업데이트
-//        adapter?.data = visibleMarkers.map{ $0.pinData }
-//        bottomSheet.collectionView.reloadData()
+        adapter?.data = visibleMarkers.map{ $0.pinData }
+        bottomSheet.collectionView.reloadData()
     }
 }
 
@@ -223,25 +213,50 @@ extension HomeViewController: CLLocationManagerDelegate {
 // MARK: PinCollectionViewAdapterDelegate
 extension HomeViewController: PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity) {
-        print("Selected: \(selected)")
-        // 여기서 화면 이동
+        presentPinDetailViewController(selected: selected)
+    }
+    
+    func deletedItem(deleted: PinEntity?) {
+        guard let deleted = deleted else { return }
+        usecase.deletePin(pinID: deleted.pin_id)
+        removePinEntity(pinEntity: deleted)
+    }
+}
+
+// MARK: 화면이동
+extension HomeViewController {
+    private func presentAddPinViewController(lat: Double, lon: Double) {
+        let vc = PinEditViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.pinmode = .create(latitude: lat, longtitude: lon)
+        vc.isAdded = { pin in
+            let newAnnotation = CustomAnnotation(pinData: pin)
+            self.usecase.addPin(pin: pin)
+            self.mapView.addAnnotation(newAnnotation)
+            self.mapView(self.mapView, regionDidChangeAnimated: true)
+        }
+        present(vc, animated: true)
+    }
+    private func presentPinDetailViewController(selected: PinEntity) {
         let vc = PinDetailViewController(selected, isPin: true)
-        vc.sendToBack = {[weak self] entity in
-            guard let entity else { return }
-            let annotation = CustomAnnotation(pinData: entity)
-            self?.mapView.removeAnnotation(annotation)
+        vc.deletePinNoti = removePinEntity
+        vc.updatePinNoti = { before, after in
+            self.removePinEntity(pinEntity: before)
+            let newAnnotation = CustomAnnotation(pinData: after)
+            self.mapView.addAnnotation(newAnnotation)
+            self.mapView(self.mapView, regionDidChangeAnimated: true)
         }
         present(vc, animated: true)
     }
     
-    func deletedItem(deleted: PinEntity?) {
-        print("Deleted: \(deleted?.title ?? "empty")")
-        // 여기서 CoreData 업데이트
-        guard let deleted = deleted else { return }
-        usecase.deletePin(pinID: deleted.pin_id)
-        let deletedAnnotation = CustomAnnotation(pinData: deleted)
-        mapView.removeAnnotation(deletedAnnotation)
-        // 삭제후 현재 위치의 어노테이션이 뭐가 있는지 다시 로드
+    private func removePinEntity(pinEntity: PinEntity) { // 클로저용..
+        if let annotationToRemove = mapView.annotations.first(
+            where: { guard let custom = $0 as? CustomAnnotation else { return false }
+                return custom.pinData.pin_id == pinEntity.pin_id
+            })
+        {
+            mapView.removeAnnotation(annotationToRemove)
+        }
         mapView(mapView, regionDidChangeAnimated: true)
     }
 }
@@ -254,8 +269,7 @@ extension HomeViewController {
             showAlertAboutLocation()
             return
         }
-        
-        print("기록하기 화면으로 이동")
+        presentAddPinViewController(lat: location.latitude, lon: location.longitude)
     }
     
     @objc private func moveToUserLocation() {

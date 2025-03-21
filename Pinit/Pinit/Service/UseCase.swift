@@ -116,7 +116,9 @@ final class UseCaseImpl: UseCase {
     func fetchAllReviewsByPinID(pinID: UUID, completion: @escaping ([ReviewEntity]) -> Void) {
         dbRepository.fetchReviewsByPinId(pinID: pinID) { items in
             let reviewEntites = items.compactMap { $0.toReviewEntity() }
-            completion(reviewEntites)
+            DispatchQueue.main.async {
+                completion(reviewEntites)
+            }
         }
     }
 }

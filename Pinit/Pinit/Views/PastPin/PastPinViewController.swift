@@ -12,7 +12,7 @@ import SnapKit
 final class PastPinViewController: UIViewController {
     
     //MARK: - 모든 PinEntity를 가져옵니다.
-    let pinData = PinEntity.sampleData
+    var pinData = PinEntity.sampleData
     
     private let usecase: UseCase
     
@@ -138,12 +138,20 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
 extension PastPinViewController : PinCollectionViewAdapterDelegate {
     
     func selectedItem(selected: PinEntity) { //화면 이동
-        let vc = PinDetailViewController(selected)
-        self.present(vc, animated: true)
+        let vc = PinDetailViewController(selected, isPin: true)
+        vc.deletePinNoti = { pin in
+            // 여기서 삭제된 핀이 무엇인지 알려주니까 여기서 삭제된 핀 데이터 소스에서 제거하기
+        }
+        vc.updatePinNoti = { before, after in
+            // 여기서 수정된 핀 비포, 애프터로 나오니까 데이터 소스에서 업데이트 하기
+        }
+        present(vc, animated: true)
     }
     
     func deletedItem(deleted: PinEntity?) { //아이템 삭제 클릭시
-        print("deletedItem")
+        guard let deleted = deleted else { return }
+        usecase.deletePin(pinID: deleted.pin_id)
+        self.pinData = pinData.filter{ $0.pin_id != deleted.pin_id }
     }
     
 }
