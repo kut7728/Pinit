@@ -280,13 +280,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UUYBHY988H;
+				DEVELOPMENT_TEAM = 42TSDC5PJS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pinit/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "기록 작성을 위한 카메라 사용을 허용해 주십옵소서";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치기반 기록 작성을 위한 위치 서비스 사용을 허용해 주시옵소서";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -308,13 +311,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UUYBHY988H;
+				DEVELOPMENT_TEAM = 42TSDC5PJS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pinit/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "기록 작성을 위한 카메라 사용을 허용해 주십옵소서";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치기반 기록 작성을 위한 위치 서비스 사용을 허용해 주시옵소서";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
