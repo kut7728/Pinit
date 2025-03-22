@@ -45,7 +45,9 @@ class NewPinReviewPanel: UIView {
             .value
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
         textField.leftViewMode = .always
-        
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
         textField.placeholder = "내용을 입력해주세요"
         return textField
     }()
@@ -55,21 +57,13 @@ class NewPinReviewPanel: UIView {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .default)
         let largeImage = UIImage(systemName: "arrow.right.circle.fill")?.withConfiguration(largeConfig)
         button.setImage(largeImage, for: .normal)
-        button.tintColor = .systemGreen
+        button.tintColor = DesignSystemColor.Lavender.value
         return button
     }()
     
-    public lazy var topBorder: UIView = {
-        let border = UIView()
-        border.backgroundColor = .systemGray4
-        return border
-    }()
-    
-    
-    
     private func addComponents() {
         self.addSubviews(newReviewPanel)
-        newReviewPanel.addSubviews(topBorder, reviewDate, reviewText, commitButton)
+        newReviewPanel.addSubviews(reviewDate, reviewText, commitButton)
         
         
         newReviewPanel.snp.makeConstraints {
@@ -85,10 +79,11 @@ class NewPinReviewPanel: UIView {
         
         reviewText.snp.makeConstraints {
             $0.top.equalTo(reviewDate.snp.bottom).offset(10)
-            $0.width.equalTo(340)
+//            $0.width.equalTo(340)
             $0.height.equalTo(40)
             
             $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalTo(commitButton.snp.leading).offset(-10)
             
         }
         
@@ -104,4 +99,8 @@ class NewPinReviewPanel: UIView {
 
 #Preview {
     NewPinReviewPanel()
+}
+
+#Preview {
+    PinDetailViewController(PinEntity.sampleData[0], isPin: true)
 }
