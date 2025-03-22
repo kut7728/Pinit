@@ -10,7 +10,7 @@ import MapKit
 import SnapKit
 
 enum PinMode {
-    case create(latitude: Double, longtitude: Double)
+    case create(latitude: Double, longitude: Double)
     case edit(PinEntity : PinEntity)
 }
 
@@ -24,17 +24,6 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     public lazy var mapView: MKMapView = {
         var map = MKMapView()
-        var lat = 37.506446
-        var long = 126.885397
-        let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
-        
-        map.setRegion(region, animated: true)
-        
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
-        annotation.title = "test"
-        map.addAnnotation(annotation)
         map.showsUserLocation = false
         map.isUserInteractionEnabled = false
         
@@ -109,7 +98,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     private let dateLabel : UILabel = {
         let label = UILabel()
-        label.text = "테스트 날짜"
+        label.text = Date().koreanDateString()
         return label
     }()
     
@@ -148,12 +137,12 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     func viewmode(){
         switch pinmode {
-        case let .create(latitude, longtitude):
-            print("\(latitude), \(longtitude)")
-            
+        case let .create(latitude, longitude):
+            print("\(latitude), \(longitude)")
+            setupMapView(lat: latitude, lon: longitude)
             pinEntity = PinEntity(pin_id: UUID(),
                                   title: "",
-                                  latitude: latitude, longitude: longtitude,
+                                  latitude: latitude, longitude: longitude,
                                   address: "",
                                   date: Date(),
                                   weather: "",
@@ -164,12 +153,29 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             print(PinEntity)
             self.pinEntity = PinEntity
             print("편집 모드입니다")
+            setupMapView(lat: PinEntity.latitude, lon: PinEntity.longitude)
             dateLabel.text = pinEntity?.date.koreanDateString()
             titleTextField.text = pinEntity?.title
             contentTextView.text = pinEntity?.description
         case .none:
             print("?")
         }
+    }
+    
+    private func setupMapView(lat: Double, lon: Double) {
+        mapView.setRegion(
+            MKCoordinateRegion(
+                center: CLLocationCoordinate2D(
+                    latitude: lat,
+                    longitude: lon),
+                span: MKCoordinateSpan(
+                    latitudeDelta: 0.003,
+                    longitudeDelta: 0.003)),
+            animated: true)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon) // San Francisco, CA
+        mapView.addAnnotation(annotation)
     }
     
     // MARK: - SetUI

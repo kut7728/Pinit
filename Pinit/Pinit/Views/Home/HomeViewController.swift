@@ -86,8 +86,8 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnnotations() {
-        mapView.removeAnnotations(mapView.annotations)
         usecase.fetchAllPins { pins in
+            self.mapView.removeAnnotations(self.mapView.annotations)
             let annotations = pins.map { CustomAnnotation(pinData: $0) }
             self.mapView.addAnnotations(annotations)
             self.mapView(self.mapView, regionDidChangeAnimated: true)
@@ -235,7 +235,7 @@ extension HomeViewController {
     private func presentAddPinViewController(lat: Double, lon: Double) {
         let vc = PinEditViewController()
         vc.modalPresentationStyle = .fullScreen
-        vc.pinmode = .create(latitude: lat, longtitude: lon)
+        vc.pinmode = .create(latitude: lat, longitude: lon)
         vc.isAdded = { pin in
             let newAnnotation = CustomAnnotation(pinData: pin)
             self.usecase.addPin(pin: pin)
