@@ -215,8 +215,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         weatherImage.snp.makeConstraints{
             $0.top.equalTo(mapView.snp.bottom).offset(10)
-            $0.leading.equalTo(view.snp.centerX).offset(100)
-            $0.height.width.equalTo(30)
+//            $0.leading.equalTo(view.snp.centerX).offset(100)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.height.width.equalTo(35)
         }
         
         dateLabel.snp.makeConstraints{
