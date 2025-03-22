@@ -311,12 +311,15 @@ extension HomeViewController {
             // 높이 조정 pretend?
             if newHeight > (view.frame.height * 0.6) {
                 bottomSheetHeight = large
+                bottomSheet.collectionView.isUserInteractionEnabled = true
             }
             else if newHeight > (view.frame.height * 0.3) {
                 bottomSheetHeight = medium
+                bottomSheet.collectionView.isUserInteractionEnabled = true
             }
             else {
                 bottomSheetHeight = small
+                bottomSheet.collectionView.isUserInteractionEnabled = false
             }
         }
         bottomSheet.snp.updateConstraints {

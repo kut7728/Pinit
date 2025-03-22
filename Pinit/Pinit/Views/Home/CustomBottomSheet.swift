@@ -50,5 +50,7 @@ final class CustomBottomSheet: UIView {
             $0.top.equalToSuperview().offset(cornerRadius*1.8)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+        
+        collectionView.isUserInteractionEnabled = false
     }
 }
