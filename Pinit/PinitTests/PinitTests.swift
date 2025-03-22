@@ -12,7 +12,7 @@ import Kingfisher
 @testable import Pinit
 
 final class PinitTests: XCTestCase {
-    var usecase: UseCase!
+    var service: Service!
     var context: NSManagedObjectContext!
     var imageStore: ImageStoreRepository!
     var moya: MoyaProvider<Router>!
@@ -32,7 +32,7 @@ final class PinitTests: XCTestCase {
         
         moya = MoyaProvider<Router>()
         
-        usecase = UseCaseImpl(
+        service = ServiceImpl(
             dbRepository: DBRepositoryImpl(context: context),
             imageStore: imageStore,
             moyaProvider: moya
@@ -42,7 +42,7 @@ final class PinitTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         context = nil
-        usecase = nil
+        service = nil
     }
     
     func test_샘플데이터로_핀추가_확인() throws {
@@ -51,7 +51,7 @@ final class PinitTests: XCTestCase {
         // When
         for pin in pins {
             // Then
-            XCTAssertTrue(usecase.addPin(pin: pin), "Pin 추가 실패")
+            XCTAssertTrue(service.addPin(pin: pin), "Pin 추가 실패")
         }
         do {
             let request = PinDTO.fetchRequest()
@@ -66,12 +66,12 @@ final class PinitTests: XCTestCase {
     func test_핀_전부가져오기() {
         // Given
         for sample in PinEntity.sampleData {
-            XCTAssertTrue(usecase.addPin(pin: sample), "Pin 추가 실패")
+            XCTAssertTrue(service.addPin(pin: sample), "Pin 추가 실패")
         }
         
         // When
         var pins: [PinEntity] = []
-        usecase.fetchAllPins { items in
+        service.fetchAllPins { items in
             pins = items
             
             // Then
@@ -89,7 +89,7 @@ final class PinitTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "날씨 정보를 성공적으로 가져와야 한다.")
         // When
-        usecase.fetchCurrentWeather(latitude: latitude, longitude: longitude) { weatherData in
+        service.fetchCurrentWeather(latitude: latitude, longitude: longitude) { weatherData in
             // Then
             if let weatherData = weatherData {
                 print(weatherData)

@@ -1,5 +1,5 @@
 //
-//  UseCase.swift
+//  Service.swift
 //  Pinit
 //
 //  Created by 안정흠 on 3/12/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Moya
 
-protocol UseCase {
+protocol Service {
     
     /*
      Create, Update, Delete는 하나의 entity만 처리하기에 UIBlocking이 없어 그냥 처리했지만,
@@ -30,7 +30,7 @@ protocol UseCase {
     
 }
 
-final class UseCaseImpl: UseCase {
+final class ServiceImpl: Service {
     let provider: MoyaProvider<Router>
     let dbRepository: DBRepository
     let imageStore: ImageStoreRepository

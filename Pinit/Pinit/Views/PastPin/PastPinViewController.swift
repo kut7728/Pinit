@@ -14,7 +14,7 @@ final class PastPinViewController: UIViewController {
     //MARK: - 모든 PinEntity를 가져옵니다.
     var pinData: [PinEntity] = []
     
-    private let usecase: UseCase
+    private let service: Service
     
     //MARK: - properties
     private let PinCalendar : FSCalendar = {
@@ -47,7 +47,7 @@ final class PastPinViewController: UIViewController {
         SetUI()
         setupAdapter()
         calendarUI()
-        usecase.fetchPinsByDate(date: Date()) { items in
+        service.fetchPinsByDate(date: Date()) { items in
             self.adapter?.data = items
             self.PinCollectionView.reloadData()
         }
@@ -55,15 +55,15 @@ final class PastPinViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        usecase.fetchPinsByDate(date: Date()) { items in
+        service.fetchPinsByDate(date: Date()) { items in
             self.adapter?.data = items
             self.PinCollectionView.reloadData()
         }
     }
     
     //MARK: - init
-    init(usecase: UseCase) {
-        self.usecase = usecase
+    init(service: Service) {
+        self.service = service
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -121,7 +121,7 @@ final class PastPinViewController: UIViewController {
 extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance{
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        usecase.fetchPinsByDate(date: date) { items in
+        service.fetchPinsByDate(date: date) { items in
             self.adapter?.data = items
             self.PinCollectionView.reloadData()
         }
@@ -164,7 +164,7 @@ extension PastPinViewController : PinCollectionViewAdapterDelegate {
     
     func deletedItem(deleted: PinEntity?, indexPath: IndexPath) { //아이템 삭제 클릭시
         guard let deleted = deleted else { return }
-        usecase.deletePin(pinID: deleted.pin_id)
+        service.deletePin(pinID: deleted.pin_id)
         self.pinData = pinData.filter{ $0.pin_id != deleted.pin_id }
     }
     
@@ -172,6 +172,6 @@ extension PastPinViewController : PinCollectionViewAdapterDelegate {
 
 
 #Preview {
-    PastPinViewController(usecase: DIContainer.usecase)
+    PastPinViewController(service: DIContainer.service)
 }
 

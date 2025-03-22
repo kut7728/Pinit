@@ -45,12 +45,12 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        let home = UINavigationController(rootViewController: HomeViewController(usecase: DIContainer.usecase))
+        let home = UINavigationController(rootViewController: HomeViewController(service: DIContainer.service))
         home.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"),
                                        selectedImage: UIImage(systemName: "house.fill"))
         
-        let pastPin = UINavigationController(rootViewController: PastPinViewController(usecase: DIContainer.usecase))
+        let pastPin = UINavigationController(rootViewController: PastPinViewController(service: DIContainer.service))
         pastPin.tabBarItem = UITabBarItem(title: "PastPin",
                                           image: UIImage(systemName: "calendar"),
                                           tag: 1)

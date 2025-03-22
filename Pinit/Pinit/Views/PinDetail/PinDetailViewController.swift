@@ -17,7 +17,7 @@ final class PinDetailViewController: UIViewController {
     private var pinTableView = UITableView(frame: .zero, style: .grouped)
     private var pinEntity: PinEntity
     private var isPin: Bool
-    private var useCase = DIContainer.usecase
+    private var service = DIContainer.service
     var deletePinNoti: ((PinEntity) -> Void)?
     var updatePinNoti: ((_ before: PinEntity, _ after: PinEntity) -> Void)?
     
@@ -65,7 +65,7 @@ final class PinDetailViewController: UIViewController {
     }
     
     private func loadReviewData() {
-        self.useCase.fetchAllReviewsByPinID(pinID: self.pinEntity.pin_id) {[weak self] items in
+        self.service.fetchAllReviewsByPinID(pinID: self.pinEntity.pin_id) {[weak self] items in
             self?.datasource = items
             self?.pinTableView.reloadData()
         }
@@ -180,7 +180,7 @@ extension PinDetailViewController {
         
         reviewPanelContainer.reviewText.text = ""
         
-        useCase.addReview(review: review)
+        service.addReview(review: review)
         self.datasource.append(review)
         
         self.pinTableView.reloadData()
@@ -204,13 +204,14 @@ extension PinDetailViewController {
     }
     
     @objc func pinMenuButtonTapped() {
+        
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let editAction = UIAlertAction(title: "수정", style: .default) { _ in
             print("수정")
             let vc = PinEditViewController(pinMode: .edit(PinEntity: self.pinEntity))
             vc.isAdded = { pin in
-                self.useCase.updatePin(pin: pin)
+                self.service.updatePin(pin: pin)
                 self.updatePinNoti!(self.pinEntity, pin)
                 self.pinEntity = pin
                 self.pinTableView.reloadData()
@@ -221,7 +222,7 @@ extension PinDetailViewController {
         
         let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
             print("삭제")
-            self.useCase.deletePin(pinID: (self.pinEntity.pin_id))
+            self.service.deletePin(pinID: (self.pinEntity.pin_id))
             self.deletePinNoti?(self.pinEntity)
             self.dismiss(animated: true){
                 self.showToast(message: "삭제가 완료되었습니다.")
@@ -280,7 +281,7 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
             if let deleted = self?.datasource.remove(at: indexPath.row).id {
-                self?.useCase.deleteReview(reviewId: deleted)
+                self?.service.deleteReview(reviewId: deleted)
                 self?.pinTableView.deleteRows(at: [indexPath], with: .automatic)
             }
         }

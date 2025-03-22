@@ -14,8 +14,8 @@ class HomeViewController: UIViewController {
     // BottomSheet 동적 높이를 저장하기위한 변수
     private lazy var bottomSheetHeight: CGFloat = view.frame.height / 14
     private let circleButtonSize: CGFloat = 48
-    private let locationmanager = CLLocationManager()
-    private let usecase: UseCase
+    private let locationmanager = LocationManager()
+    private let service: Service
     
     // MARK: UI Components
     private var adapter: PinCollectionViewAdapter?
@@ -41,8 +41,8 @@ class HomeViewController: UIViewController {
         return button
     }()
     
-    init(usecase: UseCase) {
-        self.usecase = usecase
+    init(service: Service) {
+        self.service = service
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -64,21 +64,27 @@ class HomeViewController: UIViewController {
     }
     
     private func setupMapLocation() {
-        locationmanager.delegate = self
         mapView.delegate = self
-        
-        homeMapRequestAuthorization()
         
         mapView.showsUserLocation = true
         mapView.setCameraZoomRange(.init(minCenterCoordinateDistance: 333, maxCenterCoordinateDistance: 5000), animated: true)
+        // Location 불러오기 전 기본값 설정
+        var currentLocation = CLLocationCoordinate2D(
+            latitude: 37.277252,
+            longitude: 127.136331
+        )
+        if let location = locationmanager.getCurrentUserLocation() {
+            currentLocation = location // 정상적으로 불러옴
+        }
+        else { showAlertAboutLocation() } // 권한이 없을경우 불러오지 못하고 알럿띄움
+        
         mapView.setRegion(
             .init(
-                center: locationmanager.location?.coordinate ?? .init(),
+                center: currentLocation,
                 span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003)),
             animated: true
         )
         mapView.isRotateEnabled = false
-        //        mapView.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "annotation")
         mapView.register(CustomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomClusterAnnotationView.identifier)
         
@@ -86,7 +92,7 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnnotations() {
-        usecase.fetchAllPins { pins in
+        service.fetchAllPins { pins in
             self.mapView.removeAnnotations(self.mapView.annotations)
             let annotations = pins.map { CustomAnnotation(pinData: $0) }
             self.mapView.addAnnotations(annotations)
@@ -196,27 +202,6 @@ extension HomeViewController: MKMapViewDelegate {
     }
 }
 
-// MARK: CLLocationManager
-extension HomeViewController: CLLocationManagerDelegate {
-    func homeMapRequestAuthorization() {
-        let status = locationmanager.authorizationStatus
-        
-        switch status {
-        case .notDetermined:
-            locationmanager.requestWhenInUseAuthorization()
-        case .denied, .restricted:
-            showAlertAboutLocation()
-        default:
-            break
-        }
-    }
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .denied || status == .restricted {
-            showAlertAboutLocation()
-        }
-    }
-}
-
 // MARK: PinCollectionViewAdapterDelegate
 extension HomeViewController: PinCollectionViewAdapterDelegate {
     func selectedItem(selected: PinEntity, indexPath: IndexPath) {
@@ -225,7 +210,7 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
     
     func deletedItem(deleted: PinEntity?, indexPath: IndexPath) {
         guard let deleted = deleted else { return }
-        usecase.deletePin(pinID: deleted.pin_id)
+        service.deletePin(pinID: deleted.pin_id)
         removePinEntity(pinEntity: deleted)
     }
 }
@@ -237,7 +222,7 @@ extension HomeViewController {
         vc.modalPresentationStyle = .fullScreen
         vc.isAdded = { pin in
             let newAnnotation = CustomAnnotation(pinData: pin)
-            self.usecase.addPin(pin: pin)
+            self.service.addPin(pin: pin)
             self.mapView.addAnnotation(newAnnotation)
             self.mapView(self.mapView, regionDidChangeAnimated: true)
         }
@@ -273,7 +258,7 @@ extension HomeViewController {
 extension HomeViewController {
     @objc private func moveToAddPin() {
         // 유저 현재위치 못받아오면 권한 설정을 안한거니까 알럿띄움
-        guard let location = locationmanager.location?.coordinate else {
+        guard let location = locationmanager.getCurrentUserLocation() else {
             showAlertAboutLocation()
             return
         }
@@ -281,7 +266,7 @@ extension HomeViewController {
     }
     
     @objc private func moveToUserLocation() {
-        guard let location = locationmanager.location?.coordinate else {
+        guard let location = locationmanager.getCurrentUserLocation() else {
             showAlertAboutLocation()
             return
         }
@@ -333,5 +318,5 @@ extension HomeViewController {
 }
 
 #Preview{
-    HomeViewController(usecase: DIContainer.usecase)
+    HomeViewController(service: DIContainer.service)
 }

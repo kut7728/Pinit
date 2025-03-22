@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 
 final class LocationManager: NSObject {
-    let manager = CLLocationManager()
+    private let manager = CLLocationManager()
     
     override init() {
         super.init()
@@ -18,6 +18,24 @@ final class LocationManager: NSObject {
         
         // 배터리에 맞게 권장되는 최적의 정확도
         manager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    func getCurrentUserLocation() -> CLLocationCoordinate2D? {
+        guard manager.authorizationStatus != .denied || manager.authorizationStatus != .restricted else { return nil }
+        guard let location = manager.location?.coordinate else { return nil }
+        return location
+    }
+    
+    func requestAuthorizationIfNeeded() {
+        let status = manager.authorizationStatus
+        switch status {
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            print("Access to location denied or restricted.")
+        default:
+            break
+        }
     }
 }
 
@@ -38,7 +56,7 @@ extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        print(location.coordinate)
+//        print(location.coordinate)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
