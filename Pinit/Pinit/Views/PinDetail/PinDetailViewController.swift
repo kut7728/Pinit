@@ -180,8 +180,7 @@ extension PinDetailViewController {
         
         let editAction = UIAlertAction(title: "수정", style: .default) { _ in
             print("수정")
-            let vc = PinEditViewController()
-            vc.pinmode = .edit(PinEntity: self.pinEntity)
+            let vc = PinEditViewController(pinMode: .edit(PinEntity: self.pinEntity))
             vc.isAdded = { pin in
                 self.useCase.updatePin(pin: pin)
                 self.updatePinNoti!(self.pinEntity, pin)

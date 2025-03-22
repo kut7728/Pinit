@@ -233,9 +233,8 @@ extension HomeViewController: PinCollectionViewAdapterDelegate {
 // MARK: 화면이동
 extension HomeViewController {
     private func presentAddPinViewController(lat: Double, lon: Double) {
-        let vc = PinEditViewController()
+        let vc = PinEditViewController(pinMode: .create(latitude: lat, longitude: lon))
         vc.modalPresentationStyle = .fullScreen
-        vc.pinmode = .create(latitude: lat, longitude: lon)
         vc.isAdded = { pin in
             let newAnnotation = CustomAnnotation(pinData: pin)
             self.usecase.addPin(pin: pin)

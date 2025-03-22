@@ -17,18 +17,11 @@ enum PinMode {
 
 
 final class PinEditViewController: UIViewController, UITextViewDelegate {
-    var pinEntity: PinEntity?
-    var pinmode: PinMode?
+    private var pinEntity: PinEntity
     var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     private var pickedImage: UIImage?
     
-    public lazy var mapView: MKMapView = {
-        var map = MKMapView()
-        map.showsUserLocation = false
-        map.isUserInteractionEnabled = false
-        
-        return map
-    }()
+    private var mapView: MKMapView
     
     private let saveButton : UIButton = {
         let button = UIButton()
@@ -130,52 +123,53 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         view.backgroundColor = .white
         SetUI()
         SetMap()
-        viewmode()
         setUpKeyboard()
     }
     
-    
-    func viewmode(){
-        switch pinmode {
+    init(pinMode: PinMode) {
+        switch pinMode {
         case let .create(latitude, longitude):
             print("\(latitude), \(longitude)")
-            setupMapView(lat: latitude, lon: longitude)
-            pinEntity = PinEntity(pin_id: UUID(),
-                                  title: "",
-                                  latitude: latitude, longitude: longitude,
-                                  address: "",
-                                  date: Date(),
-                                  weather: "",
-                                  description: "",
-                                  mediaPath: nil)
+            self.pinEntity = PinEntity(
+                pin_id: UUID(),
+                title: "",
+                latitude: latitude, longitude: longitude,
+                address: "",
+                date: Date(),
+                weather: "",
+                description: "",
+                mediaPath: nil
+            )
             
         case let .edit(PinEntity):
             print(PinEntity)
             self.pinEntity = PinEntity
             print("편집 모드입니다")
-            setupMapView(lat: PinEntity.latitude, lon: PinEntity.longitude)
-            dateLabel.text = pinEntity?.date.koreanDateString()
-            titleTextField.text = pinEntity?.title
-            contentTextView.text = pinEntity?.description
-        case .none:
-            print("?")
+            dateLabel.text = pinEntity.date.koreanDateString()
+            titleTextField.text = pinEntity.title
+            contentTextView.text = pinEntity.description
         }
-    }
-    
-    private func setupMapView(lat: Double, lon: Double) {
-        mapView.setRegion(
-            MKCoordinateRegion(
-                center: CLLocationCoordinate2D(
-                    latitude: lat,
-                    longitude: lon),
-                span: MKCoordinateSpan(
-                    latitudeDelta: 0.003,
-                    longitudeDelta: 0.003)),
-            animated: true)
+        let map = MKMapView()
+        let lat = pinEntity.latitude
+        let long = pinEntity.longitude
+        let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+        
+        map.setRegion(region, animated: true)
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon) // San Francisco, CA
-        mapView.addAnnotation(annotation)
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
+        map.addAnnotation(annotation)
+        map.showsUserLocation = false
+        map.isUserInteractionEnabled = false
+        
+        mapView = map
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - SetUI
@@ -259,12 +253,12 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             return
         }
         
-        pinEntity?.title = titleTextField.text ?? ""
-        pinEntity?.description = contentTextView.text ?? ""
+        pinEntity.title = titleTextField.text ?? ""
+        pinEntity.description = contentTextView.text ?? ""
         
-        pinEntity?.mediaPath = pickedImage
+        pinEntity.mediaPath = pickedImage
         
-        isAdded?(pinEntity!)
+        isAdded?(pinEntity)
         dismiss(animated: true)
     }
     
@@ -374,6 +368,6 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
 
 #Preview{
     
-    PinEditViewController()
+    PinEditViewController(pinMode: .create(latitude: 128.125312, longitude: 37.4864321))
     
 }
