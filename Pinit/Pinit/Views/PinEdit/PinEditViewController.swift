@@ -17,11 +17,11 @@ enum PinMode {
 
 
 final class PinEditViewController: UIViewController, UITextViewDelegate {
-    private var pinEntity: PinEntity
+    private var pinEntity: PinEntity!
     var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     private var pickedImage: UIImage?
     
-    private var mapView: MKMapView
+    private var mapView: MKMapView!
     
     private let saveButton : UIButton = {
         let button = UIButton()
@@ -41,6 +41,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         textview.textAlignment = .center
         textview.textColor = UIColor.black
         textview.font = UIFont.systemFont(ofSize: 16)
+        textview.autocorrectionType = .no
+        textview.autocapitalizationType = .none
+        textview.spellCheckingType = .no
         return textview
     }()
     
@@ -58,6 +61,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             .value
         textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         textfield.leftViewMode = .always
+        textfield.autocorrectionType = .no
+        textfield.autocapitalizationType = .none
+        textfield.spellCheckingType = .no
         return textfield
     }()
     
@@ -117,6 +123,16 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         return toolbar
     }()
     
+    private func setImageToCameraButton(image: UIImage?) {
+        guard let image else { return }
+        self.pickedImage = image
+        cameraButton.backgroundColor = .clear
+        cameraButton.setImage(nil, for: .normal)
+        cameraButton.clipsToBounds = true
+        cameraButton.layer.cornerRadius = 75
+        cameraButton.setBackgroundImage(image, for: .normal)
+    }
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,9 +143,10 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     }
     
     init(pinMode: PinMode) {
+        super.init(nibName: nil, bundle: nil)
+
         switch pinMode {
         case let .create(latitude, longitude):
-            print("\(latitude), \(longitude)")
             self.pinEntity = PinEntity(
                 pin_id: UUID(),
                 title: "",
@@ -142,13 +159,14 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             )
             
         case let .edit(PinEntity):
-            print(PinEntity)
             self.pinEntity = PinEntity
-            print("편집 모드입니다")
             dateLabel.text = pinEntity.date.koreanDateString()
             titleTextField.text = pinEntity.title
             contentTextView.text = pinEntity.description
+            self.setImageToCameraButton(image: pinEntity.mediaPath)
         }
+        
+        
         let map = MKMapView()
         let lat = pinEntity.latitude
         let long = pinEntity.longitude
@@ -165,7 +183,6 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         mapView = map
         
-        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -198,8 +215,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         weatherImage.snp.makeConstraints{
             $0.top.equalTo(mapView.snp.bottom).offset(10)
-            $0.leading.equalTo(view.snp.centerX).offset(100)
-            $0.height.width.equalTo(30)
+//            $0.leading.equalTo(view.snp.centerX).offset(100)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.height.width.equalTo(35)
         }
         
         dateLabel.snp.makeConstraints{
@@ -255,7 +273,6 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         pinEntity.title = titleTextField.text ?? ""
         pinEntity.description = contentTextView.text ?? ""
-        
         pinEntity.mediaPath = pickedImage
         
         isAdded?(pinEntity)
@@ -314,7 +331,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     //MARK: 키보드가 나타낼때 화면을 -300
     @objc func keyboardWillShow(notification: NSNotification) {
-        view.frame.origin.y = -300
+        view.frame.origin.y = -250
     }
     
     //MARK: 키보드가 사라질 때 동작
@@ -344,19 +361,7 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-            self.pickedImage = selectedImage
-            cameraButton.backgroundColor = .clear
-            cameraButton.setImage(nil, for: .normal)
-            //
-            //            // 이미지를 버튼 크기에 맞게 조정하여 설정
-            //            let resizedImage = resizeImage(image: pickedImage, targetSize: CGSize(width: 150, height: 150))
-            
-            cameraButton.clipsToBounds = true
-            cameraButton.layer.cornerRadius = 75
-            cameraButton.setBackgroundImage(pickedImage, for: .normal)
-            
-            // 선택한 이미지를 pinEntity에 저장 (나중에 경로로 변환하는 로직 추가 필요)
-            // pinEntity?.mediaPath = ...
+            setImageToCameraButton(image: selectedImage)
         }
         picker.dismiss(animated: true, completion: nil)
     }

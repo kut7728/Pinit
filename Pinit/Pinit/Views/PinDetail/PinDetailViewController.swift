@@ -48,10 +48,21 @@ final class PinDetailViewController: UIViewController {
         setupReviewTable()
         addComponents()
         loadReviewData()
+        setUpKeyboard()
         
         reviewPanelContainer.commitButton.addTarget(self, action: #selector(onCommitButtonTapped), for: .touchUpInside)
     }
     
+    private func setUpKeyboard() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
     
     private func loadReviewData() {
         self.useCase.fetchAllReviewsByPinID(pinID: self.pinEntity.pin_id) {[weak self] items in
@@ -67,7 +78,7 @@ final class PinDetailViewController: UIViewController {
         let lat = pinEntity.latitude
         let long = pinEntity.longitude
         
-        let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
+        let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         
         map.setRegion(region, animated: true)
@@ -75,7 +86,7 @@ final class PinDetailViewController: UIViewController {
         map.isUserInteractionEnabled = false
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
         annotation.title = pinEntity.title
         map.addAnnotation(annotation)
         
@@ -175,6 +186,20 @@ extension PinDetailViewController {
         self.pinTableView.reloadData()
     }
     
+    @objc func doneBtnClicked() {
+        view.endEditing(true)
+    }
+    
+    //MARK: 키보드가 나타낼때 화면을 -300
+    @objc func keyboardWillShow(notification: NSNotification) {
+        view.frame.origin.y = -200
+    }
+    
+    //MARK: 키보드가 사라질 때 동작
+    @objc func keyboardWillHide(notification: NSNotification) {
+        view.frame.origin.y = 0
+    }
+    
     @objc func pinMenuButtonTapped() {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
@@ -185,7 +210,7 @@ extension PinDetailViewController {
                 self.useCase.updatePin(pin: pin)
                 self.updatePinNoti!(self.pinEntity, pin)
                 self.pinEntity = pin
-                #warning("업데이트 후 헤더 업데이트 해줘야함ㅇㅇ")
+                self.pinTableView.reloadData()
             }
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
@@ -215,6 +240,33 @@ extension PinDetailViewController {
 
 // MARK: - Delegate
 extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    // viewForHeaderInSection
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = PinDetailHeader(entity: pinEntity)
+        if !isPin {
+            header.pinMenuButton.isHidden = true
+            header.reviewSectionTitle.text = "방명록"
+        }
+        header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
+        return header
+    }
+    
+    
+    
+    // estimatedHeightForHeaderInSection
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 100
+    }
+    
+    // heightForHeaderInSection
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
     
     // didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -252,32 +304,7 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         
     }
     
-    // viewForHeaderInSection
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = PinDetailHeader(entity: pinEntity)
-        if !isPin {
-            header.pinMenuButton.isHidden = true
-            header.reviewSectionTitle.text = "방명록"
-        }
-        header.pinMenuButton.addTarget(self, action: #selector(pinMenuButtonTapped), for: .touchUpInside)
-        return header
-    }
     
-    
-    
-    // estimatedHeightForHeaderInSection
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return 100
-    }
-    
-    // heightForHeaderInSection
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
 }
 
 
