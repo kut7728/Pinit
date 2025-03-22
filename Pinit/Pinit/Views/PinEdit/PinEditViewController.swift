@@ -329,9 +329,11 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         self.dismiss(animated: true)
     }
     
-    //MARK: 키보드가 나타낼때 화면을 -300
     @objc func keyboardWillShow(notification: NSNotification) {
-        view.frame.origin.y = -250
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            let keyboardHeight = keyboardFrame.height
+            self.view.frame.origin.y = -keyboardHeight
+        }
     }
     
     //MARK: 키보드가 사라질 때 동작
