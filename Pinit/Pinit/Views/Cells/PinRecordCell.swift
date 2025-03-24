@@ -21,8 +21,9 @@ final class PinRecordCell: UICollectionViewCell {
     }()
     public lazy var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .lightGray
+        imageView.clipsToBounds = true
         return imageView
     }()
     private lazy var pinTitleLabel: UILabel = {
@@ -98,19 +99,19 @@ final class PinRecordCell: UICollectionViewCell {
 extension PinRecordCell {
     func captureMapSnapshotWithPin(center: CLLocationCoordinate2D, imageSize: CGSize, completion: @escaping (UIImage?) -> Void) {
         let options = MKMapSnapshotter.Options()
-            options.region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
-            options.size = imageSize
-            options.mapType = .standard
-            
-            let snapshotter = MKMapSnapshotter(options: options)
-            snapshotter.start { snapshot, error in
-                guard let snapshot = snapshot, error == nil else {
-                    print("스냅샷 생성 실패")
-                    completion(nil)
-                    return
-                }
-                
-                completion(snapshot.image)
+        options.region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
+        options.size = imageSize
+        options.mapType = .standard
+        
+        let snapshotter = MKMapSnapshotter(options: options)
+        snapshotter.start { snapshot, error in
+            guard let snapshot = snapshot, error == nil else {
+                print("스냅샷 생성 실패")
+                completion(nil)
+                return
             }
+            
+            completion(snapshot.image)
+        }
     }
 }

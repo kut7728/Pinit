@@ -21,12 +21,12 @@ class HomeViewController: UIViewController {
     private var adapter: PinCollectionViewAdapter?
     private let mapView = MKMapView(frame: .zero)
     private let bottomSheet = CustomBottomSheet()
+    
     private lazy var addPinButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "pencil.line")
         button.setImage(UIImage(systemName: "pencil.line"), for: .normal)
-        button.backgroundColor = .secondarySystemBackground
-        button.tintColor = DesignSystemColor.Purple.value
+        button.backgroundColor = DesignSystemColor.Lavender.value
+        button.tintColor = .white
         button.layer.cornerRadius = circleButtonSize / 2
         button.clipsToBounds = true
         return button
@@ -34,8 +34,8 @@ class HomeViewController: UIViewController {
     private lazy var currentLocationButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "dot.scope"), for: .normal)
-        button.backgroundColor = .secondarySystemBackground
-        button.tintColor = DesignSystemColor.Purple.value
+        button.backgroundColor = DesignSystemColor.Lavender.value
+        button.tintColor = .white
         button.layer.cornerRadius = circleButtonSize / 2
         button.clipsToBounds = true
         return button
@@ -67,7 +67,8 @@ class HomeViewController: UIViewController {
         mapView.delegate = self
         
         mapView.showsUserLocation = true
-        mapView.setCameraZoomRange(.init(minCenterCoordinateDistance: 333, maxCenterCoordinateDistance: 5000), animated: true)
+#warning("setCameraZoomRange 주석")
+//        mapView.setCameraZoomRange(.init(minCenterCoordinateDistance: 333, maxCenterCoordinateDistance: 5000), animated: true)
         // Location 불러오기 전 기본값 설정
         var currentLocation = CLLocationCoordinate2D(
             latitude: 37.277252,
@@ -298,7 +299,9 @@ extension HomeViewController {
                 bottomSheetHeight = large
                 bottomSheet.collectionView.isUserInteractionEnabled = true
             }
-            else if newHeight > (view.frame.height * 0.3) {
+
+            else if newHeight > (view.frame.height * 0.25) {
+#warning("0.3 -> 0.25")
                 bottomSheetHeight = medium
                 bottomSheet.collectionView.isUserInteractionEnabled = true
             }

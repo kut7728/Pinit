@@ -43,12 +43,12 @@ final class SettingViewController: UIViewController {
         
         //버튼 레이아웃 설정
         resetButton.setTitle("전체 기록 삭제", for: .normal)
-        resetButton.titleLabel?.font = DesignSystemFont.Pretendard_Medium18.value
+        resetButton.titleLabel?.font = DesignSystemFont.Pretendard_Bold14.value
         resetButton.addTarget(self, action: #selector(resetAlert), for: .touchUpInside)
         
         resetButton.setTitleColor(.white, for: .normal)
         
-        resetButton.backgroundColor = .red
+        resetButton.backgroundColor = DesignSystemColor.Purple.value
         resetButton.layer.cornerRadius = 10
         
         resetButton.layer.masksToBounds = false

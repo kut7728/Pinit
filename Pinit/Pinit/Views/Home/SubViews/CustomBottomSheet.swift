@@ -13,7 +13,7 @@ final class CustomBottomSheet: UIView {
     let grabber: UIView = {
         let grabber = UIView()
         grabber.layer.cornerRadius = 4
-        grabber.backgroundColor = DesignSystemColor.Purple.value
+        grabber.backgroundColor = DesignSystemColor.Lavender.value
         grabber.layer.borderColor = UIColor.white.cgColor
         grabber.layer.borderWidth = 1
         grabber.clipsToBounds = true
@@ -33,6 +33,7 @@ final class CustomBottomSheet: UIView {
     func setupLayout() {
         let cornerRadius = 20.0
         self.backgroundColor = .secondarySystemBackground
+//        self.backgroundColor = DesignSystemColor.Lavender1.value
         self.layer.cornerRadius = cornerRadius
         // cornerRadius 상단 좌,우측만 적용하기
         self.layer.maskedCorners = .init(arrayLiteral: [.layerMaxXMinYCorner, .layerMinXMinYCorner])

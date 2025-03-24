@@ -14,9 +14,7 @@ enum PinMode {
     case edit(PinEntity : PinEntity)
 }
 
-
-
-final class PinEditViewController: UIViewController, UITextViewDelegate {
+final class PinEditViewController: UIViewController{
     private var pinEntity: PinEntity!
     var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     private var pickedImage: UIImage?
@@ -25,40 +23,46 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     private let saveButton : UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor(red: 28/255, green: 70/255, blue: 245/255, alpha: 1) // #FF8C42 (딥 오렌지)
+        button.backgroundColor = DesignSystemColor.Purple.value // #FF8C42 (딥 오렌지)
         button.setTitle("저장", for: .normal)
+        button.titleLabel?.font = DesignSystemFont.Pretendard_Bold14.value
         button.layer.cornerRadius = 10
         return button
     }()
     
-    let contentTextView : UITextView = {
-        let textview = UITextView()
-        textview.backgroundColor = .white
-        textview.layer.borderColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1).cgColor // #A9A9A9 (다크 라이트 그레이)
-        textview.layer.borderWidth = 2 // 테두리 두께 설정
-        textview.layer.cornerRadius = 5
-        textview.text = "남기고자 하는 메모가 있다면 작성해주세요."
-        textview.textAlignment = .center
-        textview.textColor = UIColor.black
-        textview.font = UIFont.systemFont(ofSize: 16)
-        textview.autocorrectionType = .no
-        textview.autocapitalizationType = .none
-        textview.spellCheckingType = .no
-        return textview
+    let contentTextView: UITextView = {
+        let textView = UITextView()
+        textView.backgroundColor = .white
+        textView.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        textView.layer.borderWidth = 2
+        textView.layer.cornerRadius = 5
+        textView.text = "남기고자 하는 메모가 있다면 작성해주세요."
+        textView.tintColor = DesignSystemColor.Purple.value
+        textView.textAlignment = .left
+        textView.textColor = UIColor.lightGray
+        textView.font = DesignSystemFont.Pretendard_Bold14.value
+        textView.autocorrectionType = .no
+        textView.autocapitalizationType = .none
+        textView.spellCheckingType = .no
+        
+        // Add padding here
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        return textView
     }()
     
     private let titleTextField : UITextField = {
         let textfield = UITextField()
-        textfield.layer.borderColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1).cgColor
+        textfield.layer.borderColor =  DesignSystemColor.Lavender10.value.cgColor
+        textfield.tintColor = DesignSystemColor.Purple.value
         textfield.layer.borderWidth = 2
         textfield.textColor = .black
         textfield.layer.cornerRadius = 5
         textfield.attributedPlaceholder = NSAttributedString(
-            string: "제목 작성",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
+            string: "제목을 작성해주세요.",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
-        textfield.font = DesignSystemFont.Pretendard_Bold14
-            .value
+        textfield.font = DesignSystemFont.Pretendard_Bold14.value
         textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         textfield.leftViewMode = .always
         textfield.autocorrectionType = .no
@@ -72,7 +76,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         //MARK: 아래 카메라 버튼
         button.backgroundColor = .white
         button.layer.cornerRadius = 75
-        button.layer.shadowColor = UIColor.black.cgColor // 색깔
+        button.layer.shadowColor = DesignSystemColor.Purple.value.cgColor // 색깔
         button.layer.masksToBounds = false  // 내부에 속한 요소들이 UIView 밖을 벗어날 때, 잘라낼 것인지. 그림자는 밖에 그려지는 것이므로 false 로 설정
         button.layer.shadowOffset = CGSize(width: 0, height: 4) // 위치조정
         button.layer.shadowRadius = 10 // 반경
@@ -83,7 +87,8 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
             let largeImage = cameraImage.withConfiguration(largeConfig)
             button.setImage(largeImage, for: .normal)
         }
-        button.tintColor = UIColor(red: 96/255, green: 99/255, blue: 104/255, alpha: 1)
+        //        button.tintColor = UIColor(red: 96/255, green: 99/255, blue: 104/255, alpha: 1)
+        button.tintColor = DesignSystemColor.Purple.value
         button.imageView?.contentMode = .scaleAspectFit
         
         return button
@@ -98,6 +103,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     private let dateLabel : UILabel = {
         let label = UILabel()
         label.text = Date().koreanDateString()
+        label.font = DesignSystemFont.Pretendard_Bold18.value
         return label
     }()
     
@@ -144,7 +150,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     
     init(pinMode: PinMode) {
         super.init(nibName: nil, bundle: nil)
-
+        
         switch pinMode {
         case let .create(latitude, longitude):
             self.pinEntity = PinEntity(
@@ -172,6 +178,9 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         let long = pinEntity.longitude
         let center = CLLocationCoordinate2D(latitude: lat, longitude: long) // San Francisco, CA
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+        map.layer.cornerRadius = 10
+        map.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        map.layer.borderWidth = 2
         
         map.setRegion(region, animated: true)
         
@@ -194,6 +203,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         titleTextField.inputAccessoryView = keyboardToolBar
         contentTextView.inputAccessoryView = keyboardToolBar
         contentTextView.delegate = self
+        titleTextField.delegate = self
         
         closeButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
@@ -203,8 +213,8 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         mapView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.width.equalToSuperview()
-            $0.height.equalToSuperview().dividedBy(4)
+            $0.leading.trailing.equalToSuperview().inset(3)
+            $0.height.equalToSuperview().multipliedBy(0.25)
         }
         
         closeButton.snp.makeConstraints {
@@ -215,7 +225,7 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
         
         weatherImage.snp.makeConstraints{
             $0.top.equalTo(mapView.snp.bottom).offset(10)
-//            $0.leading.equalTo(view.snp.centerX).offset(100)
+            //            $0.leading.equalTo(view.snp.centerX).offset(100)
             $0.trailing.equalToSuperview().inset(20)
             $0.height.width.equalTo(35)
         }
@@ -340,22 +350,6 @@ final class PinEditViewController: UIViewController, UITextViewDelegate {
     @objc func keyboardWillHide(notification: NSNotification) {
         view.frame.origin.y = 0
     }
-    
-    //MARK: 사용자가 텍스트뷰에 입력을 시작할 때 기본 안내 문구
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == "남기고자 하는 메모가 있다면 작성해주세요." {
-            textView.text = ""
-            textView.textColor = .black
-        }
-    }
-    
-    //MARK: 텍스트뷰가 비어있을 때 안내 메시지를 다시 표시
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = "남기고자 하는 메모가 있다면 작성해주세요."
-            textView.textColor = UIColor.lightGray
-        }
-    }
 }
 
 //MARK: - PinEditViewController 내에서 사진 선택 기능을 쉽게 사용
@@ -370,6 +364,46 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension PinEditViewController: UITextFieldDelegate, UITextViewDelegate{
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text == "제목을 작성해주세요." {
+            textField.text = ""
+        }
+        textField.layer.borderColor = DesignSystemColor.Purple.value.cgColor
+        textField.layer.borderWidth = 2.0
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        textField.layer.borderWidth = 2.0
+    }
+    
+    
+    //MARK: 사용자가 텍스트뷰에 입력을 시작할 때 기본 안내 문구
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "남기고자 하는 메모가 있다면 작성해주세요." {
+            textView.text = ""
+            textView.textColor = .black
+        }
+        textView.layer.borderColor = DesignSystemColor.Purple.value.cgColor
+        textView.layer.borderWidth = 2.0
+    }
+    
+    // MARK: 텍스트뷰가 비어있을 때 안내 메시지를 다시 표시
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = "남기고자 하는 메모가 있다면 작성해주세요."
+            textView.textColor = .lightGray
+        }
+        
+        DispatchQueue.main.async {
+            textView.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+            textView.layer.borderWidth = 2.0
+        }
     }
 }
 
