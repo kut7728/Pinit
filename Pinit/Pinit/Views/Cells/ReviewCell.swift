@@ -10,17 +10,6 @@ import SnapKit
 
 class ReviewCell: UITableViewCell {
     
-    // MARK: - init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        addComponents()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: - 컴포넌트 설정
     public lazy var reviewCellPanel: UIView = {
         let view = UIView()
@@ -31,7 +20,7 @@ class ReviewCell: UITableViewCell {
     public lazy var reviewDate: UILabel = {
         let label = UILabel()
         label.text = "25년 3월 3일"
-        label.font = DesignSystemFont.Pretendard_SemiBold16.value
+        label.font = DesignSystemFont.Pretendard_Bold16.value
         return label
     }()
     
@@ -49,6 +38,34 @@ class ReviewCell: UITableViewCell {
         return button
     }()
     
+    // MARK: - init
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addComponents()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 4, left: 0, bottom: 2, right: 0))
+    }
+    
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        if selected {
+            contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
+            contentView.layer.shadowColor = DesignSystemColor.Purple.value.cgColor
+        }else{
+            contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
+            contentView.layer.shadowColor = DesignSystemColor.Purple.value.cgColor
+        }
+    }
     
     
     // MARK: - 데이터 설정 메서드
@@ -56,24 +73,19 @@ class ReviewCell: UITableViewCell {
         reviewDate.text = date
         reviewText.text = desc
     }
-    
-    
-    
-    
     // MARK: - 레이아웃
     private func addComponents() {
+
         self.addSubviews(reviewCellPanel)
         reviewCellPanel.addSubviews(reviewDate, reviewText, reviewMenuButton)
         
         
-        reviewCellPanel.snp.makeConstraints {
-            $0.width.equalToSuperview()
-            $0.height.equalTo(60)
-            $0.centerY.equalToSuperview()
+        reviewCellPanel.snp.makeConstraints{
+            $0.edges.equalToSuperview()
         }
         
         reviewDate.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().inset(10)
         }
         
@@ -82,10 +94,10 @@ class ReviewCell: UITableViewCell {
             $0.leading.equalToSuperview().inset(10)
         }
         
-        reviewMenuButton.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(10)
-        }
+//        reviewMenuButton.snp.makeConstraints {
+//            $0.top.equalToSuperview()
+//            $0.trailing.equalToSuperview().inset(10)
+//        }
         
     }
     

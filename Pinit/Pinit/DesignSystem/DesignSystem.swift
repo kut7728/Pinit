@@ -9,16 +9,25 @@ import UIKit
 
 enum DesignSystemColor {
     case Purple
+    case Purple50
     case Lavender
+    case Lavender10
+    case Lavender1
 }
 extension DesignSystemColor {
     var value: UIColor {
         switch self {
         case .Purple:
             UIColor(hex: "#561CE2")
+        case .Purple50:
+            UIColor(hex: "#8562D5")
         case .Lavender:
             UIColor(hex: "#6450E2")
-        
+        case .Lavender10:
+            UIColor(hex: "#C2BFD2")
+        case .Lavender1:
+            UIColor(hex: "#CECCCF")
+            
         }
     }
 }

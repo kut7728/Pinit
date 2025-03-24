@@ -28,7 +28,6 @@ class PinDetailHeader: UIView {
     // 핀 상세 뷰 컨테이너
     private lazy var pinDetailPanel: UIView = {
         let view = UIView()
-
         view.backgroundColor = .white
         return view
     }()
@@ -61,7 +60,7 @@ class PinDetailHeader: UIView {
     public lazy var pinMenuButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = DesignSystemColor.Lavender.value
         return button
     }()
     
@@ -69,9 +68,10 @@ class PinDetailHeader: UIView {
     private lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = entity.mediaPath
-        imageView.backgroundColor = DesignSystemColor.Lavender.value
-//        imageView.layer.borderWidth = 4
-//        imageView.layer.borderColor = DesignSystemColor.Purple.value.cgColor
+        imageView.backgroundColor = DesignSystemColor.Lavender.value.withAlphaComponent(0.7)
+        imageView.layer.cornerRadius = 8
+        imageView.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        imageView.layer.borderWidth = 2
         imageView.layer.cornerRadius = 8
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -129,13 +129,13 @@ class PinDetailHeader: UIView {
         }
         
         pinMenuButton.snp.makeConstraints {
-            $0.top.equalTo(pinTitle)
-            $0.trailing.equalToSuperview().inset(10)
+            $0.centerY.equalTo(pinTitle)
+            $0.trailing.equalToSuperview().inset(20)
         }
         
         pinDate.snp.makeConstraints {
-            $0.top.equalTo(pinTitle.snp.bottom)
-            $0.leading.equalToSuperview().inset(10)
+            $0.top.equalTo(pinTitle.snp.bottom).offset(5)
+            $0.leading.equalToSuperview().inset(20)
         }
         
         pinImageView.snp.makeConstraints {
@@ -154,7 +154,7 @@ class PinDetailHeader: UIView {
         
         pinDescription.snp.makeConstraints {
             $0.top.equalTo(pinImageView.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(10)
             
             if pinDescription.text == nil || pinDescription.text == "" {
                 $0.height.equalTo(0)
@@ -169,9 +169,6 @@ class PinDetailHeader: UIView {
     }
 }
 
-#Preview {
-    PinDetailHeader(entity: PinEntity.sampleData[0])
-}
 
 #Preview {
     PinDetailViewController(PinEntity.producerData[1], isPin: true)

@@ -43,7 +43,7 @@ final class PinDetailViewController: UIViewController {
     // MARK: - VIewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .secondarySystemBackground
         
         setupReviewTable()
         addComponents()
@@ -84,6 +84,9 @@ final class PinDetailViewController: UIViewController {
         map.setRegion(region, animated: true)
         map.showsUserLocation = false
         map.isUserInteractionEnabled = false
+        map.layer.cornerRadius = 10
+        map.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        map.layer.borderWidth = 2
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -99,20 +102,28 @@ final class PinDetailViewController: UIViewController {
         let largeImage = UIImage(systemName: "xmark.circle.fill")?.withConfiguration(largeConfig)
         let button = UIButton()
         button.setImage(largeImage, for: .normal)
-        button.tintColor = .black
+        button.tintColor = DesignSystemColor.Lavender.value
         button.alpha = 0.7 // 투명도 50% 설정
         button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
-
+        
         return button
     }()
     
     // 리뷰 테이블뷰 설정
     private func setupReviewTable() {
-//        pinTableView = UITableView(frame: .zero, style: .grouped)
+        //        pinTableView = UITableView(frame: .zero, style: .grouped)
+        
+        pinTableView.layer.cornerRadius = 10
+        pinTableView.layer.shadowColor = DesignSystemColor.Purple.value.cgColor
+
+        pinTableView.backgroundColor = .clear
+        pinTableView.separatorStyle = .none
+        
         pinTableView.estimatedRowHeight = UITableView.automaticDimension
         pinTableView.dataSource = self
         pinTableView.delegate = self
         pinTableView.register(ReviewCell.self, forCellReuseIdentifier: "CustomCell")
+        
         
     }
     
@@ -120,6 +131,7 @@ final class PinDetailViewController: UIViewController {
     // 리뷰 작성 패널
     public lazy var reviewPanelContainer: NewPinReviewPanel = {
         let view = NewPinReviewPanel()
+        view.reviewText.delegate = self
         return view
     }()
     
@@ -134,7 +146,7 @@ final class PinDetailViewController: UIViewController {
         // 지도 constraint
         mapView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)  // 기기의 안전구역부터 시작하도록
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(3)
             $0.height.equalToSuperview().multipliedBy(0.25)  // 기기의 높이 *0.25로 높이 설정
         }
         
@@ -154,8 +166,8 @@ final class PinDetailViewController: UIViewController {
         
         
         pinTableView.snp.makeConstraints {
-            $0.width.equalToSuperview()
-            $0.top.equalTo(mapView.snp.bottom)
+            $0.leading.trailing.equalTo(mapView)
+            $0.top.equalTo(mapView.snp.bottom).offset(4)
             $0.bottom.equalTo(reviewPanelContainer.snp.top)
         }
     }
@@ -189,7 +201,7 @@ extension PinDetailViewController {
     @objc func doneBtnClicked() {
         view.endEditing(true)
     }
-  
+    
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
@@ -301,6 +313,8 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         
         // 셀 재사용을 위한 찌꺼기 제거 절차
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        cell.backgroundColor = .clear
+        cell.layer.cornerRadius = 10
         
         
         cell.configure(date: data.date.koreanDateString(), desc: data.description)
@@ -311,7 +325,19 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
+extension PinDetailViewController : UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = DesignSystemColor.Purple.value.cgColor
+        textField.layer.borderWidth = 2.0
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.layer.borderWidth = 1.0
+    }
+}
 
 #Preview {
-    PinDetailViewController(PinEntity.sampleData[1], isPin: true)
+    PinDetailViewController(PinEntity.producerData[0], isPin: true)
 }

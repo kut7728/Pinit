@@ -105,12 +105,13 @@ final class PastPinViewController: UIViewController {
         PinCalendar.appearance.headerTitleFont = DesignSystemFont.Pretendard_Bold20.value
         PinCalendar.appearance.headerTitleColor = .black
         //요일 폰트
-        PinCalendar.appearance.weekdayFont = DesignSystemFont.Pretendard_Bold12.value
+        PinCalendar.appearance.weekdayFont = DesignSystemFont.Pretendard_Medium16.value
         PinCalendar.appearance.weekdayTextColor = .black
         //날짜 폰트
-        PinCalendar.appearance.titleFont = DesignSystemFont.Pretendard_Medium12.value
+        PinCalendar.appearance.titleFont = DesignSystemFont.Pretendard_Medium14.value
         //오늘
-        PinCalendar.appearance.todayColor = .systemGray3
+        PinCalendar.appearance.todayColor = DesignSystemColor.Purple50.value
+        PinCalendar.appearance.todaySelectionColor = DesignSystemColor.Purple50.value
         //오늘 아님
         PinCalendar.appearance.selectionColor = .systemBlue
     }
@@ -128,10 +129,10 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
         
     }
     
-    //해당 pinEntity안에 데이터의 유무에 따라 해당 날짜에 dot이 노출댑니당>.<
-    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        return pinData.contains { Calendar.current.isDate($0.date, inSameDayAs: date) } ? 1 : 0
-    }
+//    //해당 pinEntity안에 데이터의 유무에 따라 해당 날짜에 dot이 노출댑니당>.<
+//    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+//        return pinData.contains { Calendar.current.isDate($0.date, inSameDayAs: date) } ? 1 : 0
+//    }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         let day = Calendar.current.component(.weekday, from: date) - 1
@@ -139,7 +140,7 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
         if Calendar.current.shortWeekdaySymbols[day] == "Sun" || Calendar.current.shortWeekdaySymbols[day] == "일" {
             return .systemRed //일요일 색
         } else if Calendar.current.shortWeekdaySymbols[day] == "Sat" || Calendar.current.shortWeekdaySymbols[day] == "토" {
-            return .systemBlue //토요일 색
+            return DesignSystemColor.Purple.value //토요일 색
         } else {
             return .label //기본색
         }
