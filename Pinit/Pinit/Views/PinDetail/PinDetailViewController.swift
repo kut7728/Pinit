@@ -109,21 +109,21 @@ final class PinDetailViewController: UIViewController {
         return button
     }()
     
+    
     // 리뷰 테이블뷰 설정
     private func setupReviewTable() {
         //        pinTableView = UITableView(frame: .zero, style: .grouped)
         
         pinTableView.layer.cornerRadius = 10
         pinTableView.layer.shadowColor = DesignSystemColor.Purple.value.cgColor
-
+        
         pinTableView.backgroundColor = .clear
         pinTableView.separatorStyle = .none
         
         pinTableView.estimatedRowHeight = UITableView.automaticDimension
         pinTableView.dataSource = self
         pinTableView.delegate = self
-        pinTableView.register(ReviewCell.self, forCellReuseIdentifier: "CustomCell")
-        
+        pinTableView.register(ReviewCell.self, forCellReuseIdentifier: "ReviewCell")
         
     }
     
@@ -289,10 +289,6 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
-    
     // didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
@@ -309,6 +305,10 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [action])
     }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
     // numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return datasource.count
@@ -318,11 +318,10 @@ extension PinDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let data: ReviewEntity = datasource[indexPath.row]
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! ReviewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath) as! ReviewCell
         
         // 셀 재사용을 위한 찌꺼기 제거 절차
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        cell.backgroundColor = .clear
+        cell.backgroundColor = .white
         cell.layer.cornerRadius = 10
         
         

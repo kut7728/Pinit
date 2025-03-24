@@ -68,10 +68,10 @@ class PinDetailHeader: UIView {
     private lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = entity.mediaPath
-        imageView.backgroundColor = DesignSystemColor.Lavender.value.withAlphaComponent(0.7)
+        imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = 8
         imageView.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
-        imageView.layer.borderWidth = 2
+        imageView.layer.borderWidth = 3
         imageView.layer.cornerRadius = 8
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -86,6 +86,12 @@ class PinDetailHeader: UIView {
         textView.isScrollEnabled = false // 내부 텍스트가 길어질 때 자동으로 늘어나도록 설정
         textView.sizeToFit()
         return textView
+    }()
+    
+    private let dividerView : UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
     }()
     
     public lazy var reviewSectionTitle: UILabel = {
@@ -104,6 +110,7 @@ class PinDetailHeader: UIView {
                                    pinMenuButton,
                                    pinImageView,
                                    pinDescription,
+                                   dividerView,
                                    reviewSectionTitle)
         
         
@@ -118,7 +125,7 @@ class PinDetailHeader: UIView {
             $0.top.equalToSuperview().inset(10)
             $0.width.lessThanOrEqualTo(260)
             $0.width.greaterThanOrEqualTo(160)
-            $0.leading.equalToSuperview().inset(10)
+            $0.leading.equalToSuperview().inset(20)
         }
         
         pinWeather.snp.makeConstraints {
@@ -142,7 +149,7 @@ class PinDetailHeader: UIView {
             $0.top.equalTo(pinDate.snp.bottom).offset(20)
             
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(250)
+            $0.leading.trailing.equalToSuperview().inset(16)
             
             if pinImageView.image == nil {
                 $0.height.equalTo(0)
@@ -166,10 +173,16 @@ class PinDetailHeader: UIView {
             $0.leading.equalToSuperview().offset(10)
             
         }
+        
+        dividerView.snp.makeConstraints{
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(1)
+            $0.bottom.equalTo(reviewSectionTitle.snp.top).offset(-16)
+        }
     }
 }
 
 
 #Preview {
-    PinDetailViewController(PinEntity.producerData[1], isPin: true)
+    PinDetailViewController(PinEntity.producerData[3], isPin: true)
 }

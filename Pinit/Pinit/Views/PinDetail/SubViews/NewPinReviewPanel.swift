@@ -58,6 +58,7 @@ class NewPinReviewPanel: UIView {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .default)
         let largeImage = UIImage(systemName: "arrow.right.circle.fill")?.withConfiguration(largeConfig)
         button.setImage(largeImage, for: .normal)
+//        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         button.tintColor = DesignSystemColor.Lavender.value
         return button
     }()
@@ -91,7 +92,9 @@ class NewPinReviewPanel: UIView {
         commitButton.snp.makeConstraints {
             $0.top.equalTo(reviewDate.snp.bottom).offset(10)
             $0.trailing.equalToSuperview().offset(-10)
-            $0.centerY.equalTo(reviewText.snp.centerY)  // y축 기준 정렬
+            $0.centerY.equalTo(reviewText.snp.centerY)
+            $0.height.width.equalTo(45)
+            
             
         }
     }

@@ -28,6 +28,7 @@ class ReviewCell: UITableViewCell {
         let label = UILabel()
         label.text = "뭐 대충 이런게 인생 아이겠심까"
         label.font = DesignSystemFont.Pretendard_Medium18.value
+        label.numberOfLines = 0
         return label
     }()
     
@@ -76,7 +77,8 @@ class ReviewCell: UITableViewCell {
     // MARK: - 레이아웃
     private func addComponents() {
 
-        self.addSubviews(reviewCellPanel)
+//        self.addSubviews(reviewCellPanel)
+        self.contentView.addSubviews(reviewCellPanel)
         reviewCellPanel.addSubviews(reviewDate, reviewText, reviewMenuButton)
         
         
@@ -91,7 +93,8 @@ class ReviewCell: UITableViewCell {
         
         reviewText.snp.makeConstraints{
             $0.top.equalTo(reviewDate.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.bottom.equalToSuperview()
         }
         
 //        reviewMenuButton.snp.makeConstraints {

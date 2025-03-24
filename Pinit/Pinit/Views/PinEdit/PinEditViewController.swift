@@ -318,7 +318,7 @@ final class PinEditViewController: UIViewController{
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = sourceType
         imagePicker.delegate = self
-        //        imagePicker.allowsEditing = true
+        imagePicker.allowsEditing = true
         
         present(imagePicker, animated: true, completion: nil)
     }
