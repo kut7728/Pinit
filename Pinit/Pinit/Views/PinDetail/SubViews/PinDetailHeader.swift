@@ -83,7 +83,8 @@ class PinDetailHeader: UIView {
         let textView = UITextView()
         textView.text = entity.description
         textView.font = DesignSystemFont.Pretendard_Medium16.value
-        textView.isScrollEnabled = false // 내부 텍스트가 길어질 때 자동으로 늘어나도록 설정
+        textView.isScrollEnabled = false
+        textView.isEditable = false
         textView.sizeToFit()
         return textView
     }()

@@ -192,11 +192,15 @@ extension PinDetailViewController {
     }
     
     @objc func onCommitButtonTapped() {
+        guard let reviewText = reviewPanelContainer.reviewText.text, !reviewText.isEmpty else {
+            showToast(message: "리뷰를 입력해주세요.")
+            return }
+        
         let review: ReviewEntity = ReviewEntity(
             id: UUID(),
             pinID: pinEntity.pin_id,
             date: Date(),
-            description: reviewPanelContainer.reviewText.text ?? ""
+            description: reviewText
         )
         
         reviewPanelContainer.reviewText.text = ""
@@ -210,7 +214,6 @@ extension PinDetailViewController {
     @objc func doneBtnClicked() {
         view.endEditing(true)
     }
-    
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {

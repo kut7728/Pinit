@@ -58,7 +58,6 @@ class NewPinReviewPanel: UIView {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .default)
         let largeImage = UIImage(systemName: "arrow.right.circle.fill")?.withConfiguration(largeConfig)
         button.setImage(largeImage, for: .normal)
-//        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         button.tintColor = DesignSystemColor.Lavender.value
         return button
     }()
