@@ -30,34 +30,39 @@ final class PinEditViewController: UIViewController{
         return button
     }()
     
-    let contentTextView : UITextView = {
-        let textview = UITextView()
-        textview.backgroundColor = .white
-        textview.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor // #A9A9A9 (다크 라이트 그레이)
-        textview.layer.borderWidth = 2 // 테두리 두께 설정
-        textview.layer.cornerRadius = 5
-        textview.text = "남기고자 하는 메모가 있다면 작성해주세요."
-        textview.textAlignment = .center
-        textview.textColor = UIColor.black
-        textview.font = UIFont.systemFont(ofSize: 16)
-        textview.autocorrectionType = .no
-        textview.autocapitalizationType = .none
-        textview.spellCheckingType = .no
-        return textview
+    let contentTextView: UITextView = {
+        let textView = UITextView()
+        textView.backgroundColor = .white
+        textView.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        textView.layer.borderWidth = 2
+        textView.layer.cornerRadius = 5
+        textView.text = "남기고자 하는 메모가 있다면 작성해주세요."
+        textView.tintColor = DesignSystemColor.Purple.value
+        textView.textAlignment = .left
+        textView.textColor = UIColor.lightGray
+        textView.font = DesignSystemFont.Pretendard_Bold14.value
+        textView.autocorrectionType = .no
+        textView.autocapitalizationType = .none
+        textView.spellCheckingType = .no
+        
+        // Add padding here
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        return textView
     }()
     
     private let titleTextField : UITextField = {
         let textfield = UITextField()
         textfield.layer.borderColor =  DesignSystemColor.Lavender10.value.cgColor
+        textfield.tintColor = DesignSystemColor.Purple.value
         textfield.layer.borderWidth = 2
         textfield.textColor = .black
         textfield.layer.cornerRadius = 5
         textfield.attributedPlaceholder = NSAttributedString(
             string: "제목을 작성해주세요.",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
-        textfield.font = DesignSystemFont.Pretendard_Bold14
-            .value
+        textfield.font = DesignSystemFont.Pretendard_Bold14.value
         textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         textfield.leftViewMode = .always
         textfield.autocorrectionType = .no
@@ -365,17 +370,14 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
 extension PinEditViewController: UITextFieldDelegate, UITextViewDelegate{
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.text == "제목을 작성해주세요." {
-            textField.text = ""
-            textField.textColor = .black
-        }
+        textField.text = ""
         textField.layer.borderColor = DesignSystemColor.Purple.value.cgColor
         textField.layer.borderWidth = 2.0
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
-        textField.layer.borderWidth = 1.0
+        textField.layer.borderWidth = 2.0
     }
     
     

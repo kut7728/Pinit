@@ -95,6 +95,8 @@ final class PastPinViewController: UIViewController {
         
         PinCalendar.backgroundColor = .white
         PinCalendar.layer.cornerRadius = 10
+        PinCalendar.layer.borderColor = DesignSystemColor.Lavender10.value.cgColor
+        PinCalendar.layer.borderWidth = 2
         PinCalendar.locale = Locale.init(identifier: "ko_KR")
         PinCalendar.firstWeekday = 1
         PinCalendar.appearance.headerDateFormat = "YYYY년 MM월"
@@ -103,17 +105,18 @@ final class PastPinViewController: UIViewController {
         
         //년월 폰트
         PinCalendar.appearance.headerTitleFont = DesignSystemFont.Pretendard_Bold20.value
-        PinCalendar.appearance.headerTitleColor = .black
+        PinCalendar.appearance.headerTitleColor = DesignSystemColor.Purple.value
         //요일 폰트
         PinCalendar.appearance.weekdayFont = DesignSystemFont.Pretendard_Medium16.value
         PinCalendar.appearance.weekdayTextColor = .black
         //날짜 폰트
         PinCalendar.appearance.titleFont = DesignSystemFont.Pretendard_Medium14.value
         //오늘
-        PinCalendar.appearance.todayColor = DesignSystemColor.Purple50.value
+        PinCalendar.appearance.todayColor = DesignSystemColor.Lavender10.value
         PinCalendar.appearance.todaySelectionColor = DesignSystemColor.Purple50.value
+
         //오늘 아님
-        PinCalendar.appearance.selectionColor = .systemBlue
+        PinCalendar.appearance.selectionColor = DesignSystemColor.Purple50.value
     }
 }
 
