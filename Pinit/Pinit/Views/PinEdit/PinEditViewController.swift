@@ -370,7 +370,9 @@ extension PinEditViewController: UIImagePickerControllerDelegate, UINavigationCo
 extension PinEditViewController: UITextFieldDelegate, UITextViewDelegate{
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.text = ""
+        if textField.text == "제목을 작성해주세요." {
+            textField.text = ""
+        }
         textField.layer.borderColor = DesignSystemColor.Purple.value.cgColor
         textField.layer.borderWidth = 2.0
     }

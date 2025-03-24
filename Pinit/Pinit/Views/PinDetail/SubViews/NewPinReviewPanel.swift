@@ -40,6 +40,7 @@ class NewPinReviewPanel: UIView {
         textField.layer.borderColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1).cgColor // #A9A9A9 (다크 라이트 그레이)
         textField.layer.borderWidth = 2
         textField.textColor = .black
+        textField.tintColor = DesignSystemColor.Purple.value
         textField.layer.cornerRadius = 20
         textField.font = DesignSystemFont.Pretendard_Medium16
             .value
