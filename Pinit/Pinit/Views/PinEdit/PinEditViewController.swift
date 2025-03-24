@@ -152,22 +152,23 @@ final class PinEditViewController: UIViewController{
         
         switch pinMode {
         case let .create(latitude, longitude):
+            
+            self.pinEntity = PinEntity(
+                pin_id: UUID(),
+                title: "",
+                latitude: latitude, longitude: longitude,
+                address: "",
+                date: Date(),
+                weather: "",
+                description: "",
+                mediaPath: nil
+            )
             service.fetchCurrentWeather(latitude: latitude, longitude: longitude) { items in
                 guard let items = items else { return }
                 let icon = items.weather[0].icon
-                self.pinEntity = PinEntity(
-                    pin_id: UUID(),
-                    title: "",
-                    latitude: latitude, longitude: longitude,
-                    address: "",
-                    date: Date(),
-                    weather: icon,
-                    description: "",
-                    mediaPath: nil
-                )
                 self.weatherImage.image = UIImage(named: icon)
+                self.pinEntity.weather = icon
             }
-           
         case let .edit(PinEntity):
             self.pinEntity = PinEntity
             dateLabel.text = pinEntity.date.koreanDateString()

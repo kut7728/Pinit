@@ -14,7 +14,7 @@ struct PinEntity {
     let longitude: Double
     let address: String
     let date: Date
-    let weather: String
+    var weather: String
     var description: String?
     var mediaPath: UIImage?
     
