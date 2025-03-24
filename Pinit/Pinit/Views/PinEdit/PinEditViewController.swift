@@ -18,7 +18,7 @@ final class PinEditViewController: UIViewController{
     private var pinEntity: PinEntity!
     var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     private var pickedImage: UIImage?
-    
+    private var service = DIContainer.service
     private var mapView: MKMapView!
     
     private let saveButton : UIButton = {
@@ -96,7 +96,6 @@ final class PinEditViewController: UIViewController{
     
     private let weatherImage : UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "01d")
         return view
     }()
     
@@ -153,17 +152,22 @@ final class PinEditViewController: UIViewController{
         
         switch pinMode {
         case let .create(latitude, longitude):
-            self.pinEntity = PinEntity(
-                pin_id: UUID(),
-                title: "",
-                latitude: latitude, longitude: longitude,
-                address: "",
-                date: Date(),
-                weather: "",
-                description: "",
-                mediaPath: nil
-            )
-            
+            service.fetchCurrentWeather(latitude: latitude, longitude: longitude) { items in
+                guard let items = items else { return }
+                let icon = items.weather[0].icon
+                self.pinEntity = PinEntity(
+                    pin_id: UUID(),
+                    title: "",
+                    latitude: latitude, longitude: longitude,
+                    address: "",
+                    date: Date(),
+                    weather: icon,
+                    description: "",
+                    mediaPath: nil
+                )
+                self.weatherImage.image = UIImage(named: icon)
+            }
+           
         case let .edit(PinEntity):
             self.pinEntity = PinEntity
             dateLabel.text = pinEntity.date.koreanDateString()
