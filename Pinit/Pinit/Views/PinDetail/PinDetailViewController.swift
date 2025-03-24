@@ -132,7 +132,16 @@ final class PinDetailViewController: UIViewController {
     public lazy var reviewPanelContainer: NewPinReviewPanel = {
         let view = NewPinReviewPanel()
         view.reviewText.delegate = self
+        view.reviewText.inputAccessoryView = keyboardToolBar
         return view
+    }()
+    private lazy var keyboardToolBar: UIToolbar = {
+        let toolbar = UIToolbar()
+        let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneBarButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneBtnClicked))
+        toolbar.items = [flexBarButton, doneBarButton]
+        toolbar.sizeToFit()
+        return toolbar
     }()
     
     // MARK: - Layout
