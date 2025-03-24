@@ -102,7 +102,7 @@ final class PinDetailViewController: UIViewController {
         let largeImage = UIImage(systemName: "xmark.circle.fill")?.withConfiguration(largeConfig)
         let button = UIButton()
         button.setImage(largeImage, for: .normal)
-        button.tintColor = DesignSystemColor.Lavender.value
+        button.tintColor = .black
         button.alpha = 0.7 // 투명도 50% 설정
         button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         
@@ -145,7 +145,7 @@ final class PinDetailViewController: UIViewController {
         
         // 지도 constraint
         mapView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)  // 기기의 안전구역부터 시작하도록
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(4)
             $0.leading.trailing.equalToSuperview().inset(3)
             $0.height.equalToSuperview().multipliedBy(0.25)  // 기기의 높이 *0.25로 높이 설정
         }

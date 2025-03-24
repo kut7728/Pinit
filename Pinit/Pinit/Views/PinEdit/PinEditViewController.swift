@@ -115,7 +115,7 @@ final class PinEditViewController: UIViewController{
             let largeImage = closeImage.withConfiguration(largeConfig)
             button.setImage(largeImage, for: .normal)
         }
-        button.tintColor = DesignSystemColor.Lavender.value
+        button.tintColor = .black
         button.alpha = 0.7 // 투명도 50% 설정
         return button
     }()
