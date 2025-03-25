@@ -31,15 +31,7 @@
 <br/>
 
 ## 🗺️ 주요 기능
-### 🏃‍♂️ 위치기반 기록
-(홈화면, 기록작성뷰 화면 사진) 설명으로 위치기반으로 기록된다는 점과 실시간 날씨가 같이 저장된다는 점 어필
-
-### 📸 기록 조회
-(과거기록뷰 사진) 달력으로 날짜를 선택해서 해당 날짜의 기록을 조회할수 있다는 점 어필
-
-### 📝 리뷰 작성
-(기록 상세뷰 사진) 상세뷰에서 각 기록에대한 리뷰를 남길 수 있다는 점 어필
-
+<img src="https://github.com/user-attachments/assets/62f087d9-ef64-41fa-88e1-a1a8f4771d0f" width="1920">
 <br/>
 
 ## 🧰 사용 기술 및 라이브러리
@@ -116,6 +108,6 @@
 
 ## 📔 문서
 
-| 팀 페이지 | 기획/디자인 | 템플릿 | 회의록 | 기능명세서 | 
-| :-: | :-: | :-: | :-: | :-: |
-| 📚 [노션](https://kut7728.notion.site/team2-projectsite?pvs=4) | 🎨 [기획/디자인](https://www.figma.com/design/iR7lbwFWqPsbkpElXBVEl3/PinIt?node-id=0-1&t=4bTVEqEFuJVSoaZt-1)| 📃 [템플릿](https://github.com/kut7728/Pinit/wiki/템플릿)| 📝 [회의록](https://www.notion.so/kut7728/1b4a988b89d780fd8467d5d5e8275256?v=1b4a988b89d7803480e5000ce2d0b58f&pvs=4) | 📝 [기능명세서](https://docs.google.com/spreadsheets/d/1YNMxF1E2F_T6BspqpI4CF22eKbS_wbcuXSFk1wTMLlw/edit?usp=sharing)
+| 팀 페이지 | 기획/디자인 | 템플릿 | 회의록 | 기능명세서 | 발표자료 |
+| :-: | :-: | :-: | :-: | :-: | :-: |
+| 📚 [노션](https://kut7728.notion.site/team2-projectsite?pvs=4) | 🎨 [기획/디자인](https://www.figma.com/design/iR7lbwFWqPsbkpElXBVEl3/PinIt?node-id=0-1&t=4bTVEqEFuJVSoaZt-1)| 📃 [템플릿](https://github.com/kut7728/Pinit/wiki/템플릿)| 📝 [회의록](https://www.notion.so/kut7728/1b4a988b89d780fd8467d5d5e8275256?v=1b4a988b89d7803480e5000ce2d0b58f&pvs=4) | 📝 [기능명세서](https://docs.google.com/spreadsheets/d/1YNMxF1E2F_T6BspqpI4CF22eKbS_wbcuXSFk1wTMLlw/edit?usp=sharing) | 👨‍🏫[발표자료](https://file.notion.so/f/f/bd94a3f9-0a38-47eb-9f90-756e78f6ff87/33f23413-031c-4b2f-b99a-2c19329dfcb3/결과보고서_2조(PinIt).pdf?table=block&id=1c1a988b-89d7-80b8-8b5f-c964e04295fd&spaceId=bd94a3f9-0a38-47eb-9f90-756e78f6ff87&expirationTimestamp=1742918400000&signature=o2pswXyMcDv7rTIcpKgoehb0CDnumH9IBx4MAJrWq6s&downloadName=결과보고서_2조%28PinIt%29.pdf)
