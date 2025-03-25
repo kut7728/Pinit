@@ -31,7 +31,7 @@
 <br/>
 
 ## 🗺️ 주요 기능
-<img src="https://github.com/user-attachments/assets/d120fd46-4ae9-438b-a684-18b641c6fdba" width="1920">
+<img src="https://github.com/user-attachments/assets/375d9414-d71b-40f8-950a-99a9d565d8fd" width="1920">
 <br/>
 
 ## 🧰 사용 기술 및 라이브러리
