@@ -103,6 +103,7 @@
 | Unit Test | [🎫 CoreData, FileManager CRUD 테스트 작성해보기](https://github.com/kut7728/Pinit/wiki/🎫-CoreData,-FileManager-CRUD-테스트-작성해보기) |
 | Moya | [🛜 Moya를 이용한 Network fetch](https://github.com/kut7728/Pinit/wiki/🛜-Moya를-이용한-Network-fetch) |
 | FSCalendar | [🗓️ FSCalender 라이브러리 사용하기](https://github.com/kut7728/Pinit/wiki/🗓%EF%B8%8F-FSCalender-라이브러리-사용하기) |
+| Custom BottomSheet | [☝️ 커스텀 바텀시트 구현 PanGesture 로 바텀시트 같은 인터렉션 만들기](https://github.com/EST-iOS-TEAM2/Pinit/wiki/☝%EF%B8%8F커스텀-바텀시트-구현---PanGesture-로-바텀시트-같은-인터렉션-만들기) |
 
 
 
