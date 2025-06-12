@@ -27,6 +27,7 @@
 |:-:|:-:|:-:|:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/77233954?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/21167914?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/78650062?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/197554863?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/144425677?v=4" width=100>|
 |[@kut7728](https://github.com/kut7728)|[@JustHm](https://github.com/JustHm)|[@HISEHOONAN](https://github.com/HISEHOONAN)|[@IntakHan304](https://github.com/IntakHan304)|[@lkhwan0204](https://github.com/lkhwan0204)|
+|PM, 디자인<br/>기록상세뷰|DB, 파일저장기능<br/>홈화면|API통신<br/>과거기록뷰|설정화면|기록작성화면|
 
 <br/>
 
