@@ -83,17 +83,19 @@ final class PinitTests: XCTestCase {
     }
     
     func test_날씨정보_가져오기() {
-        // Given
         let latitude = PinEntity.sampleData[1].latitude
         let longitude = PinEntity.sampleData[1].longitude
         
-        let expectation = XCTestExpectation(description: "날씨 정보를 성공적으로 가져와야 한다.")
-        // When
+        // 비동기 expectation 생성
+        let expectation = XCTestExpectation(description: "날씨 정보를 성공적으로 가져와야함.")
+        
+        // 네트워크 레이어 호출
         service.fetchCurrentWeather(latitude: latitude, longitude: longitude) { weatherData in
-            // Then
+            
+            XCTAssertNotNil(weatherData, "날씨 데이터가 nil이면 실패")
+            
             if let weatherData = weatherData {
-                print(weatherData)
-                //print(weatherData.weather.first?.icon)
+                print(#file,#function,#line,weatherData)
             }
             
             expectation.fulfill() // 비동기 작업이 완료되었음을 알림
@@ -101,19 +103,10 @@ final class PinitTests: XCTestCase {
         //5초 안에 expectation 실행
         wait(for: [expectation], timeout: 5.0)
     }
-//    func test_날씨_아이콘_가져오기(){
-//        
-//    }
-    
-    
-    //    func testPerformanceExample() throws {
-    //        // This is an example of a performance test case.
-    //        measure {
-    //            // Put the code you want to measure the time of here.
-    //        }
-    //    }
     
 }
+
+
 // 테스트용 equatable
 extension PinEntity: Equatable {
     public static func == (lhs: PinEntity, rhs: PinEntity) -> Bool {

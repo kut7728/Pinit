@@ -9,7 +9,7 @@ import UIKit
 import FSCalendar
 import SnapKit
 
-final class PastPinViewController: UIViewController {
+class PastPinViewController: UIViewController {
     
     //MARK: - 모든 PinEntity를 가져옵니다.
     var pinData: [PinEntity] = []
@@ -88,7 +88,6 @@ final class PastPinViewController: UIViewController {
     }
     
     //MARK: - 캘린더 세팅ㅇㅇ
-
     private func calendarUI(){
         PinCalendar.delegate = self
         PinCalendar.dataSource = self
@@ -131,12 +130,6 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
         }
         
     }
-    
-//    //해당 pinEntity안에 데이터의 유무에 따라 해당 날짜에 dot이 노출댑니당>.<
-//    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-//        return pinData.contains { Calendar.current.isDate($0.date, inSameDayAs: date) } ? 1 : 0
-//    }
-    
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         let day = Calendar.current.component(.weekday, from: date) - 1
         
@@ -149,7 +142,6 @@ extension PastPinViewController : FSCalendarDelegate, FSCalendarDataSource, FSCa
         }
     }
 }
-
 //MARK: - extension
 extension PastPinViewController : PinCollectionViewAdapterDelegate {
     

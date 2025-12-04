@@ -14,7 +14,7 @@ enum PinMode {
     case edit(PinEntity : PinEntity)
 }
 
-final class PinEditViewController: UIViewController{
+final class PinEditViewController: UIViewController {
     private var pinEntity: PinEntity!
     var isAdded: ((PinEntity) -> Void)? // 핀추가가 됐을때 호출되는 클로저 (홈에서만 사용)
     private var pickedImage: UIImage?

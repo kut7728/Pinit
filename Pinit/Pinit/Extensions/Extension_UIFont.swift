@@ -8,9 +8,8 @@
 import Foundation
 import UIKit
 
-//MARK: - 폰트 조절
+//MARK: - 폰트
 extension UIFont {
-    
     enum Pretendard {
         case bold
         case extraBold
