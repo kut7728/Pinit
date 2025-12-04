@@ -27,6 +27,7 @@
 |:-:|:-:|:-:|:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/77233954?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/21167914?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/78650062?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/197554863?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/144425677?v=4" width=100>|
 |[@kut7728](https://github.com/kut7728)|[@JustHm](https://github.com/JustHm)|[@HISEHOONAN](https://github.com/HISEHOONAN)|[@IntakHan304](https://github.com/IntakHan304)|[@lkhwan0204](https://github.com/lkhwan0204)|
+|PM, 디자인<br/>기록상세뷰|DB, 파일저장기능<br/>홈화면|API통신<br/>과거기록뷰|설정화면|기록작성화면|
 
 <br/>
 
@@ -103,6 +104,7 @@
 | Unit Test | [🎫 CoreData, FileManager CRUD 테스트 작성해보기](https://github.com/kut7728/Pinit/wiki/🎫-CoreData,-FileManager-CRUD-테스트-작성해보기) |
 | Moya | [🛜 Moya를 이용한 Network fetch](https://github.com/kut7728/Pinit/wiki/🛜-Moya를-이용한-Network-fetch) |
 | FSCalendar | [🗓️ FSCalender 라이브러리 사용하기](https://github.com/kut7728/Pinit/wiki/🗓%EF%B8%8F-FSCalender-라이브러리-사용하기) |
+| Custom BottomSheet | [☝️ 커스텀 바텀시트 구현 PanGesture 로 바텀시트 같은 인터렉션 만들기](https://github.com/EST-iOS-TEAM2/Pinit/wiki/☝%EF%B8%8F커스텀-바텀시트-구현---PanGesture-로-바텀시트-같은-인터렉션-만들기) |
 
 
 
@@ -110,4 +112,4 @@
 
 | 팀 페이지 | 기획/디자인 | 템플릿 | 회의록 | 기능명세서 | 발표자료 |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| 📚 [노션](https://kut7728.notion.site/team2-projectsite?pvs=4) | 🎨 [기획/디자인](https://www.figma.com/design/iR7lbwFWqPsbkpElXBVEl3/PinIt?node-id=0-1&t=4bTVEqEFuJVSoaZt-1)| 📃 [템플릿](https://github.com/kut7728/Pinit/wiki/템플릿)| 📝 [회의록](https://www.notion.so/kut7728/1b4a988b89d780fd8467d5d5e8275256?v=1b4a988b89d7803480e5000ce2d0b58f&pvs=4) | 📝 [기능명세서](https://docs.google.com/spreadsheets/d/1YNMxF1E2F_T6BspqpI4CF22eKbS_wbcuXSFk1wTMLlw/edit?usp=sharing) | 👨‍🏫[발표자료](https://file.notion.so/f/f/bd94a3f9-0a38-47eb-9f90-756e78f6ff87/6fa1a0f6-af09-4c26-9b3b-883e06aaf580/결과보고서_2조(PinIt).pdf?table=block&id=1c2a988b-89d7-80b8-8e1a-df3a90e17c81&spaceId=bd94a3f9-0a38-47eb-9f90-756e78f6ff87&expirationTimestamp=1742997600000&signature=HEqgIEhHNhii8FhDJBjEBdZVE3A-wXq_x4NhnVJLl-c&downloadName=결과보고서_2조%28PinIt%29.pdf)
+| 📚 [노션](https://kut7728.notion.site/team2-projectsite?pvs=4) | 🎨 [기획/디자인](https://www.figma.com/design/iR7lbwFWqPsbkpElXBVEl3/PinIt?node-id=0-1&t=4bTVEqEFuJVSoaZt-1)| 📃 [템플릿](https://github.com/kut7728/Pinit/wiki/템플릿)| 📝 [회의록](https://www.notion.so/kut7728/1b4a988b89d780fd8467d5d5e8275256?v=1b4a988b89d7803480e5000ce2d0b58f&pvs=4) | 📝 [기능명세서](https://docs.google.com/spreadsheets/d/1YNMxF1E2F_T6BspqpI4CF22eKbS_wbcuXSFk1wTMLlw/edit?usp=sharing) | 👨‍🏫[발표자료](https://docs.google.com/presentation/d/1VVe3LoDxEhZLyuY7QjSIee3uDjZeTbPN/edit?usp=sharing&ouid=111731441746136355968&rtpof=true&sd=true)
